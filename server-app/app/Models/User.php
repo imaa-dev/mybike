@@ -39,6 +39,11 @@ class User extends Authenticatable
         return $this->belongsTo(Role::class);
     }
 
+    public function files()
+    {
+        return $this->morphMany(File::class,  'fileable');
+    }
+
     /**
      * Get the attributes that should be cast.
      *

@@ -9,7 +9,8 @@ import {
     Building2,
     Handshake,
     Box,
-    BookUser
+    SquareUser,
+    User
 } from 'lucide-react';
 import AppLogo from './app-logo';
 
@@ -37,9 +38,13 @@ const mainNavItems: NavItem[] = [
     {
         title: 'Clientes',
         href: '/dashboard',
-        icon: BookUser,
+        icon: SquareUser,
     },
-
+    {
+        title: 'Usuarios',
+        href: '/dashboard',
+        icon: User,
+    },
 ];
 
 const footerNavItems: NavItem[] = [
