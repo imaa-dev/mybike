@@ -2,6 +2,8 @@
 
 namespace App\Http\Services;
 
+use App\Models\Servi;
+
 class ServiService
 {
     public function getAll()
@@ -10,7 +12,24 @@ class ServiService
     }
     public function create($request)
     {
+        try {
+            // create a services using polimorfis tables
+            $servi = new Servi();
 
+            $servi->save();
+            $data = [
+                'status' => 'success',
+                'code' => 200,
+                'message' => 'Servi Created Successfully',
+                'data' => $servi
+            ];
+        } catch (\Throwable $th) {
+            $data = [
+                'status' => 'error',
+                'message' => $th->getMessage()
+            ];
+        }
+        return response()->json($data);
     }
 
     public function update($request)

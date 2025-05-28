@@ -22,27 +22,27 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: 'Organización',
-        href: '/dashboard',
+        href: '/organization',
         icon: Building2,
     },
     {
         title: 'Servicios',
-        href: '/dashboard',
+        href: '/service',
         icon: Handshake,
     },
     {
         title: 'Productos',
-        href: '/dashboard',
+        href: '/product',
         icon: Box,
     },
     {
         title: 'Clientes',
-        href: '/dashboard',
+        href: '/client',
         icon: SquareUser,
     },
     {
         title: 'Usuarios',
-        href: '/dashboard',
+        href: '/user',
         icon: User,
     },
 ];
