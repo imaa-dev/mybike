@@ -1,7 +1,9 @@
-import { SVGAttributes } from 'react';
 
-export default function AppLogoIcon(props: SVGAttributes<SVGElement>) {
+export default function AppLogoIcon({props} ){
     return (
-        <img src="logo2.png" />
+        <>
+            {props?.organization && <img src={`http://localhost:8000/storage/${props.organization.file.path}`} alt='Logo' />}
+            {!props?.organization && <img src="http://localhost:8000/storage/logo2.png" alt='Logo' />}
+        </>
     );
 }

@@ -23,8 +23,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('create/client', [UserController::class, 'storeClient'])->name('clients.store');
     Route::get('product', [ProductController::class, 'create'])->name('products.create');
     Route::post('create/product', [ProductController::class, 'store'])->name('products.store');
-    Route::get('organization', [OrganizationController::class, 'create'])->name('organizations.create');
+    Route::get('list/organization', [OrganizationController::class, 'list'])->name('organization.list');
+    Route::get('create/organization', [OrganizationController::class, 'create'])->name('organization.create');
+    Route::get('organization/{organization}/edit', [OrganizationController::class, 'getUpdate'])->name('organization.get.update');
     Route::post('create/organization', [OrganizationController::class, 'store'])->name('organizations.store');
+    Route::post('organization/edit', [OrganizationController::class, 'update'])->name('organizations.update');
+    Route::post('organization/delete/{id}', [OrganizationController::class, 'delete'])->name('organizations.destroy');
+
+
     Route::get('user', [UserController::class, 'create'])->name('users.create');
 });
 

@@ -1,121 +1,170 @@
 import AppLayout from '@/layouts/app-layout';
-import { Head, useForm, usePage } from '@inertiajs/react';
+import { Head, router, useForm } from '@inertiajs/react';
 import { BreadcrumbItem } from '@/types';
-import { FormEventHandler, useEffect } from 'react';
-import toast, { Toaster } from 'react-hot-toast';
 import { Button } from '@/components/ui/button';
+import toast, { Toaster } from 'react-hot-toast';
+import { useState } from 'react';
+import ButtonTop from '@/components/button-top';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Organizacion',
-        href: '/organization'
+        title: 'Organización',
+        href: '/organization',
     },
+    {
+        title: 'Listar',
+        href: '/organization/listar',
+    }
 ];
 
-type CreateOrganizationForm = {
-    file: File,
-    name: string,
-    description: string
-}
+export default function Organization({organizations}) {
+    const [organizationDrop,  setOrganizationDrop] = useState<number>(0);
+    const [modal, setModal] = useState<boolean>(false);
+    const { post } = useForm({});
 
-export default function Organization(){
-    const { data, setData, post, errors, reset } = useForm<Required<CreateOrganizationForm>>({
-        file: null,
-        name: '',
-        description: ''
-    })
-    const { props } = usePage();
-    useEffect(() => {
-        if (props.flash?.message) {
-            toast.success(props.flash.message);
-        }
-        if (props.flash?.error) {
-            toast.error(props.flash.error);
-        }
-    }, [props.flash]);
-    const submit: FormEventHandler = (e) => {
-        e.preventDefault();
-        post('create/organization')
-
+    const eliminar = (id) => {
+        post(`/organization/delete/${id}`, {
+            onSuccess: (mes) => {
+                toast.success(mes.props.flash?.message);
+            }
+        })
     }
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Organizacion" />
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
-                <div className="border-sidebar-border/70 dark:border-sidebar-border relative min-h-[100vh] flex-1 overflow-hidden rounded-xl border md:min-h-min">
-
-                    <form className="mx-auto max-w-md" onSubmit={submit}>
-                        <div className="group relative z-0 mb-5 w-full">
-                            <input
-                                type="file"
-                                name="file_organization"
-                                id="file_organization"
-                                className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                                autoFocus
-                                tabIndex={1}
-                                autoComplete="file"
-                                onChange={(e) => setData('file', e.target.files )}
-                                required
-                            />
-                            <label
-                                htmlFor="floating_email"
-                                className="absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:start-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:font-medium peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:text-gray-400 peer-focus:dark:text-blue-500"
-                            >
-                                Icono Marca Organizacion
-                            </label>
-                        </div>
-                        <div className="group relative z-0 mb-5 w-full">
+                <ButtonTop />
+                <div className="relative m-5 overflow-x-auto shadow-md sm:rounded-lg">
+                    <div className="flex-column flex flex-wrap items-center justify-between space-y-4 bg-white py-4 md:flex-row md:space-y-0 dark:bg-gray-900">
+                        <div className="relative">
+                            <div className="rtl:inset-r-0 pointer-events-none absolute inset-y-0 start-0 flex items-center ps-3">
+                                <svg
+                                    className="h-4 w-4 text-gray-500 dark:text-gray-400"
+                                    aria-hidden="true"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 20 20"
+                                >
+                                    <path d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+                                </svg>
+                            </div>
                             <input
                                 type="text"
-                                name="organization_name"
-                                id="organization_name"
-                                className="peer block w-full appearance-none border-0 border-b-2 border-gray-300 bg-transparent px-0 py-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-0 focus:outline-none dark:border-gray-600 dark:text-white dark:focus:border-blue-500"
-                                placeholder=" "
-                                required
-                                autoFocus
-                                autoComplete="name"
-                                tabIndex={1}
-                                value={data.name}
-                                onChange={(e) => setData('name', e.target.value)}
+                                id="table-search-users"
+                                className="block w-80 rounded-lg border border-gray-300 bg-gray-50 ps-10 pt-2 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                                placeholder="Buscar Organizacion"
                             />
-                            <label
-                                htmlFor="floating_email"
-                                className="absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:start-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:font-medium peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:text-gray-400 peer-focus:dark:text-blue-500"
-                            >
-                                Nombre Organización
-                            </label>
                         </div>
-                        <div className="group relative z-0 mb-5 w-full">
-                            <input
-                                type="description"
-                                name="organizacion_description"
-                                id="organizacion_description"
-                                className="peer block w-full appearance-none border-0 border-b-2 border-gray-300 bg-transparent px-0 py-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-0 focus:outline-none dark:border-gray-600 dark:text-white dark:focus:border-blue-500"
-                                placeholder=" "
-                                required
-                                autoFocus
-                                autoComplete="description"
-                                tabIndex={1}
-                                value={data.description}
-                                onChange={(e) => setData('description', e.target.value)}
-                            />
-                            <label
-                                htmlFor="floating_email"
-                                className="absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:start-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:font-medium peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:text-gray-400 peer-focus:dark:text-blue-500"
-                            >
-                                Descripción
-                            </label>
-                        </div>
+                    </div>
 
-                        <Button
-                            type="submit"
-                            className="mt-4 w-full"
-                        >
-                            Crear Organizacion
-                        </Button>
-                    </form>
-                    <Toaster />
+                    <table className="w-full text-left text-sm text-gray-500 rtl:text-right dark:text-gray-400">
+                        <thead className="bg-gray-50 text-xs text-gray-700 uppercase dark:bg-gray-700 dark:text-gray-400">
+                            <tr>
+                                <th scope="col" className="p-4">
+                                    <div className="flex items-center">
+                                        <input
+                                            id="checkbox-all-search"
+                                            type="checkbox"
+                                            className="h-4 w-4 rounded-sm border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600 dark:focus:ring-offset-gray-800"
+                                        />
+                                        <label htmlFor="checkbox-all-search" className="sr-only">
+                                            checkbox
+                                        </label>
+                                    </div>
+                                </th>
+                                <th scope="col" className="px-6 py-3">
+                                    Organizacion
+                                </th>
+                                <th scope="col" className="px-6 py-3">
+                                    Acciones
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {organizations.map((organization, index) => (
+                                <tr
+                                    key={index}
+                                    className="border-b border-gray-200 bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-600"
+                                >
+                                    <td key={index} className="w-4 p-4">
+                                        <div key={index} className="flex items-center">
+                                            <input
+                                                id="checkbox-table-search-1"
+                                                type="checkbox"
+                                                className="h-4 w-4 rounded-sm border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600 dark:focus:ring-offset-gray-800"
+                                            />
+                                            <label htmlFor="checkbox-table-search-1" className="sr-only">
+                                                checkbox
+                                            </label>
+                                        </div>
+                                    </td>
+                                    <th scope="row" className="flex items-center px-6 py-4 whitespace-nowrap text-gray-900 dark:text-white">
+                                        <img
+                                            className="h-10 w-10 rounded-full"
+                                            src={`http://localhost:8000/storage/${organization.file.path}`}
+                                            alt="logo image"
+                                        />
+                                        <div className="ps-3">
+                                            <div className="text-base font-semibold">{organization.name}</div>
+                                            <div className="font-normal text-gray-500">{organization.description}</div>
+                                        </div>
+                                    </th>
+
+
+                                    <td className="px-6 py-4">
+                                        <button
+                                            type="button"
+                                            onClick={() => {
+                                                router.visit(`/organization/${organization.id}/edit`);
+                                            }}
+                                            className="me-2 mb-2 rounded-lg border border-blue-700 px-5 py-2.5 text-center text-sm font-medium text-blue-700 hover:bg-blue-800 hover:text-white focus:ring-4 focus:ring-blue-300 focus:outline-none dark:border-blue-500 dark:text-blue-500 dark:hover:bg-blue-500 dark:hover:text-white dark:focus:ring-blue-800"
+                                        >
+                                            Editar
+                                        </button>
+
+                                        <button
+                                            className="me-2 mb-2 rounded-lg border border-red-700 px-5 py-2.5 text-center text-sm font-medium text-red-700 hover:bg-red-800 hover:text-white focus:ring-4 focus:ring-red-300 focus:outline-none dark:border-red-500 dark:text-red-500 dark:hover:bg-red-600 dark:hover:text-white dark:focus:ring-red-900"
+                                            type="button"
+                                            onClick={() => {
+                                                setOrganizationDrop(organization.id);
+                                                setModal(true);
+                                            }}
+                                        >
+                                            Eliminar
+                                        </button>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
                 </div>
+                {modal && (
+                    <div className="fixed top-0 right-0 left-0 z-50 flex h-screen w-screen items-center justify-center bg-black/50">
+                        <div className="rounded-lg bg-white p-6 shadow-lg dark:bg-gray-700">
+                            <h3 className="mb-4 text-lg text-gray-800 dark:text-gray-200">¿Realmente quieres eliminar la organización?</h3>
+                            <div className="flex justify-end gap-2">
+                                <button
+                                    onClick={() => {
+                                        if (organizationDrop !== null) eliminar(organizationDrop);
+                                        setModal(false);
+                                    }}
+                                    className="me-2 mb-2 rounded-lg border border-red-700 px-5 py-2.5 text-center text-sm font-medium text-red-700 hover:bg-red-800 hover:text-white focus:ring-4 focus:ring-red-300 focus:outline-none dark:border-red-500 dark:text-red-500 dark:hover:bg-red-600 dark:hover:text-white dark:focus:ring-red-900"
+                                >
+                                    Sí, eliminar
+                                </button>
+                                <button
+                                    onClick={() => setModal(false)}
+                                    type="button"
+                                    className="me-2 mb-2 rounded-lg border border-gray-800 px-5 py-2.5 text-center text-sm font-medium text-gray-900 hover:bg-gray-900 hover:text-white focus:ring-4 focus:ring-gray-300 focus:outline-none dark:border-gray-600 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-800"
+                                >
+                                    Cancelar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                <Toaster />
             </div>
         </AppLayout>
     );
