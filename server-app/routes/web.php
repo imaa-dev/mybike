@@ -19,10 +19,17 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('service', [\App\Http\Controllers\ServiController::class, 'create'])->name('services.create');
     Route::post('create/service', [\App\Http\Controllers\ServiController::class, 'store'])->name('services.store');
 
+    // Client routes
     Route::get('client', [UserController::class, 'createClient'])->name('clients.create');
     Route::post('create/client', [UserController::class, 'storeClient'])->name('clients.store');
-    Route::get('product', [ProductController::class, 'create'])->name('products.create');
+
+    // Product routes
+    Route::get('product', [ProductController::class, 'list'])->name('products.list');
+    Route::get('create/product', [ProductController::class, 'create'])->name('products.create');
     Route::post('create/product', [ProductController::class, 'store'])->name('products.store');
+    Route::post('update/product', [ProductController::class, 'update'])->name('products.update');
+
+    // Organization routes
     Route::get('list/organization', [OrganizationController::class, 'list'])->name('organization.list');
     Route::get('create/organization', [OrganizationController::class, 'create'])->name('organization.create');
     Route::get('organization/{organization}/edit', [OrganizationController::class, 'getUpdate'])->name('organization.get.update');
@@ -30,7 +37,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('organization/edit', [OrganizationController::class, 'update'])->name('organizations.update');
     Route::post('organization/delete/{id}', [OrganizationController::class, 'delete'])->name('organizations.destroy');
 
-
+    // User routes
     Route::get('user', [UserController::class, 'create'])->name('users.create');
 });
 

@@ -1,9 +1,9 @@
 import { Button } from '@/components/ui/button';
-import { Head, router, useForm } from '@inertiajs/react';
-import { FormEventHandler, useState } from 'react';
+import { Head, useForm } from '@inertiajs/react';
+import { FormEventHandler } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 import AppLayout from '@/layouts/app-layout';
-import { BreadcrumbItem } from '@/types';
+import { BreadcrumbItem, ButtonItem } from '@/types';
 import ButtonTop from '@/components/button-top';
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -23,8 +23,20 @@ type CreateOrganizationForm = {
     description: string,
     active: boolean,
 }
+
+const buttonItems : ButtonItem[] = [
+    {
+        title: 'Crear',
+        href: '/create/organization',
+    },
+    {
+        title: 'Listar',
+        href: '/list/organization',
+    }
+]
+
 const OrganizationForm = () => {
-    const { data, setData, post, errors, reset } = useForm<Required<CreateOrganizationForm>>({
+    const { data, setData, post, reset } = useForm<Required<CreateOrganizationForm>>({
         file: null,
         name: '',
         description: '',
@@ -38,9 +50,19 @@ const OrganizationForm = () => {
                 toast.success(page.props.flash?.message);
                 reset()
             },
-            onError: () => {
-                toast.error('ERROR')
-                console.log('error')
+            onError: (res) => {
+                if(res.file){
+                    toast.error(res.file);
+                }
+                if(res.description){
+                    toast.error(res.description);
+                }
+                if(res.active){
+                    toast.error(res.active);
+                }
+                if(res.name){
+                    toast.error(res.name);
+                }
             }
         })
     }
@@ -48,23 +70,23 @@ const OrganizationForm = () => {
         <AppLayout breadcrumbs={breadcrumbs} >
             <Head title='Organization' />
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
-                <ButtonTop />
+                <ButtonTop items={buttonItems} />
                 <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
                 <div className="inline-flex rounded-md shadow-xs">
                         <form
-                        className="flex w-full  flex-col justify-center gap-6 rounded-lg bg-white p-6 shadow-md md:p-10 dark:bg-gray-800"
+                        className="flex w-full flex-col justify-center gap-6 rounded-lg bg-white p-6 shadow-md md:p-10 dark:bg-gray-800"
                         onSubmit={submit}
                     >
                         <div className="group relative z-0 mb-12 w-full">
                             <input
                                 type="file"
-                                name="file_organization"
-                                id="file_organization"
+                                name="file"
+                                id="file"
                                 className="peer block w-full appearance-none border-0 border-b-2 border-gray-300 bg-transparent px-0 py-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-0 focus:outline-none dark:border-gray-600 dark:text-white dark:focus:border-blue-500"
                                 autoFocus
                                 tabIndex={1}
                                 autoComplete="file"
-                                onChange={(e) => setData('file', e.target.files)}
+                                onChange={(e) => setData('file', e.target.files[0])}
                                 required
                             />
                             <label
@@ -94,7 +116,7 @@ const OrganizationForm = () => {
                             >
                                 Nombre Organización
                             </label>
-                            {errors && <a>{errors.name}</a>}
+
                         </div>
                         <div className="group relative z-0 mb-5 w-full">
                             <input

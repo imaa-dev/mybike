@@ -24,7 +24,7 @@ class StoreOrganizationRequest extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'description' => 'required|string|max:255',
-            'file' => 'file|mimes:jpeg,png,jpg,gif,svg',
+            'file' => 'required|mimes:jpeg,png,jpg,gif,svg',
             'active' => 'required|boolean',
         ];
     }
@@ -38,7 +38,6 @@ class StoreOrganizationRequest extends FormRequest
             'description.required' => 'La descripcion es requerida',
             'description.string' => 'La descripcion debe ser una cadena de caracteres',
             'description.max' => 'La descripcion debe tener mas de 255 caracteres',
-            'file.file' => 'El archivo debe ser una imagen',
             'file.mimes' => 'El archivo debe ser una imagen',
             'active.required' => 'El activo es requerido',
         ];

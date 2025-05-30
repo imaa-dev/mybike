@@ -13,9 +13,7 @@ class OrganizationService
     public function create($request)
     {
         try{
-            foreach ($request->file('file') as $file) {
-                $path = $file->store('organization/'.$request->user()->id, 'public');
-            }
+            $path = $request->file('file')->store('organization/'.$request->user()->id, 'public');
             $organization = new Organization();
             $organization->user_id  = $request->user()->id;
             $organization->name = $request->name;
@@ -45,14 +43,14 @@ class OrganizationService
     {
 
         try{
-            foreach ($request->file('file') as $file) {
-                $path = $file->store('organization/'.$request->user()->id, 'public');
-            }
+
+            $path = $request->file('file')->store('organization/'.$request->user()->id, 'public');
             $organizationUpdate = Organization::where('id', $request->organization_id)->with('file')->first();
             Storage::disk('public')->delete($organizationUpdate->file->path);
             $organizationUpdate->user_id = $request->user()->id;
             $organizationUpdate->name = $request->name;
             $organizationUpdate->description =  $request->description;
+            $organizationUpdate->active  = $request->active;
             $organizationUpdate->save();
             $organizationUpdate->file()->delete();
             $organizationUpdate->file()->create([

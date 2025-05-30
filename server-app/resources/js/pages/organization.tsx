@@ -1,7 +1,6 @@
 import AppLayout from '@/layouts/app-layout';
 import { Head, router, useForm } from '@inertiajs/react';
-import { BreadcrumbItem } from '@/types';
-import { Button } from '@/components/ui/button';
+import { BreadcrumbItem, ButtonItem, OrganizationData } from '@/types';
 import toast, { Toaster } from 'react-hot-toast';
 import { useState } from 'react';
 import ButtonTop from '@/components/button-top';
@@ -17,23 +16,34 @@ const breadcrumbs: BreadcrumbItem[] = [
     }
 ];
 
-export default function Organization({organizations}) {
-    const [organizationDrop,  setOrganizationDrop] = useState<number>(0);
+const buttonItems : ButtonItem[] = [
+    {
+        title: 'Crear',
+        href: '/create/organization',
+    },
+    {
+        title: 'Listar',
+        href: '/list/organization',
+    }
+]
+
+export default function Organization({ organizations }: OrganizationData[]) {
+    const [organizationDrop, setOrganizationDrop] = useState<number>(0);
     const [modal, setModal] = useState<boolean>(false);
     const { post } = useForm({});
-
+    console.log('List', organizations);
     const eliminar = (id) => {
         post(`/organization/delete/${id}`, {
             onSuccess: (mes) => {
                 toast.success(mes.props.flash?.message);
-            }
-        })
-    }
+            },
+        });
+    };
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Organizacion" />
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
-                <ButtonTop />
+                <ButtonTop items={buttonItems} />
                 <div className="relative m-5 overflow-x-auto shadow-md sm:rounded-lg">
                     <div className="flex-column flex flex-wrap items-center justify-between space-y-4 bg-white py-4 md:flex-row md:space-y-0 dark:bg-gray-900">
                         <div className="relative">
@@ -76,6 +86,9 @@ export default function Organization({organizations}) {
                                     Organizacion
                                 </th>
                                 <th scope="col" className="px-6 py-3">
+                                    Activa
+                                </th>
+                                <th scope="col" className="px-6 py-3">
                                     Acciones
                                 </th>
                             </tr>
@@ -109,7 +122,19 @@ export default function Organization({organizations}) {
                                             <div className="font-normal text-gray-500">{organization.description}</div>
                                         </div>
                                     </th>
-
+                                    <th scope="col" className="px-6 py-4">
+                                        {organization.active ? (
+                                            <div className="flex items-center">
+                                                <div className="me-2 h-2.5 w-2.5 rounded-full bg-green-500"></div>
+                                                Activa
+                                            </div>
+                                        ) : (
+                                            <div className="flex items-center">
+                                                <div className="me-2 h-2.5 w-2.5 rounded-full bg-red-500"></div>
+                                                Inactiva
+                                            </div>
+                                        )}
+                                    </th>
 
                                     <td className="px-6 py-4">
                                         <button

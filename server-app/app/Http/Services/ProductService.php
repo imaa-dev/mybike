@@ -34,4 +34,40 @@ class ProductService{
         }
         return $data;
     }
+
+    public function update($request){
+        try {
+
+            $data = [
+                'code' => 200,
+                'status' =>  'success',
+                'message' =>  'Producto Actualizado Correctamente'
+            ];
+        } catch (\Throwable $th) {
+            Log::error($th);
+            $data = [
+                'error' => 'Error al eliminar producto',
+                'code' => 500,
+            ];
+        }
+
+        return $data;
+    }
+
+    public function delete($request){
+        try {
+
+            $data = [
+                'code' => 200,
+                'status' =>  'success',
+                'message' =>  'Producto eliminado Correctamente'
+            ];
+        } catch  (\Throwable $th) {
+            Log::error($th);
+            $data = [
+                'error' => 'Error al eliminar producto',
+                'code' => 500,
+            ];
+        }
+    }
 }

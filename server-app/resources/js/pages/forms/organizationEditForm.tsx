@@ -10,7 +10,8 @@ type UpdateOrganizationForm = {
     organization_id: string;
     file: File,
     name: string,
-    description: string
+    description: string,
+    active: boolean,
 }
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -23,6 +24,16 @@ const breadcrumbs: BreadcrumbItem[] = [
     }
 ];
 
+const buttonItems : [] = [
+    {
+        name: 'Crear',
+        href: '/create/organization',
+    },
+    {
+        name: 'Listar',
+        href: '/list/organization',
+    }
+]
 export default function OrganizationEditForm({organization}) {
 
     const { data, setData, post, errors, reset } = useForm<Required<UpdateOrganizationForm>>({
@@ -30,7 +41,9 @@ export default function OrganizationEditForm({organization}) {
         file: organization.file,
         name: organization.name,
         description: organization.description,
+        active: organization.active,
     })
+    const active = organization.active;
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
         post('/organization/edit', {
@@ -49,7 +62,7 @@ export default function OrganizationEditForm({organization}) {
         <AppLayout breadcrumbs={breadcrumbs} >
             <Head title="Organizacion" />
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
-                <ButtonTop />
+                <ButtonTop items={buttonItems} />
                 <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
                     <div className="inline-flex rounded-md shadow-xs">
                         <form
@@ -66,7 +79,7 @@ export default function OrganizationEditForm({organization}) {
                                     autoFocus
                                     tabIndex={1}
                                     autoComplete="file"
-                                    onChange={(e) => setData('file', e.target.files)}
+                                    onChange={(e) => setData('file', e.target.files[0])}
                                     required
                                 />
                                 <label
@@ -75,7 +88,6 @@ export default function OrganizationEditForm({organization}) {
                                 >
                                     Icono Marca Organizacion
                                 </label>
-                                <a>{errors.file && errors.file}</a>
                             </div>
                             <div className="group relative z-0 mb-5 w-full">
                                 <input
@@ -118,6 +130,21 @@ export default function OrganizationEditForm({organization}) {
                                 >
                                     Descripción
                                 </label>
+                                <div className="group relative mt-10 z-0 mb-5 w-full">
+                                    <label className="inline-flex items-center cursor-pointer">
+                                        <input
+                                            type="checkbox"
+                                            tabIndex={5}
+                                            autoComplete="active"
+                                            className="sr-only peer"
+                                            checked={data.active}
+                                            onChange={ (e) =>setData('active', e.target.checked) }
+                                        />
+                                        <div
+                                            className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600 dark:peer-checked:bg-blue-600"></div>
+                                        {active ? <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Desactivar Organizacion</span> : <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Activar Organizacion</span>}
+                                    </label>
+                                </div>
                             </div>
 
                             <Button type="submit" className="mt-4 w-full">

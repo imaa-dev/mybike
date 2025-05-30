@@ -63,14 +63,13 @@ const footerNavItems: NavItem[] = [
 
 export function AppSidebar() {
     const page = usePage();
-
     return (
         <Sidebar collapsible="icon" variant="inset">
             <SidebarHeader>
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton size="lg" asChild>
-                            <Link href="/dashboard" prefetch>
+                            <Link href={page.props.organization ? '/dashboard' : '/create/organization'} prefetch>
                                 <AppLogo props={page.props} />
                             </Link>
                         </SidebarMenuButton>

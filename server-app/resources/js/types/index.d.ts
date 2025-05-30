@@ -10,6 +10,11 @@ export interface BreadcrumbItem {
     href: string;
 }
 
+export interface ButtonItem {
+    title: string;
+    href: string;
+}
+
 export interface NavGroup {
     title: string;
     items: NavItem[];
@@ -40,4 +45,21 @@ export interface User {
     created_at: string;
     updated_at: string;
     [key: string]: unknown; // This allows for additional properties...
+}
+
+export interface OrganizationData {
+    id: number;
+    file: File;
+    name: string;
+    description: string;
+    address: string;
+    city: string;
+    state: string;
+    country: string;
+    postal_code: string;
+    phone: string;
+    email: string;
+    website: string;
+    created_at: string;
+    updated_at: string;
 }

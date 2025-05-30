@@ -17,12 +17,23 @@ class ProductController extends Controller
         $this->productService = $productService;
     }
 
-    public function create(){
+    public function list(){
         return Inertia::render('product');
+    }
+
+    public function create(){
+        return Inertia::render('forms/createProductForm');
     }
 
     public function store(Request $request){
         $res = $this->productService->create($request);
         dd($res);
+    }
+
+    public function update(Request $request){
+        return true;
+    }
+    public function delete(Request $request){
+        return true;
     }
 }
