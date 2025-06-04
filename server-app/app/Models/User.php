@@ -39,7 +39,7 @@ class User extends Authenticatable
         return $this->belongsTo(Role::class);
     }
 
-    public function files()
+    public function file()
     {
         return $this->morphMany(File::class,  'fileable');
     }

@@ -26,16 +26,24 @@ const buttonItems : ButtonItem[] = [
         href: '/list/organization',
     }
 ]
+interface OrganizationDataProp {
+    organizations:  OrganizationData[];
+}
 
-export default function Organization({ organizations }: OrganizationData[]) {
+
+export default function Organization({ organizations }: OrganizationDataProp) {
     const [organizationDrop, setOrganizationDrop] = useState<number>(0);
     const [modal, setModal] = useState<boolean>(false);
     const { post } = useForm({});
-    console.log('List', organizations);
-    const eliminar = (id) => {
+
+    const eliminar = (id: number) => {
         post(`/organization/delete/${id}`, {
-            onSuccess: (mes) => {
-                toast.success(mes.props.flash?.message);
+            onSuccess: (page) => {
+                const message = (page.props as { flash?: { message?: string } }).flash?.message;
+                if (message) {
+                    toast.success(message);
+                }
+
             },
         });
     };
@@ -94,7 +102,7 @@ export default function Organization({ organizations }: OrganizationData[]) {
                             </tr>
                         </thead>
                         <tbody>
-                            {organizations.map((organization, index) => (
+                            {organizations.map((organization: OrganizationData, index:number ) => (
                                 <tr
                                     key={index}
                                     className="border-b border-gray-200 bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-600"
@@ -112,11 +120,13 @@ export default function Organization({ organizations }: OrganizationData[]) {
                                         </div>
                                     </td>
                                     <th scope="row" className="flex items-center px-6 py-4 whitespace-nowrap text-gray-900 dark:text-white">
-                                        <img
-                                            className="h-10 w-10 rounded-full"
-                                            src={`http://localhost:8000/storage/${organization.file.path}`}
-                                            alt="logo image"
-                                        />
+                                        {organization.file && (
+                                            <img
+                                                className="h-10 w-10 rounded-full"
+                                                src={`http://localhost:8000/storage/${organization.file.path}`}
+                                                alt="logo image"
+                                            />
+                                        )}
                                         <div className="ps-3">
                                             <div className="text-base font-semibold">{organization.name}</div>
                                             <div className="font-normal text-gray-500">{organization.description}</div>

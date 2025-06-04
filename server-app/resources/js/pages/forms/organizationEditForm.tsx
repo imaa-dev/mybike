@@ -1,18 +1,11 @@
 import { Button } from '@/components/ui/button';
 import { FormEventHandler } from 'react';
-import { Head, router, useForm } from '@inertiajs/react';
+import { Head, useForm } from '@inertiajs/react';
 import toast from 'react-hot-toast';
 import AppLayout from '@/layouts/app-layout';
-import { BreadcrumbItem } from '@/types';
+import { BreadcrumbItem, ButtonItem, OrganizationData } from '@/types';
 import ButtonTop from '@/components/button-top';
 
-type UpdateOrganizationForm = {
-    organization_id: string;
-    file: File,
-    name: string,
-    description: string,
-    active: boolean,
-}
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Organización',
@@ -24,32 +17,46 @@ const breadcrumbs: BreadcrumbItem[] = [
     }
 ];
 
-const buttonItems : [] = [
+const buttonItems : ButtonItem[] = [
     {
-        name: 'Crear',
+        title: 'Crear',
         href: '/create/organization',
     },
     {
-        name: 'Listar',
+        title: 'Listar',
         href: '/list/organization',
     }
 ]
-export default function OrganizationEditForm({organization}) {
+type EditOrganizationForm = {
+    id: number;
+    name: string;
+    description: string;
+    active:  boolean;
+    file: File | null;
+}
 
-    const { data, setData, post, errors, reset } = useForm<Required<UpdateOrganizationForm>>({
-        organization_id: organization.id,
-        file: organization.file,
+interface OrganizationEditFormProps {
+    organization: OrganizationData;
+}
+export default function OrganizationEditForm({organization}: OrganizationEditFormProps) {
+
+    const { data, setData, post, reset } = useForm<Required<EditOrganizationForm>>({
+        id: organization.id,
+        file: null,
         name: organization.name,
         description: organization.description,
         active: organization.active,
     })
+
     const active = organization.active;
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
         post('/organization/edit', {
             onSuccess: (page) => {
-                console.log('UPDATED',page)
-                toast.success(page.props.flash?.message)
+                const message = (page.props as { flash?: { message?: string } }).flash?.message;
+                if(message) {
+                    toast.success(message)
+                }
                 reset()
             },
             onError: (error) => {
@@ -59,18 +66,24 @@ export default function OrganizationEditForm({organization}) {
     }
 
     return (
-        <AppLayout breadcrumbs={breadcrumbs} >
+        <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Organizacion" />
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
                 <ButtonTop items={buttonItems} />
                 <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
                     <div className="inline-flex rounded-md shadow-xs">
                         <form
-                            className="flex w-full  flex-col justify-center gap-6 rounded-lg bg-white p-6 shadow-md md:p-10 dark:bg-gray-800"
+                            className="flex w-full flex-col justify-center gap-6 rounded-lg bg-white p-6 shadow-md md:p-10 dark:bg-gray-800"
                             onSubmit={submit}
                         >
                             <div className="group relative z-0 mb-12 w-full">
-                                <img className="m-5 p-2 w-30" src={`http://localhost:8000/storage/${organization.file.path}`} alt={"Organization Edit"} />
+                                {organization.file && (
+                                    <img
+                                        className="m-5 w-30 p-2"
+                                        src={`http://localhost:8000/storage/${organization.file.path}`}
+                                        alt={'Organization Edit'}
+                                    />
+                                )}
                                 <input
                                     type="file"
                                     name="file_organization"
@@ -79,7 +92,13 @@ export default function OrganizationEditForm({organization}) {
                                     autoFocus
                                     tabIndex={1}
                                     autoComplete="file"
-                                    onChange={(e) => setData('file', e.target.files[0])}
+                                    onChange={(e) => {
+                                        const file =  e.target.files?.[0];
+                                        console.log(file);
+                                        if(file) {
+                                            setData('file', file);
+                                        }
+                                    }}
                                     required
                                 />
                                 <label
@@ -130,19 +149,22 @@ export default function OrganizationEditForm({organization}) {
                                 >
                                     Descripción
                                 </label>
-                                <div className="group relative mt-10 z-0 mb-5 w-full">
-                                    <label className="inline-flex items-center cursor-pointer">
+                                <div className="group relative z-0 mt-10 mb-5 w-full">
+                                    <label className="inline-flex cursor-pointer items-center">
                                         <input
                                             type="checkbox"
                                             tabIndex={5}
                                             autoComplete="active"
-                                            className="sr-only peer"
+                                            className="peer sr-only"
                                             checked={data.active}
-                                            onChange={ (e) =>setData('active', e.target.checked) }
+                                            onChange={(e) => setData('active', e.target.checked)}
                                         />
-                                        <div
-                                            className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600 dark:peer-checked:bg-blue-600"></div>
-                                        {active ? <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Desactivar Organizacion</span> : <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Activar Organizacion</span>}
+                                        <div className="peer relative h-6 w-11 rounded-full bg-gray-200 peer-checked:bg-blue-600 peer-focus:ring-4 peer-focus:ring-blue-300 peer-focus:outline-none after:absolute after:start-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:after:translate-x-full peer-checked:after:border-white rtl:peer-checked:after:-translate-x-full dark:border-gray-600 dark:bg-gray-700 dark:peer-checked:bg-blue-600 dark:peer-focus:ring-blue-800"></div>
+                                        {active ? (
+                                            <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Desactivar Organizacion</span>
+                                        ) : (
+                                            <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Activar Organizacion</span>
+                                        )}
                                     </label>
                                 </div>
                             </div>
@@ -155,8 +177,7 @@ export default function OrganizationEditForm({organization}) {
                 </div>
             </div>
         </AppLayout>
-
-    )
+    );
 }
 
 

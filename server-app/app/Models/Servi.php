@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Servi extends Model
 {
 
-    public function files()
+    public function file()
     {
         return $this->morphMany(File::class, 'fileable');
     }

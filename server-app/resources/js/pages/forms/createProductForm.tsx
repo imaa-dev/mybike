@@ -32,11 +32,11 @@ type CreateProductForm = {
     description: string,
     brand: string,
     model: string,
-    file: File
+    file: File | null
 }
 export default function CreateProductForm() {
 
-    const { data, setData, post, processing, errors, reset } = useForm<Required<CreateProductForm>>({
+    const { data, setData, post, errors } = useForm<Required<CreateProductForm>>({
         name: '',
         description: '',
         brand: '',
@@ -49,12 +49,11 @@ export default function CreateProductForm() {
         post('create/product')
     }
     return (
-        <AppLayout breadcrumbs={breadcrumbs} >
+        <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Productos" />
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-5">
                 <ButtonTop items={buttonItems} />
                 <div className="border-sidebar-border/70 dark:border-sidebar-border relative min-h-[100vh] flex-1 overflow-hidden rounded-xl border md:min-h-min">
-
                     <form
                         className="flex w-full flex-col justify-center gap-6 rounded-lg bg-white p-6 shadow-md md:p-10 dark:bg-gray-800"
                         onSubmit={submit}
@@ -62,76 +61,97 @@ export default function CreateProductForm() {
                         <div id="create-product-carousel" className="relative w-full" data-carousel="slide">
                             <div className="relative h-56 overflow-hidden rounded-lg md:h-96">
                                 <div className="hidden duration-700 ease-in-out" data-carousel-item>
-                                    <img src="http://localhost:8000/storage/carousel.png"
-                                         className="absolute block w-100 -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
-                                         alt="..." />
+                                    <img
+                                        src="http://localhost:8000/storage/carousel.png"
+                                        className="absolute top-1/2 left-1/2 block w-100 -translate-x-1/2 -translate-y-1/2"
+                                        alt="..."
+                                    />
                                 </div>
                                 <div className="hidden duration-700 ease-in-out" data-carousel-item>
-                                    <img src="http://localhost:8000/storage/carousel.png"
-                                         className="absolute block w-100 -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
-                                         alt="..." />
+                                    <img
+                                        src="http://localhost:8000/storage/carousel.png"
+                                        className="absolute top-1/2 left-1/2 block w-100 -translate-x-1/2 -translate-y-1/2"
+                                        alt="..."
+                                    />
                                 </div>
                             </div>
 
-                            <button type="button"
-                                    className="absolute top-0 start-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
-                                    data-carousel-prev>
-                                <span
-                                    className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
-                                    <svg className="w-4 h-4 text-white dark:text-gray-800 rtl:rotate-180" aria-hidden="true"
-                                         xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                                        <path
-                                            d="M5 1 1 5l4 4" />
+                            <button
+                                type="button"
+                                className="group absolute start-0 top-0 z-30 flex h-full cursor-pointer items-center justify-center px-4 focus:outline-none"
+                                data-carousel-prev
+                            >
+                                <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/30 group-hover:bg-white/50 group-focus:ring-4 group-focus:ring-white group-focus:outline-none dark:bg-gray-800/30 dark:group-hover:bg-gray-800/60 dark:group-focus:ring-gray-800/70">
+                                    <svg
+                                        className="h-4 w-4 text-white rtl:rotate-180 dark:text-gray-800"
+                                        aria-hidden="true"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        fill="none"
+                                        viewBox="0 0 6 10"
+                                    >
+                                        <path d="M5 1 1 5l4 4" />
                                     </svg>
                                     <span className="sr-only">Previous</span>
                                 </span>
                             </button>
-                            <button type="button"
-                                    className="absolute top-0 end-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
-                                    data-carousel-next>
-                                <span
-                                    className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
-                                    <svg className="w-4 h-4 text-white dark:text-gray-800 rtl:rotate-180" aria-hidden="true"
-                                         xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                                        <path
-                                            d="m1 9 4-4-4-4" />
+                            <button
+                                type="button"
+                                className="group absolute end-0 top-0 z-30 flex h-full cursor-pointer items-center justify-center px-4 focus:outline-none"
+                                data-carousel-next
+                            >
+                                <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/30 group-hover:bg-white/50 group-focus:ring-4 group-focus:ring-white group-focus:outline-none dark:bg-gray-800/30 dark:group-hover:bg-gray-800/60 dark:group-focus:ring-gray-800/70">
+                                    <svg
+                                        className="h-4 w-4 text-white rtl:rotate-180 dark:text-gray-800"
+                                        aria-hidden="true"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        fill="none"
+                                        viewBox="0 0 6 10"
+                                    >
+                                        <path d="m1 9 4-4-4-4" />
                                     </svg>
                                     <span className="sr-only">Next</span>
                                 </span>
                             </button>
                         </div>
 
-
-                        <div className="relative z-0 w-full mb-5 grou">
-                            <input type="file"
-                                   name="file_product[]"
-                                   id="file_product"
-                                   className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                                   autoFocus
-                                   multiple
-                                   tabIndex={1}
-                                   autoComplete="file"
-                                   onChange={(e) => setData('file', e.target.files ? Array.from(e.target.files) : [])}
-                                   required
+                        <div className="grou relative z-0 mb-5 w-full">
+                            <input
+                                type="file"
+                                name="file_product[]"
+                                id="file_product"
+                                className="peer block w-full appearance-none border-0 border-b-2 border-gray-300 bg-transparent px-0 py-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-0 focus:outline-none dark:border-gray-600 dark:text-white dark:focus:border-blue-500"
+                                autoFocus
+                                multiple
+                                tabIndex={1}
+                                autoComplete="file"
+                                onChange={(e) => {
+                                    const file = e.target.files?.[0];
+                                    if(file){
+                                        setData('file', file);
+                                    }
+                                }}
+                                required
                             />
                         </div>
-                        <div className="relative z-0 w-11111full mb-5 group">
-                            <input type="text"
-                                   name="name_product"
-                                   id="name_product"
-                                   className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                                   placeholder="Nombre Producto"
-                                   autoFocus
-                                   tabIndex={1}
-                                   autoComplete="name"
-                                   value={data.name}
-                                   onChange={(e) => setData('name', e.target.value)}
-                                   required />
+                        <div className="w-11111full group relative z-0 mb-5">
+                            <input
+                                type="text"
+                                name="name_product"
+                                id="name_product"
+                                className="peer block w-full appearance-none border-0 border-b-2 border-gray-300 bg-transparent px-0 py-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-0 focus:outline-none dark:border-gray-600 dark:text-white dark:focus:border-blue-500"
+                                placeholder="Nombre Producto"
+                                autoFocus
+                                tabIndex={1}
+                                autoComplete="name"
+                                value={data.name}
+                                onChange={(e) => setData('name', e.target.value)}
+                                required
+                            />
                             <InputError message={errors.name} />
                         </div>
-                        <div className="relative z-0 w-full mb-5 group">
+                        <div className="group relative z-0 mb-5 w-full">
                             <input
-                                className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                                className="peer block w-full appearance-none border-0 border-b-2 border-gray-300 bg-transparent px-0 py-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-0 focus:outline-none dark:border-gray-600 dark:text-white dark:focus:border-blue-500"
                                 type="text"
                                 name="description_product"
                                 id="description_product"
@@ -144,9 +164,9 @@ export default function CreateProductForm() {
                             />
                             <InputError message={errors.description} />
                         </div>
-                        <div className="relative z-0 w-full mb-5 group">
+                        <div className="group relative z-0 mb-5 w-full">
                             <input
-                                className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                                className="peer block w-full appearance-none border-0 border-b-2 border-gray-300 bg-transparent px-0 py-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-0 focus:outline-none dark:border-gray-600 dark:text-white dark:focus:border-blue-500"
                                 type="text"
                                 name="brand_product"
                                 id="brand_product"
@@ -159,9 +179,9 @@ export default function CreateProductForm() {
                             />
                             <InputError message={errors.brand} />
                         </div>
-                        <div className="relative z-0 w-full mb-5 group">
+                        <div className="group relative z-0 mb-5 w-full">
                             <input
-                                className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                                className="peer block w-full appearance-none border-0 border-b-2 border-gray-300 bg-transparent px-0 py-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-0 focus:outline-none dark:border-gray-600 dark:text-white dark:focus:border-blue-500"
                                 type="text"
                                 name="model_product"
                                 id="model_product"
@@ -177,11 +197,9 @@ export default function CreateProductForm() {
                         <Button type="submit" className="mt-4 w-full" tabIndex={4}>
                             Crear Producto
                         </Button>
-
                     </form>
                 </div>
             </div>
         </AppLayout>
-
-    )
+    );
 }

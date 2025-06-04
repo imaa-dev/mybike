@@ -46,20 +46,17 @@ export interface User {
     updated_at: string;
     [key: string]: unknown; // This allows for additional properties...
 }
+export interface FileMeta {
+    id: number;
+    path: string;
+}
 
 export interface OrganizationData {
     id: number;
-    file: File;
+    file: FileMeta;
     name: string;
     description: string;
-    address: string;
-    city: string;
-    state: string;
-    country: string;
-    postal_code: string;
-    phone: string;
-    email: string;
-    website: string;
-    created_at: string;
-    updated_at: string;
+    active: boolean;
 }
+
+

@@ -18,7 +18,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 type CreateOrganizationForm = {
-    file: File,
+    file: File | null,
     name: string,
     description: string,
     active: boolean,
@@ -47,7 +47,10 @@ const OrganizationForm = () => {
         post('/create/organization',{
             preserveScroll: true,
             onSuccess: (page) => {
-                toast.success(page.props.flash?.message);
+                const message = (page.props as { flash?: { message?: string } }).flash?.message;
+                if(message) {
+                    toast.success(message);
+                }
                 reset()
             },
             onError: (res) => {
@@ -86,7 +89,12 @@ const OrganizationForm = () => {
                                 autoFocus
                                 tabIndex={1}
                                 autoComplete="file"
-                                onChange={(e) => setData('file', e.target.files[0])}
+                                onChange={(e) => {
+                                    const file = e.target.files?.[0];
+                                    if(file) {
+                                        setData('file', file)
+                                    }
+                                }}
                                 required
                             />
                             <label

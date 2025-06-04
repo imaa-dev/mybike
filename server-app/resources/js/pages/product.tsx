@@ -1,9 +1,6 @@
 import AppLayout from '@/layouts/app-layout';
-import type { BreadcrumbItem } from '@/types';
-import { Head, useForm } from '@inertiajs/react';
-import InputError from '@/components/input-error';
-import { Button } from '@/components/ui/button';
-import { FormEventHandler } from 'react';
+import type { BreadcrumbItem, ButtonItem } from '@/types';
+import { Head } from '@inertiajs/react';
 import ButtonTop from '@/components/button-top';
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -18,21 +15,13 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 ];
 
-type CreateProductForm = {
-    name: string,
-    description: string,
-    brand: string,
-    model: string,
-    file?: File[],
-};
-
-const buttonItems : [] = [
+const buttonItems : ButtonItem[] = [
     {
-        name: 'Crear',
+        title: 'Crear',
         href: '/create/product',
     },
     {
-        name: 'Listar',
+        title: 'Listar',
         href: '/product',
     }
 ]

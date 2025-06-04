@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
 {
-    public function files()
+    public function file()
     {
         return $this->morphMany(File::class, 'fileable');
     }

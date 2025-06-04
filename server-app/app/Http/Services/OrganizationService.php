@@ -43,9 +43,8 @@ class OrganizationService
     {
 
         try{
-
             $path = $request->file('file')->store('organization/'.$request->user()->id, 'public');
-            $organizationUpdate = Organization::where('id', $request->organization_id)->with('file')->first();
+            $organizationUpdate = Organization::where('id', $request->id)->with('file')->first();
             Storage::disk('public')->delete($organizationUpdate->file->path);
             $organizationUpdate->user_id = $request->user()->id;
             $organizationUpdate->name = $request->name;
