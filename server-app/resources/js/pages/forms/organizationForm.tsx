@@ -3,8 +3,7 @@ import { Head, useForm } from '@inertiajs/react';
 import { FormEventHandler } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 import AppLayout from '@/layouts/app-layout';
-import { BreadcrumbItem, ButtonItem } from '@/types';
-import ButtonTop from '@/components/button-top';
+import { BreadcrumbItem } from '@/types';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -12,8 +11,12 @@ const breadcrumbs: BreadcrumbItem[] = [
         href: '/list/organization',
     },
     {
+        title: 'Listar',
+        href: '/list/organization',
+    },
+    {
         title: 'Crear',
-        href: '/organization/listar',
+        href: '/list/organization',
     }
 ];
 
@@ -24,16 +27,6 @@ type CreateOrganizationForm = {
     active: boolean,
 }
 
-const buttonItems : ButtonItem[] = [
-    {
-        title: 'Crear',
-        href: '/create/organization',
-    },
-    {
-        title: 'Listar',
-        href: '/list/organization',
-    }
-]
 
 const OrganizationForm = () => {
     const { data, setData, post, reset } = useForm<Required<CreateOrganizationForm>>({
@@ -73,7 +66,6 @@ const OrganizationForm = () => {
         <AppLayout breadcrumbs={breadcrumbs} >
             <Head title='Organization' />
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
-                <ButtonTop items={buttonItems} />
                 <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
                 <div className="inline-flex rounded-md shadow-xs">
                         <form

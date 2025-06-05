@@ -3,30 +3,23 @@ import { FormEventHandler } from 'react';
 import { Head, useForm } from '@inertiajs/react';
 import toast from 'react-hot-toast';
 import AppLayout from '@/layouts/app-layout';
-import { BreadcrumbItem, ButtonItem, OrganizationData } from '@/types';
-import ButtonTop from '@/components/button-top';
+import { BreadcrumbItem, OrganizationData } from '@/types';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Organización',
-        href: '/organization',
-    },
-    {
-        title: 'Actualizar',
-        href: '/organization/listar',
-    }
-];
-
-const buttonItems : ButtonItem[] = [
-    {
-        title: 'Crear',
-        href: '/create/organization',
+        href: '/list/organization',
     },
     {
         title: 'Listar',
         href: '/list/organization',
+    },
+    {
+        title: 'Actualizar',
+        href: '/list/organization',
     }
-]
+
+];
 type EditOrganizationForm = {
     id: number;
     name: string;
@@ -69,7 +62,6 @@ export default function OrganizationEditForm({organization}: OrganizationEditFor
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Organizacion" />
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
-                <ButtonTop items={buttonItems} />
                 <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
                     <div className="inline-flex rounded-md shadow-xs">
                         <form

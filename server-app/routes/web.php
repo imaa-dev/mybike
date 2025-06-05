@@ -16,23 +16,24 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return Inertia::render('dashboard');
     })->name('dashboard');
 
-    Route::get('service', [\App\Http\Controllers\ServiController::class, 'create'])->name('services.create');
+    Route::get('service', [\App\Http\Controllers\ServiController::class, 'create'])->name('services.create.view');
     Route::post('create/service', [\App\Http\Controllers\ServiController::class, 'store'])->name('services.store');
 
     // Client routes
-    Route::get('client', [UserController::class, 'createClient'])->name('clients.create');
+    Route::get('client', [UserController::class, 'createClient'])->name('clients.create.view');
     Route::post('create/client', [UserController::class, 'storeClient'])->name('clients.store');
 
     // Product routes
     Route::get('product', [ProductController::class, 'list'])->name('products.list');
-    Route::get('create/product', [ProductController::class, 'create'])->name('products.create');
-    Route::post('create/product', [ProductController::class, 'store'])->name('products.store');
+    Route::get('create/product', [ProductController::class, 'create'])->name('product.create.vew');
+    Route::post('create/product', [ProductController::class, 'store'])->name('product.store');
+    Route::get('update/{product}/product', [ProductController::class, 'getUpdate'])->name('product.update.view');
     Route::post('update/product', [ProductController::class, 'update'])->name('products.update');
 
     // Organization routes
-    Route::get('list/organization', [OrganizationController::class, 'list'])->name('organization.list');
-    Route::get('create/organization', [OrganizationController::class, 'create'])->name('organization.create');
-    Route::get('organization/{organization}/edit', [OrganizationController::class, 'getUpdate'])->name('organization.get.update');
+    Route::get('list/organization', [OrganizationController::class, 'list'])->name('organization.list.view');
+    Route::get('create/organization', [OrganizationController::class, 'create'])->name('organization.create.view');
+    Route::get('organization/{organization}/edit', [OrganizationController::class, 'getUpdate'])->name('organization.update.view');
     Route::post('create/organization', [OrganizationController::class, 'store'])->name('organizations.store');
     Route::post('organization/edit', [OrganizationController::class, 'update'])->name('organizations.update');
     Route::post('organization/delete/{id}', [OrganizationController::class, 'delete'])->name('organizations.destroy');

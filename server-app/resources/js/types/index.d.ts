@@ -59,4 +59,14 @@ export interface OrganizationData {
     active: boolean;
 }
 
+export interface ProductData {
+    id: number;
+    name: string,
+    description: string,
+    brand: string,
+    model: string,
+    price: number,
+    file: FileMeta[] | null
+}
+
 

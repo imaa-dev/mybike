@@ -27,7 +27,6 @@ class StoreProductRequest extends FormRequest
             'brand' => ['required', 'string'],
             'model' => ['required', 'string'],
             'price' => ['nullable', 'numeric'],
-            'file' => ['required', 'image', 'mimes:jpeg,png,jpg,gif,svg'],
         ];
     }
 

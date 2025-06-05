@@ -1,10 +1,8 @@
+import type { BreadcrumbItem, ProductData } from '@/types';
+import AppLayout from '@/layouts/app-layout';
+import { Head, useForm } from '@inertiajs/react';
 import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
-import { Head, useForm } from '@inertiajs/react';
-import AppLayout from '@/layouts/app-layout';
-import { BreadcrumbItem } from '@/types';
-import { FormEventHandler } from 'react';
-import toast, { Toaster } from 'react-hot-toast';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -12,16 +10,14 @@ const breadcrumbs: BreadcrumbItem[] = [
         href: '/product',
     },
     {
-        title: 'Listar',
+        title: 'Actualizar ',
         href: '/product',
     },
-    {
-        title: 'Crear',
-        href: '/',
-    }
+
 ];
 
 interface ProductDataProps {
+    id: number;
     name: string,
     description: string,
     brand: string,
@@ -29,42 +25,51 @@ interface ProductDataProps {
     price: number,
     file: File[] | null
 }
-export default function CreateProductForm() {
+
+interface Product {
+    product: ProductData
+}
+export default function EditProducForm ({product}: Product) {
 
     const { data, setData, post, errors } = useForm<Required<ProductDataProps>>({
-        name: '',
-        description: '',
-        brand: '',
-        model: '',
-        price: 0,
-        file: null
+        id: product.id,
+        name: product.name,
+        description: product.description,
+        brand: product.brand,
+        model: product.model,
+        price: product.price,
+        file: product.file
     })
-    const submit:FormEventHandler = (e) => {
+    console.log(product)
+    const submit = (e) => {
         e.preventDefault();
-        post('/create/product',{
-            onSuccess: (page) => {
-                console.log(page);
-                const message = (page.props as { flash?: { message?: string } }).flash?.message;
-                if (message) {
-                    toast.success(message);
-                }
-            },
-            onError: (error) => {
-                console.log(error);
-            }
-
+        post('/update/product', {
+            onSuccess: ((page) => {
+                console.log("POST",page)
+            })
         })
     }
+
+
     return (
-        <AppLayout breadcrumbs={breadcrumbs}>
+        <AppLayout breadcrumbs={breadcrumbs} >
             <Head title="Productos" />
-            <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-5">
+            <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
                 <div className="border-sidebar-border/70 dark:border-sidebar-border relative min-h-[100vh] flex-1 overflow-hidden rounded-xl border md:min-h-min">
                     <form
                         className="flex w-full flex-col justify-center gap-6 rounded-lg bg-white p-6 shadow-md md:p-10 dark:bg-gray-800"
                         onSubmit={submit}
                     >
                         <div className="grou relative z-0 mb-5 w-full">
+                            {product.file[0] ? (
+                                <img
+                                    className="m-5 w-70 p-2"
+                                    src={`http://localhost:8000/storage/${product.file[0].path}`}
+                                />
+                            ): <img
+                                className="m-5 w-70 p-2"
+                                src={`http://localhost:8000/storage/engran.png`}
+                            />}
                             <input
                                 type="file"
                                 name="file_product[]"
@@ -161,12 +166,11 @@ export default function CreateProductForm() {
                             <InputError message={errors.price} />
                         </div>
                         <Button type="submit" className="mt-4 w-full" tabIndex={4}>
-                            Crear Producto
+                            Actualizar Producto
                         </Button>
                     </form>
                 </div>
             </div>
-            <Toaster />
         </AppLayout>
-    );
+    )
 }

@@ -37,7 +37,7 @@ class OrganizationController extends Controller
     {
         $res =  $this->organizationService->create($request);
         session()->flash('message', $res['message']);
-        return redirect()->route('organization.list');
+        return redirect()->route('organization.list.view');
     }
     public function getUpdate(Organization $organization)
     {
@@ -50,13 +50,13 @@ class OrganizationController extends Controller
     {
         $res = $this->organizationService->update($request);
         session()->flash('message', $res['message']);
-        return redirect()->route('organization.list');
+        return redirect()->route('organization.list.view');
     }
 
     public function delete(Request $request)
     {
         $res = $this->organizationService->delete($request);
         session()->flash('message', $res['message']);
-        return redirect()->route('organization.list');
+        return redirect()->route('organization.list.view');
     }
 }
