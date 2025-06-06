@@ -46,7 +46,7 @@ class OrganizationController extends Controller
             'organization' => $organizationFile,
         ]);
     }
-    public function update(StoreOrganizationRequest $request)
+    public function update(Request $request)
     {
         $res = $this->organizationService->update($request);
         session()->flash('message', $res['message']);

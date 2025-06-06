@@ -1,63 +1,56 @@
-import type { BreadcrumbItem, ProductData } from '@/types';
 import AppLayout from '@/layouts/app-layout';
 import { Head, useForm } from '@inertiajs/react';
+import type { BreadcrumbItem, User } from '@/types';
 import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
+import { FormEventHandler } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
+
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Producto',
-        href: '/product',
+        title: 'Cliente',
+        href: '/client',
     },
     {
-        title: 'Actualizar ',
-        href: '/product',
+        title: 'Listar ',
+        href: '/client',
+    },
+    {
+        title: 'Crear',
+        href: '/',
     },
 
 ];
 
-interface ProductDataProps {
-    id: number;
-    name: string,
-    description: string,
-    brand: string,
-    model: string,
-    price: number,
-    file: File[] | null
-}
+export default function CreateClientForm() {
 
-interface Product {
-    product: ProductData
-}
-export default function EditProducForm ({product}: Product) {
-
-    const { data, setData, post, errors } = useForm<Required<ProductDataProps>>({
-        id: product.id,
-        name: product.name,
-        description: product.description,
-        brand: product.brand,
-        model: product.model,
-        price: product.price,
+    const { data, setData, post, errors } = useForm<Required<User>>({
+        name: '',
+        description: '',
+        brand: '',
+        model: '',
+        price: 0,
         file: null
     })
-    console.log(product)
-    const submit = (e) => {
+    const submit:FormEventHandler = (e) => {
         e.preventDefault();
-        post('/update/product', {
-            onSuccess: ((page) => {
+        post('/create/client',{
+            onSuccess: (page) => {
                 const message = (page.props as { flash?: { message?: string } }).flash?.message;
-                if(message){
+                if (message) {
                     toast.success(message);
                 }
-            })
+            },
+            onError: (error) => {
+                console.log(error);
+            }
+
         })
     }
-
-
     return (
-        <AppLayout breadcrumbs={breadcrumbs} >
-            <Head title="Productos" />
+        <AppLayout breadcrumbs={breadcrumbs}>
+            <Head title="Clientes" />
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
                 <div className="border-sidebar-border/70 dark:border-sidebar-border relative min-h-[100vh] flex-1 overflow-hidden rounded-xl border md:min-h-min">
                     <form
@@ -65,15 +58,6 @@ export default function EditProducForm ({product}: Product) {
                         onSubmit={submit}
                     >
                         <div className="grou relative z-0 mb-5 w-full">
-                            {product.file[0] ? (
-                                <img
-                                    className="m-5 w-70 p-2"
-                                    src={`http://localhost:8000/storage/${product.file[0].path}`}
-                                />
-                            ): <img
-                                className="m-5 w-70 p-2"
-                                src={`http://localhost:8000/storage/engran.png`}
-                            />}
                             <input
                                 type="file"
                                 name="file_product[]"
@@ -170,7 +154,7 @@ export default function EditProducForm ({product}: Product) {
                             <InputError message={errors.price} />
                         </div>
                         <Button type="submit" className="mt-4 w-full" tabIndex={4}>
-                            Actualizar Producto
+                            Crear Producto
                         </Button>
                     </form>
                 </div>

@@ -4,6 +4,7 @@ import { FormEventHandler } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 import AppLayout from '@/layouts/app-layout';
 import { BreadcrumbItem } from '@/types';
+import {useState} from "react";
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -29,12 +30,20 @@ type CreateOrganizationForm = {
 
 
 const OrganizationForm = () => {
+
     const { data, setData, post, reset } = useForm<Required<CreateOrganizationForm>>({
         file: null,
         name: '',
         description: '',
         active: false,
     })
+
+    const [uploadImage, setUploadImage] = useState<string | null>(null);
+
+    const handleImageChange = (file: File) => {
+        const imageUrl = URL.createObjectURL(file)
+        setUploadImage(imageUrl)
+    }
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
         post('/create/organization',{
@@ -68,10 +77,19 @@ const OrganizationForm = () => {
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
                 <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
                 <div className="inline-flex rounded-md shadow-xs">
-                        <form
+                    <form
                         className="flex w-full flex-col justify-center gap-6 rounded-lg bg-white p-6 shadow-md md:p-10 dark:bg-gray-800"
                         onSubmit={submit}
                     >
+                        {uploadImage ?
+                            <div className="group relative flex justify-center items-center">
+                                <img className="w-60" src={uploadImage} alt="Imagen Logo" />
+                            </div>
+                            :
+                            <div className="group relative flex justify-center items-center">
+                                <img className="w-60" src="http://localhost:8000/storage/logo-img.png" alt="Imagen Logo" />
+                            </div>
+                        }
                         <div className="group relative z-0 mb-12 w-full">
                             <input
                                 type="file"
@@ -85,6 +103,7 @@ const OrganizationForm = () => {
                                     const file = e.target.files?.[0];
                                     if(file) {
                                         setData('file', file)
+                                        handleImageChange(file)
                                     }
                                 }}
                                 required

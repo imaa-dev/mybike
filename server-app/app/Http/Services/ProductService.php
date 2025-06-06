@@ -79,7 +79,12 @@ class ProductService{
 
     public function delete($request){
         try {
-
+            $productDelete = Product::where('id', $request->id)->with('file')->first();
+            foreach ($productDelete->file as $file){
+                Storage::disk('public')->delete($file->path);
+            }
+            $productDelete->delete();
+            $productDelete->file()->delete();
             $data = [
                 'code' => 200,
                 'status' =>  'success',
@@ -92,5 +97,6 @@ class ProductService{
                 'code' => 500,
             ];
         }
+        return $data;
     }
 }

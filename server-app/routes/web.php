@@ -20,15 +20,17 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('create/service', [\App\Http\Controllers\ServiController::class, 'store'])->name('services.store');
 
     // Client routes
-    Route::get('client', [UserController::class, 'createClient'])->name('clients.create.view');
-    Route::post('create/client', [UserController::class, 'storeClient'])->name('clients.store');
+    Route::get('client', [UserController::class, 'listClient'])->name('clients.create.view');
+    Route::get('create/client', [UserController::class, 'createClient']);
+    Route::post('create/client', [UserController::class, 'store'])->name('clients.store');
 
     // Product routes
-    Route::get('product', [ProductController::class, 'list'])->name('products.list');
-    Route::get('create/product', [ProductController::class, 'create'])->name('product.create.vew');
+    Route::get('product', [ProductController::class, 'list'])->name('products.list.view');
+    Route::get('create/product', [ProductController::class, 'create'])->name('product.create.view');
     Route::post('create/product', [ProductController::class, 'store'])->name('product.store');
     Route::get('update/{product}/product', [ProductController::class, 'getUpdate'])->name('product.update.view');
     Route::post('update/product', [ProductController::class, 'update'])->name('products.update');
+    Route::post('delete/product/{id}', [ProductController::class, 'delete'])->name('products.destroy');
 
     // Organization routes
     Route::get('list/organization', [OrganizationController::class, 'list'])->name('organization.list.view');

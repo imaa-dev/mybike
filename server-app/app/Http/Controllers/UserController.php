@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Services\UserService;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -17,12 +18,21 @@ class UserController extends Controller
         return Inertia::render('user');
     }
 
+    public function listClient()
+    {
+        $clients = User::where('role_id', 3)->where('role_id', 2)->get();
+
+        return Inertia::render('client', [
+            'clients' => $clients,
+        ]);
+    }
     public function createClient()
     {
-        return Inertia::render('client');
+        return Inertia::render('forms/createClientForm');
     }
 
-    public function storeClient(Request $request)// create form request validations
+
+    public function storeClient(Request $request)
     {
         $res = $this->userService->createClient($request);
 

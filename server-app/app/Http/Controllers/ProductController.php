@@ -33,7 +33,7 @@ class ProductController extends Controller
     public function store(StoreProductRequest $request){
         $res = $this->productService->create($request);
         session()->flash('message', $res['message']);
-        return redirect()->route('products.list');
+        return redirect()->route('products.list.view');
     }
     public function getUpdate(Product $product)
     {
@@ -46,9 +46,11 @@ class ProductController extends Controller
     {
         $res = $this->productService->update($request);
         session()->flash('message', $res['message']);
-        return redirect()->route('products.list');
+        return redirect()->route('products.list.view');
     }
     public function delete(Request $request){
-        return true;
+        $res = $this->productService->delete($request);
+        session()->flash('message', $res['message']);
+        return redirect()->route('products.list.view');
     }
 }

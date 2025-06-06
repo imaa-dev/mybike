@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button';
-import { FormEventHandler } from 'react';
+import { FormEventHandler, useState } from 'react';
 import { Head, useForm } from '@inertiajs/react';
 import toast from 'react-hot-toast';
 import AppLayout from '@/layouts/app-layout';
@@ -42,6 +42,11 @@ export default function OrganizationEditForm({organization}: OrganizationEditFor
     })
 
     const active = organization.active;
+    const [uploadImage, setUploadImage] = useState<string | null>(null)
+    const handleUploadImage = (file: File) => {
+        const temporalURL = URL.createObjectURL(file)
+        setUploadImage(temporalURL)
+    }
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
         post('/organization/edit', {
@@ -54,6 +59,9 @@ export default function OrganizationEditForm({organization}: OrganizationEditFor
             },
             onError: (error) => {
                 console.log('ERROR', error)
+            },
+            headers: {
+                'Content-Type': 'multipart/form-data',
             }
         })
     }
@@ -67,15 +75,27 @@ export default function OrganizationEditForm({organization}: OrganizationEditFor
                         <form
                             className="flex w-full flex-col justify-center gap-6 rounded-lg bg-white p-6 shadow-md md:p-10 dark:bg-gray-800"
                             onSubmit={submit}
+
                         >
-                            <div className="group relative z-0 mb-12 w-full">
-                                {organization.file && (
-                                    <img
-                                        className="m-5 w-30 p-2"
-                                        src={`http://localhost:8000/storage/${organization.file.path}`}
-                                        alt={'Organization Edit'}
+                            {
+                                uploadImage ?
+                                (
+                                    <div className="group relative flex justify-center items-center">
+                                        <img className="w-60" src={uploadImage} alt="Organization Edit" />
+                                    </div>
+                                ) :
+                                organization.file && (
+                                <div className="group relative flex justify-center items-center">
+                                  <img
+                                      className="w-60"
+                                      src={`http://localhost:8000/storage/${organization.file.path}`}
+                                      alt={'Organization Edit'}
                                     />
-                                )}
+                                </div>
+                                )
+                            }
+
+                            <div className="group relative z-0 mb-12 w-full">
                                 <input
                                     type="file"
                                     name="file_organization"
@@ -86,12 +106,11 @@ export default function OrganizationEditForm({organization}: OrganizationEditFor
                                     autoComplete="file"
                                     onChange={(e) => {
                                         const file =  e.target.files?.[0];
-                                        console.log(file);
                                         if(file) {
+                                            handleUploadImage(file);
                                             setData('file', file);
                                         }
                                     }}
-                                    required
                                 />
                                 <label
                                     htmlFor="floating_email"

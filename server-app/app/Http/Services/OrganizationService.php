@@ -41,20 +41,26 @@ class OrganizationService
 
     public function update($request)
     {
-
+        
         try{
-            $path = $request->file('file')->store('organization/'.$request->user()->id, 'public');
+            if($request->hasFile('file')){
+                $path = $request->file('file')->store('organization/'.$request->user()->id, 'public');
+            }
             $organizationUpdate = Organization::where('id', $request->id)->with('file')->first();
-            Storage::disk('public')->delete($organizationUpdate->file->path);
+            if($request->hasFile('file')){
+                Storage::disk('public')->delete($organizationUpdate->file->path);
+            }
             $organizationUpdate->user_id = $request->user()->id;
             $organizationUpdate->name = $request->name;
             $organizationUpdate->description =  $request->description;
             $organizationUpdate->active  = $request->active;
             $organizationUpdate->save();
-            $organizationUpdate->file()->delete();
-            $organizationUpdate->file()->create([
-                'path' => $path
-            ]);
+            if($request->hasFile('file')){
+                $organizationUpdate->file()->delete();
+                $organizationUpdate->file()->create([
+                    'path' => $path
+                ]);
+            }
             $data = [
                 'code' => 200,
                 'success' => true,
@@ -77,6 +83,7 @@ class OrganizationService
             $organizationDelete = Organization::where('id', $request->id)->with('file')->first();
             Storage::disk('public')->delete($organizationDelete->file->path);
             $organizationDelete->delete();
+            $organizationDelete->file()->delete();
             $data = [
                 'code' => 200,
                 'success' => true,
