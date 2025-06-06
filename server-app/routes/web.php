@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ServiController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -16,15 +17,20 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return Inertia::render('dashboard');
     })->name('dashboard');
 
-    Route::get('service', [\App\Http\Controllers\ServiController::class, 'create'])->name('services.create.view');
-    Route::post('create/service', [\App\Http\Controllers\ServiController::class, 'store'])->name('services.store');
+    // Service routes
+    Route::get('service', [ServiController::class, 'list'])->name('services.list.view');
+    Route::get('create/service', [ServiController::class, 'create'])->name('services.create.view');
+    Route::get('update/{servi}/service', [ServiController::class, 'getUpdate'])->name('services.update.view');
+    Route::post('create/service', [ServiController::class, 'store'])->name('services.store.view');
+    Route::post('update/service', [ServiController::class, 'update'])->name('services.update');
+
 
     // Client routes
     Route::get('client', [UserController::class, 'listClient'])->name('clients.list.view');
     Route::get('create/client', [UserController::class, 'createClient'])->name('client.create');
     Route::post('create/client', [UserController::class, 'storeClient'])->name('client.store');
     Route::get('update/{user}/client', [UserController::class, 'getClientUpdate'])->name('client.update.view');
-    Route::post('update/client', [UserController::class, 'updateClient'])->name('client.update');
+    Route::patch('update/client/{user}', [UserController::class, 'updateClient'])->name('client.update');
 
     // Product routes
     Route::get('product', [ProductController::class, 'list'])->name('products.list.view');

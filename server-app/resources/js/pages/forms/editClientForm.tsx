@@ -34,7 +34,7 @@ type ClientData = {
 }
 export default function EditClientForm({client}: ClientProp) {
     const [uploadImage, setUploadImage] = useState<string | null>(null);
-    const { post, setData, data, reset, errors } = useForm<Required<ClientData>>({
+    const { patch, setData, data, reset, errors } = useForm<Required<ClientData>>({
         id: client.id,
         name: client.name,
         email: client.email,
@@ -48,7 +48,8 @@ export default function EditClientForm({client}: ClientProp) {
     }
     const submit: FormEventHandler = (e) => {
         e.preventDefault()
-        post('/update/client', {
+        console.log(data)
+        patch(`/update/client/${data.id}`, {
             onSuccess: (page) => {
                 console.log(page)
                 const message = (page.props as { flash?: { message?: string } }).flash?.message;

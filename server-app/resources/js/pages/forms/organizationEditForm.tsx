@@ -30,18 +30,19 @@ type EditOrganizationForm = {
 }
 
 interface OrganizationEditFormProps {
-    organization: OrganizationData;
+    organizationUpdate: OrganizationData;
 }
-export default function OrganizationEditForm({organization}: OrganizationEditFormProps) {
+export default function OrganizationEditForm({organizationUpdate}: OrganizationEditFormProps) {
+    console.log(organizationUpdate)
     const { data, setData, post, reset, errors } = useForm<Required<EditOrganizationForm>>({
-        id: organization.id,
+        id: organizationUpdate.id,
         file: null,
-        name: organization.name,
-        description: organization.description,
-        active: organization.active,
+        name: organizationUpdate.name,
+        description: organizationUpdate.description,
+        active: organizationUpdate.active,
     })
 
-    const active = organization.active;
+    const active = organizationUpdate.active;
     const [uploadImage, setUploadImage] = useState<string | null>(null)
     const handleUploadImage = (file: File) => {
         const temporalURL = URL.createObjectURL(file)
@@ -56,12 +57,6 @@ export default function OrganizationEditForm({organization}: OrganizationEditFor
                     toast.success(message)
                 }
                 reset()
-            },
-            onError: (error) => {
-                console.log('ERROR', error)
-            },
-            headers: {
-                'Content-Type': 'multipart/form-data',
             }
         })
     }
@@ -83,11 +78,11 @@ export default function OrganizationEditForm({organization}: OrganizationEditFor
                                         <img className="w-60" src={uploadImage} alt="Organization Edit" />
                                     </div>
                                 ) :
-                                organization.file ? (
+                                    organizationUpdate.file ? (
                                 <div className="group relative flex justify-center items-center">
                                   <img
                                       className="w-60"
-                                      src={`http://localhost:8000/storage/${organization.file.path}`}
+                                      src={`http://localhost:8000/storage/${organizationUpdate.file.path}`}
                                       alt={'Organization Edit'}
                                     />
                                 </div>

@@ -22,12 +22,12 @@ class UserController extends Controller
     public function listClient()
     {
 
-        $clients = User::whereIn('role_id', [2, 3])->with('file')->get();
+        $clients = User::where('role_id', 2)->with('file')->get();
         return Inertia::render('client', [
             'clients' => $clients,
         ]);
     }
-    public function updateClient(StoreClientRequest $request)
+    public function updateClient(StoreUpdateUserRequest $request, User $user)
     {
         $res = $this->userService->update($request);
         session()->flash('message', $res['message']);
@@ -46,7 +46,7 @@ class UserController extends Controller
         return Inertia::render('forms/createClientForm');
     }
 
-    public function storeClient(StoreUpdateUserRequest $request)
+    public function storeClient(StoreClientRequest $request)
     {
         $res = $this->userService->createClient($request);
         session()->flash('message', $res['message']);

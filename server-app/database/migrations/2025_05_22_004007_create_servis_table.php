@@ -21,6 +21,8 @@ return new class extends Migration
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
             $table->string('name');
             $table->string('master_note');
+            $table->dateTime('exit')->nullable();
+            $table->integer('satisfied')->nullable();
             $table->timestamps();
         });
     }

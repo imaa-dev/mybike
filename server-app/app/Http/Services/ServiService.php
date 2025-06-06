@@ -13,7 +13,6 @@ class ServiService
     public function create($request)
     {
         try {
-            // create a services using polimorfis tables
             $servi = new Servi();
 
             $servi->save();

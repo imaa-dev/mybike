@@ -42,6 +42,7 @@ class OrganizationController extends Controller
     public function getUpdate(Organization $organization)
     {
         $organizationFile = Organization::where('id', $organization->id)->with('file')->first();
+
         return Inertia::render('forms/organizationEditForm',[
             'organizationUpdate' => $organizationFile,
         ]);

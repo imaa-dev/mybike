@@ -70,4 +70,14 @@ export interface ProductData {
     file: FileMeta[]
 }
 
+export interface ServiData {
+    id: number;
+    name: string;
+    master_note: string;
+    exit: Date;
+    satisfied: string;
+    created_at: Date;
+    updated_at: Date;
+}
+
 
