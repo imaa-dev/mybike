@@ -150,13 +150,19 @@ export default function Organization({ organizations }: OrganizationDataProp) {
                                 </td>
                                 <th scope="row"
                                     className="flex items-center px-6 py-4 whitespace-nowrap text-gray-900 dark:text-white">
-                                    {organization.file && (
+                                    {organization.file ? (
                                         <img
                                             className="h-10 w-10 rounded-full"
                                             src={`http://localhost:8000/storage/${organization.file.path}`}
                                             alt="logo image"
                                         />
-                                    )}
+                                    ) : 
+                                        <img
+                                            className="h-10 w-10 rounded-full"
+                                            src={`http://localhost:8000/storage/logo-img.png`}
+                                            alt="logo image"
+                                        />
+                                    }
                                     <div className="ps-3">
                                         <div className="text-base font-semibold">{organization.name}</div>
                                         <div className="font-normal text-gray-500">{organization.description}</div>

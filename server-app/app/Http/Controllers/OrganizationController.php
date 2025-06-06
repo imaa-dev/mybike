@@ -43,10 +43,10 @@ class OrganizationController extends Controller
     {
         $organizationFile = Organization::where('id', $organization->id)->with('file')->first();
         return Inertia::render('forms/organizationEditForm',[
-            'organization' => $organizationFile,
+            'organizationUpdate' => $organizationFile,
         ]);
     }
-    public function update(Request $request)
+    public function update(StoreOrganizationRequest $request)
     {
         $res = $this->organizationService->update($request);
         session()->flash('message', $res['message']);

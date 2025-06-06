@@ -3,7 +3,6 @@
 namespace App\Http\Services;
 
 use App\Models\Organization;
-use http\Env\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
@@ -13,16 +12,20 @@ class OrganizationService
     public function create($request)
     {
         try{
-            $path = $request->file('file')->store('organization/'.$request->user()->id, 'public');
+            if($request->hasFile('file')){
+                $path = $request->file('file')->store('organization/'.$request->user()->id, 'public');
+            }
             $organization = new Organization();
             $organization->user_id  = $request->user()->id;
             $organization->name = $request->name;
             $organization->description =  $request->description;
             $organization->active  = $request->active;
             $organization->save();
-            $organization->file()->create([
-                'path' => $path
-            ]);
+            if($request->hasFile('file')){
+                $organization->file()->create([
+                    'path' => $path
+                ]);
+            }
             $data = [
                 'code' => 200,
                 'success' => true,
@@ -81,9 +84,13 @@ class OrganizationService
     {
         try {
             $organizationDelete = Organization::where('id', $request->id)->with('file')->first();
-            Storage::disk('public')->delete($organizationDelete->file->path);
+            if($organizationDelete->file){
+                Storage::disk('public')->delete($organizationDelete->file->path);
+            }
             $organizationDelete->delete();
-            $organizationDelete->file()->delete();
+            if($organizationDelete->file){
+                $organizationDelete->file()->delete();
+            }
             $data = [
                 'code' => 200,
                 'success' => true,

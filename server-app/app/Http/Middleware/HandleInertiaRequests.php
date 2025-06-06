@@ -52,7 +52,7 @@ class HandleInertiaRequests extends Middleware
                 'location' => $request->url(),
             ],
             'organization' => fn () => $request->user()
-                ? Organization::where('user_id', $request->user()->id)->with('file')->first()
+                ? Organization::where('user_id', $request->user()->id)->where('active', true)->with('file')->first()
                 : null,
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
             'flash' => [

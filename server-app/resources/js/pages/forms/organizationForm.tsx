@@ -106,7 +106,6 @@ const OrganizationForm = () => {
                                         handleImageChange(file)
                                     }
                                 }}
-                                required
                             />
                             <label
                                 htmlFor="floating_email"

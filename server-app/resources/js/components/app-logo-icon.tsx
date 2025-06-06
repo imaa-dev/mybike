@@ -1,9 +1,9 @@
 
-export default function AppLogoIcon({props} ){
+export default function AppLogoIcon({organization} ){
     return (
         <>
-            {props?.organization && <img src={`http://localhost:8000/storage/${props.organization.file.path}`} alt='Logo' />}
-            {!props?.organization && <img src="http://localhost:8000/storage/logo2.png" alt='Logo' />}
+            {organization && <img src={`http://localhost:8000/storage/${organization.file.path}`} alt='Logo' />}
+            {!organization && <img src="http://localhost:8000/storage/logo-img.png" alt='Logo' />}
         </>
     );
 }
