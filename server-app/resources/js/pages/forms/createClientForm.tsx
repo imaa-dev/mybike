@@ -1,10 +1,10 @@
 import AppLayout from '@/layouts/app-layout';
 import { Head, useForm } from '@inertiajs/react';
-import type { BreadcrumbItem, User } from '@/types';
-import InputError from '@/components/input-error';
+import type { BreadcrumbItem } from '@/types';
 import { Button } from '@/components/ui/button';
-import { FormEventHandler } from 'react';
+import { FormEventHandler, useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
+import InputError from '@/components/input-error';
 
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -22,17 +22,24 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 
 ];
-
+type UserData = {
+    name: string;
+    email: string;
+    phone: string;
+    file: File | null;
+}
 export default function CreateClientForm() {
-
-    const { data, setData, post, errors } = useForm<Required<User>>({
+    const [uploadImage, setUploadImage] = useState<string | null>(null);
+    const { data, setData, post, errors } = useForm<Required<UserData>>({
         name: '',
-        description: '',
-        brand: '',
-        model: '',
-        price: 0,
+        email: '',
+        phone: '',
         file: null
     })
+    const handleImageChange = (file: File) => {
+        const imageURL = URL.createObjectURL(file)
+        setUploadImage(imageURL);
+    }
     const submit:FormEventHandler = (e) => {
         e.preventDefault();
         post('/create/client',{
@@ -41,11 +48,7 @@ export default function CreateClientForm() {
                 if (message) {
                     toast.success(message);
                 }
-            },
-            onError: (error) => {
-                console.log(error);
             }
-
         })
     }
     return (
@@ -57,33 +60,42 @@ export default function CreateClientForm() {
                         className="flex w-full flex-col justify-center gap-6 rounded-lg bg-white p-6 shadow-md md:p-10 dark:bg-gray-800"
                         onSubmit={submit}
                     >
+                        {uploadImage ?
+                            <div className="group relative flex justify-center items-center">
+                                <img className="w-60" src={uploadImage} alt="Upload Image" />
+                            </div>
+                            :
+                            <div className="group relative flex justify-center items-center">
+                                <img className="w-60" src="http://localhost:8000/logo-img.png" alt="Upload Image" />
+                            </div>
+                        }
                         <div className="grou relative z-0 mb-5 w-full">
                             <input
                                 type="file"
-                                name="file_product[]"
-                                id="file_product"
+                                name="file_client"
+                                id="file_client"
                                 className="peer block w-full appearance-none border-0 border-b-2 border-gray-300 bg-transparent px-0 py-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-0 focus:outline-none dark:border-gray-600 dark:text-white dark:focus:border-blue-500"
                                 autoFocus
-                                multiple
                                 tabIndex={1}
                                 autoComplete="file"
                                 onChange={(e) => {
-                                    const file = e.target.files;
+                                    const file = e.target.files?.[0];
                                     if (file) {
-                                        const files = Array.from(file);
-                                        setData('file', files);
+                                        handleImageChange(file)
+                                        setData('file', file);
+
                                     }
                                 }}
-                                required
                             />
+                            <InputError message={errors.file} />
                         </div>
                         <div className="w-11111full group relative z-0 mb-5">
                             <input
                                 type="text"
-                                name="name_product"
-                                id="name_product"
+                                name="name_client"
+                                id="name_client"
                                 className="peer block w-full appearance-none border-0 border-b-2 border-gray-300 bg-transparent px-0 py-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-0 focus:outline-none dark:border-gray-600 dark:text-white dark:focus:border-blue-500"
-                                placeholder="Nombre Producto"
+                                placeholder="Nombre Cliente"
                                 autoFocus
                                 tabIndex={1}
                                 autoComplete="name"
@@ -97,64 +109,33 @@ export default function CreateClientForm() {
                             <input
                                 className="peer block w-full appearance-none border-0 border-b-2 border-gray-300 bg-transparent px-0 py-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-0 focus:outline-none dark:border-gray-600 dark:text-white dark:focus:border-blue-500"
                                 type="text"
-                                name="description_product"
-                                id="description_product"
-                                placeholder="Descripcion"
-                                required
+                                name="client_email"
+                                id="client_email"
+                                placeholder="Email"
                                 tabIndex={3}
-                                autoComplete="description"
-                                value={data.description}
-                                onChange={(e) => setData('description', e.target.value)}
+                                autoComplete="email"
+                                value={data.email}
+                                onChange={(e) => setData('email', e.target.value)}
                             />
-                            <InputError message={errors.description} />
+                            <InputError message={errors.email} />
                         </div>
                         <div className="group relative z-0 mb-5 w-full">
                             <input
                                 className="peer block w-full appearance-none border-0 border-b-2 border-gray-300 bg-transparent px-0 py-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-0 focus:outline-none dark:border-gray-600 dark:text-white dark:focus:border-blue-500"
                                 type="text"
-                                name="brand_product"
-                                id="brand_product"
-                                placeholder="Marca"
+                                name="client_phone"
+                                id="client_phone"
+                                placeholder="Celular"
                                 required
                                 tabIndex={3}
                                 autoComplete="marca"
-                                value={data.brand}
-                                onChange={(e) => setData('brand', e.target.value)}
+                                value={data.phone}
+                                onChange={(e) => setData('phone', e.target.value)}
                             />
-                            <InputError message={errors.brand} />
-                        </div>
-                        <div className="group relative z-0 mb-5 w-full">
-                            <input
-                                className="peer block w-full appearance-none border-0 border-b-2 border-gray-300 bg-transparent px-0 py-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-0 focus:outline-none dark:border-gray-600 dark:text-white dark:focus:border-blue-500"
-                                type="text"
-                                name="model_product"
-                                id="model_product"
-                                placeholder="Modelo"
-                                required
-                                tabIndex={3}
-                                autoComplete="model"
-                                value={data.model}
-                                onChange={(e) => setData('model', e.target.value)}
-                            />
-                            <InputError message={errors.model} />
-                        </div>
-                        <div className="group relative z-0 mb-5 w-full">
-                            <input
-                                className="peer block w-full appearance-none border-0 border-b-2 border-gray-300 bg-transparent px-0 py-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-0 focus:outline-none dark:border-gray-600 dark:text-white dark:focus:border-blue-500"
-                                type="text"
-                                name="price_product"
-                                id="price_product"
-                                placeholder="Precio"
-                                required
-                                tabIndex={3}
-                                autoComplete="price"
-                                value={data.price}
-                                onChange={(e) => setData('price', parseFloat(e.target.value))}
-                            />
-                            <InputError message={errors.price} />
+                            <InputError message={errors.phone} />
                         </div>
                         <Button type="submit" className="mt-4 w-full" tabIndex={4}>
-                            Crear Producto
+                            Crear Cliente
                         </Button>
                     </form>
                 </div>

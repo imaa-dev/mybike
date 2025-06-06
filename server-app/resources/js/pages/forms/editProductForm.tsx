@@ -4,6 +4,7 @@ import { Head, useForm } from '@inertiajs/react';
 import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
 import toast, { Toaster } from 'react-hot-toast';
+import { FormEventHandler } from 'react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -42,7 +43,7 @@ export default function EditProducForm ({product}: Product) {
         file: null
     })
     console.log(product)
-    const submit = (e) => {
+    const submit: FormEventHandler = (e) => {
         e.preventDefault();
         post('/update/product', {
             onSuccess: ((page) => {
@@ -66,14 +67,21 @@ export default function EditProducForm ({product}: Product) {
                     >
                         <div className="grou relative z-0 mb-5 w-full">
                             {product.file[0] ? (
+                                <div className="group relative flex justify-center items-center">
+                                    <img
+                                        className="w-60"
+                                        src={`http://localhost:8000/storage/${product.file[0].path}`}
+                                    />
+                                </div>
+                            ) :
+                            <div className="group relative flex justify-center items-center">
                                 <img
-                                    className="m-5 w-70 p-2"
-                                    src={`http://localhost:8000/storage/${product.file[0].path}`}
+                                    className="w-60"
+                                    src={`http://localhost:8000/carousel.png`}
                                 />
-                            ): <img
-                                className="m-5 w-70 p-2"
-                                src={`http://localhost:8000/storage/engran.png`}
-                            />}
+                            </div>
+
+                            }
                             <input
                                 type="file"
                                 name="file_product[]"
@@ -90,7 +98,7 @@ export default function EditProducForm ({product}: Product) {
                                         setData('file', files);
                                     }
                                 }}
-                                required
+
                             />
                         </div>
                         <div className="w-11111full group relative z-0 mb-5">

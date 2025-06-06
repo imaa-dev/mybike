@@ -42,7 +42,7 @@ class ProductController extends Controller
             'product' => $productFile
         ]);
     }
-    public function update(Request $request)
+    public function update(StoreProductRequest $request)
     {
         $res = $this->productService->update($request);
         session()->flash('message', $res['message']);

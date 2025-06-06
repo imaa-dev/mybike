@@ -40,10 +40,11 @@ export interface User {
     id: number;
     name: string;
     email: string;
-    avatar?: string;
+    phone: string;
     email_verified_at: string | null;
     created_at: string;
     updated_at: string;
+    file?: FileMeta | null;
     [key: string]: unknown; // This allows for additional properties...
 }
 export interface FileMeta {
@@ -66,7 +67,7 @@ export interface ProductData {
     brand: string,
     model: string,
     price: number,
-    file: FileMeta[] | null
+    file: FileMeta[]
 }
 
 

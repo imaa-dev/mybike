@@ -41,7 +41,7 @@ const OrganizationForm = () => {
     const [uploadImage, setUploadImage] = useState<string | null>(null);
 
     const handleImageChange = (file: File) => {
-        const imageUrl = URL.createObjectURL(file)
+        const imageUrl = URL.createObjectURL(file);
         setUploadImage(imageUrl)
     }
     const submit: FormEventHandler = (e) => {
@@ -87,7 +87,7 @@ const OrganizationForm = () => {
                             </div>
                             :
                             <div className="group relative flex justify-center items-center">
-                                <img className="w-60" src="http://localhost:8000/storage/logo-img.png" alt="Imagen Logo" />
+                                <img className="w-60" src="http://localhost:8000/logo-img.png" alt="Imagen Logo" />
                             </div>
                         }
                         <div className="group relative z-0 mb-12 w-full">
@@ -134,7 +134,6 @@ const OrganizationForm = () => {
                             >
                                 Nombre Organización
                             </label>
-
                         </div>
                         <div className="group relative z-0 mb-5 w-full">
                             <input
@@ -171,7 +170,6 @@ const OrganizationForm = () => {
                                     <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Dejar organizacion Activa</span>
                                 </label>
                             </div>
-
                             <Button type="submit" className="mt-4 w-full">
                                 Crear Organizacion
                             </Button>

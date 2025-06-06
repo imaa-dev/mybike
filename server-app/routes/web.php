@@ -20,9 +20,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('create/service', [\App\Http\Controllers\ServiController::class, 'store'])->name('services.store');
 
     // Client routes
-    Route::get('client', [UserController::class, 'listClient'])->name('clients.create.view');
-    Route::get('create/client', [UserController::class, 'createClient']);
-    Route::post('create/client', [UserController::class, 'store'])->name('clients.store');
+    Route::get('client', [UserController::class, 'listClient'])->name('clients.list.view');
+    Route::get('create/client', [UserController::class, 'createClient'])->name('client.create');
+    Route::post('create/client', [UserController::class, 'storeClient'])->name('client.store');
+    Route::get('update/{user}/client', [UserController::class, 'getClientUpdate'])->name('client.update.view');
+    Route::post('update/client', [UserController::class, 'updateClient'])->name('client.update');
 
     // Product routes
     Route::get('product', [ProductController::class, 'list'])->name('products.list.view');

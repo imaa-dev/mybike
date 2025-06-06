@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreClientRequest;
+use App\Http\Requests\StoreUpdateUserRequest;
 use App\Http\Services\UserService;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -17,13 +19,26 @@ class UserController extends Controller
     {
         return Inertia::render('user');
     }
-
     public function listClient()
     {
-        $clients = User::where('role_id', 3)->where('role_id', 2)->get();
 
+        $clients = User::whereIn('role_id', [2, 3])->with('file')->get();
         return Inertia::render('client', [
             'clients' => $clients,
+        ]);
+    }
+    public function updateClient(StoreClientRequest $request)
+    {
+        $res = $this->userService->update($request);
+        session()->flash('message', $res['message']);
+        return redirect()->route('clients.list.view');
+    }
+    public function getClientUpdate(User $user)
+    {
+
+        $client = User::where('id', $user->id)->with('file')->first();
+        return Inertia::render('forms/editClientForm', [
+            'client' => $client
         ]);
     }
     public function createClient()
@@ -31,10 +46,10 @@ class UserController extends Controller
         return Inertia::render('forms/createClientForm');
     }
 
-
-    public function storeClient(Request $request)
+    public function storeClient(StoreUpdateUserRequest $request)
     {
         $res = $this->userService->createClient($request);
-
+        session()->flash('message', $res['message']);
+        return redirect()->route('clients.list.view');
     }
 }

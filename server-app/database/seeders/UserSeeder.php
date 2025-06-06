@@ -20,6 +20,7 @@ class UserSeeder extends Seeder
                 'name' => 'Mauricio',
                 'email' => 'imaa.desarrollo@gmail.com',
                 'email_verified_at' => now(),
+                'phone' => '+56982198976',
                 'password' => Hash::make('qwerty123'),
             ],
             [
@@ -27,6 +28,7 @@ class UserSeeder extends Seeder
                 'name' => 'Alejandro',
                 'email' => 'alejandro@gmail.com',
                 'email_verified_at' => now(),
+                'phone' => '+56999887766',
                 'password' => Hash::make('qwerty123'),
             ],
             [
@@ -34,6 +36,7 @@ class UserSeeder extends Seeder
                 'name' => 'Mauri',
                 'email' => 'mauri@gmail.com',
                 'email_verified_at' => now(),
+                'phone' => '+56977668899',
                 'password' => Hash::make('qwerty123'),
             ],
         ];

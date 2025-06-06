@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Head, useForm } from '@inertiajs/react';
 import AppLayout from '@/layouts/app-layout';
 import { BreadcrumbItem } from '@/types';
-import { FormEventHandler } from 'react';
+import { FormEventHandler, useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -26,31 +26,36 @@ interface ProductDataProps {
     description: string,
     brand: string,
     model: string,
-    price: number,
+    price: string,
     file: File[] | null
 }
 export default function CreateProductForm() {
+    const [uploadImage, setUploadImage] = useState<string | null>(null);
 
     const { data, setData, post, errors } = useForm<Required<ProductDataProps>>({
         name: '',
         description: '',
         brand: '',
         model: '',
-        price: 0,
+        price: '',
         file: null
     })
+
+    const handleImageUpload = (file: FileList) => {
+        const uploadURL = URL.createObjectURL(file[0]);
+        setUploadImage(uploadURL);
+    }
     const submit:FormEventHandler = (e) => {
         e.preventDefault();
         post('/create/product',{
             onSuccess: (page) => {
-                console.log(page);
                 const message = (page.props as { flash?: { message?: string } }).flash?.message;
                 if (message) {
                     toast.success(message);
                 }
             },
             onError: (error) => {
-                console.log(error);
+                console.log("ERROR", error);
             }
 
         })
@@ -64,6 +69,16 @@ export default function CreateProductForm() {
                         className="flex w-full flex-col justify-center gap-6 rounded-lg bg-white p-6 shadow-md md:p-10 dark:bg-gray-800"
                         onSubmit={submit}
                     >
+                        {
+                            uploadImage ?
+                            <div className="group relative flex justify-center items-center">
+                                <img className="w-60" src={uploadImage} alt="Imagen Logo" />
+                            </div>
+                            :
+                            <div className="group relative flex justify-center items-center">
+                                <img className="w-60" src="http://localhost:8000/carousel.png" alt="Imagen Logo" />
+                            </div>
+                        }
                         <div className="grou relative z-0 mb-5 w-full">
                             <input
                                 type="file"
@@ -78,10 +93,10 @@ export default function CreateProductForm() {
                                     const file = e.target.files;
                                     if (file) {
                                         const files = Array.from(file);
+                                        handleImageUpload(file)
                                         setData('file', files);
                                     }
                                 }}
-                                required
                             />
                         </div>
                         <div className="w-11111full group relative z-0 mb-5">
@@ -148,7 +163,7 @@ export default function CreateProductForm() {
                         <div className="group relative z-0 mb-5 w-full">
                             <input
                                 className="peer block w-full appearance-none border-0 border-b-2 border-gray-300 bg-transparent px-0 py-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-0 focus:outline-none dark:border-gray-600 dark:text-white dark:focus:border-blue-500"
-                                type="text"
+                                type="number"
                                 name="price_product"
                                 id="price_product"
                                 placeholder="Precio"
@@ -156,7 +171,7 @@ export default function CreateProductForm() {
                                 tabIndex={3}
                                 autoComplete="price"
                                 value={data.price}
-                                onChange={(e) => setData('price', parseFloat(e.target.value))}
+                                onChange={(e) => setData('price', e.target.value)}
                             />
                             <InputError message={errors.price} />
                         </div>

@@ -44,7 +44,7 @@ class OrganizationService
 
     public function update($request)
     {
-        
+        // TODO Mejorar logica y clean code de como se alberga el update
         try{
             if($request->hasFile('file')){
                 $path = $request->file('file')->store('organization/'.$request->user()->id, 'public');

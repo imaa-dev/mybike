@@ -32,7 +32,6 @@ export default function Organization({ organizations }: OrganizationDataProp) {
                 if (message) {
                     toast.success(message);
                 }
-
             },
         });
     };
@@ -150,16 +149,16 @@ export default function Organization({ organizations }: OrganizationDataProp) {
                                 </td>
                                 <th scope="row"
                                     className="flex items-center px-6 py-4 whitespace-nowrap text-gray-900 dark:text-white">
-                                    {organization.file ? (
+                                    {organization.file && organization.file.path ? (
                                         <img
                                             className="h-10 w-10 rounded-full"
                                             src={`http://localhost:8000/storage/${organization.file.path}`}
                                             alt="logo image"
                                         />
-                                    ) : 
+                                    ) :
                                         <img
                                             className="h-10 w-10 rounded-full"
-                                            src={`http://localhost:8000/storage/logo-img.png`}
+                                            src={`http://localhost:8000/logo-img.png`}
                                             alt="logo image"
                                         />
                                     }
@@ -236,7 +235,6 @@ export default function Organization({ organizations }: OrganizationDataProp) {
                         </div>
                     </div>
                 )}
-
                 <Toaster />
             </div>
         </AppLayout>

@@ -4,6 +4,7 @@ import { Head, useForm } from '@inertiajs/react';
 import toast from 'react-hot-toast';
 import AppLayout from '@/layouts/app-layout';
 import { BreadcrumbItem, OrganizationData } from '@/types';
+import InputError from '@/components/input-error';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -31,17 +32,16 @@ type EditOrganizationForm = {
 interface OrganizationEditFormProps {
     organization: OrganizationData;
 }
-export default function OrganizationEditForm({organizationUpdate}: OrganizationEditFormProps) {
-    console.log(organizationUpdate)
-    const { data, setData, post, reset } = useForm<Required<EditOrganizationForm>>({
-        id: organizationUpdate.id,
+export default function OrganizationEditForm({organization}: OrganizationEditFormProps) {
+    const { data, setData, post, reset, errors } = useForm<Required<EditOrganizationForm>>({
+        id: organization.id,
         file: null,
-        name: organizationUpdate.name,
-        description: organizationUpdate.description,
-        active: organizationUpdate.active,
+        name: organization.name,
+        description: organization.description,
+        active: organization.active,
     })
 
-    const active = organizationUpdate.active;
+    const active = organization.active;
     const [uploadImage, setUploadImage] = useState<string | null>(null)
     const handleUploadImage = (file: File) => {
         const temporalURL = URL.createObjectURL(file)
@@ -75,7 +75,6 @@ export default function OrganizationEditForm({organizationUpdate}: OrganizationE
                         <form
                             className="flex w-full flex-col justify-center gap-6 rounded-lg bg-white p-6 shadow-md md:p-10 dark:bg-gray-800"
                             onSubmit={submit}
-
                         >
                             {
                                 uploadImage ?
@@ -84,11 +83,11 @@ export default function OrganizationEditForm({organizationUpdate}: OrganizationE
                                         <img className="w-60" src={uploadImage} alt="Organization Edit" />
                                     </div>
                                 ) :
-                                organizationUpdate.file ? (
+                                organization.file ? (
                                 <div className="group relative flex justify-center items-center">
                                   <img
                                       className="w-60"
-                                      src={`http://localhost:8000/storage/${organizationUpdate.file.path}`}
+                                      src={`http://localhost:8000/storage/${organization.file.path}`}
                                       alt={'Organization Edit'}
                                     />
                                 </div>
@@ -97,7 +96,7 @@ export default function OrganizationEditForm({organizationUpdate}: OrganizationE
                                     <div className="group relative flex justify-center items-center">
                                         <img
                                             className="w-60"
-                                            src={`http://localhost:8000/storage/logo-img.png`}
+                                            src={`http://localhost:8000/logo-img.png`}
                                             alt={'Organization Edit'}
                                           />
                                       </div>
@@ -127,6 +126,7 @@ export default function OrganizationEditForm({organizationUpdate}: OrganizationE
                                 >
                                     Icono Marca Organizacion
                                 </label>
+
                             </div>
                             <div className="group relative z-0 mb-5 w-full">
                                 <input
@@ -148,6 +148,7 @@ export default function OrganizationEditForm({organizationUpdate}: OrganizationE
                                 >
                                     Nombre Organización
                                 </label>
+                                <InputError message={errors.file} />
                             </div>
                             <div className="group relative z-0 mb-5 w-full">
                                 <input
@@ -169,6 +170,7 @@ export default function OrganizationEditForm({organizationUpdate}: OrganizationE
                                 >
                                     Descripción
                                 </label>
+                                <InputError message={errors.description} />
                                 <div className="group relative z-0 mt-10 mb-5 w-full">
                                     <label className="inline-flex cursor-pointer items-center">
                                         <input
@@ -186,6 +188,7 @@ export default function OrganizationEditForm({organizationUpdate}: OrganizationE
                                             <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Activar Organizacion</span>
                                         )}
                                     </label>
+                                    <InputError message={errors.active} />
                                 </div>
                             </div>
 
