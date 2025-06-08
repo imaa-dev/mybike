@@ -28,7 +28,7 @@ type EditOrganizationForm = {
     active:  boolean;
     file: File | null;
 }
-
+const appUrl = import.meta.env.VITE_APP_URL;
 interface OrganizationEditFormProps {
     organizationUpdate: OrganizationData;
 }
@@ -82,7 +82,7 @@ export default function OrganizationEditForm({organizationUpdate}: OrganizationE
                                 <div className="group relative flex justify-center items-center">
                                   <img
                                       className="w-60"
-                                      src={`http://localhost:8000/storage/${organizationUpdate.file.path}`}
+                                      src={`${appUrl}/storage/${organizationUpdate.file.path}`}
                                       alt={'Organization Edit'}
                                     />
                                 </div>
@@ -91,7 +91,7 @@ export default function OrganizationEditForm({organizationUpdate}: OrganizationE
                                     <div className="group relative flex justify-center items-center">
                                         <img
                                             className="w-60"
-                                            src={`http://localhost:8000/logo-img.png`}
+                                            src={`${appUrl}/logo-img.png`}
                                             alt={'Organization Edit'}
                                           />
                                       </div>

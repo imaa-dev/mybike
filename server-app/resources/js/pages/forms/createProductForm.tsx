@@ -20,7 +20,7 @@ const breadcrumbs: BreadcrumbItem[] = [
         href: '/',
     }
 ];
-
+const appUrl = import.meta.env.VITE_APP_URL;
 interface ProductDataProps {
     name: string,
     description: string,
@@ -76,7 +76,7 @@ export default function CreateProductForm() {
                             </div>
                             :
                             <div className="group relative flex justify-center items-center">
-                                <img className="w-60" src="http://localhost:8000/carousel.png" alt="Imagen Logo" />
+                                <img className="w-60" src={`${appUrl}/carousel.png`} alt="Imagen Logo" />
                             </div>
                         }
                         <div className="grou relative z-0 mb-5 w-full">

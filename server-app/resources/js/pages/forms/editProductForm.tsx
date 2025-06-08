@@ -27,7 +27,7 @@ interface ProductDataProps {
     price: number,
     file: File[] | null
 }
-
+const appUrl = import.meta.env.VITE_APP_URL;
 interface Product {
     product: ProductData
 }
@@ -70,14 +70,14 @@ export default function EditProducForm ({product}: Product) {
                                 <div className="group relative flex justify-center items-center">
                                     <img
                                         className="w-60"
-                                        src={`http://localhost:8000/storage/${product.file[0].path}`}
+                                        src={`${appUrl}/storage/${product.file[0].path}`}
                                     />
                                 </div>
                             ) :
                             <div className="group relative flex justify-center items-center">
                                 <img
                                     className="w-60"
-                                    src={`http://localhost:8000/carousel.png`}
+                                    src={`${appUrl}/carousel.png`}
                                 />
                             </div>
 

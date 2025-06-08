@@ -18,8 +18,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 interface OrganizationDataProp {
     organizations:  OrganizationData[];
 }
-
-
+const appUrl = import.meta.env.VITE_APP_URL;
 export default function Organization({ organizations }: OrganizationDataProp) {
     const [organizationDrop, setOrganizationDrop] = useState<number>(0);
     const [modal, setModal] = useState<boolean>(false);
@@ -152,13 +151,13 @@ export default function Organization({ organizations }: OrganizationDataProp) {
                                     {organization.file && organization.file.path ? (
                                         <img
                                             className="h-10 w-10 rounded-full"
-                                            src={`http://localhost:8000/storage/${organization.file.path}`}
+                                            src={`${appUrl}/storage/${organization.file?.path}`}
                                             alt="logo image"
                                         />
                                     ) :
                                         <img
                                             className="h-10 w-10 rounded-full"
-                                            src={`http://localhost:8000/logo-img.png`}
+                                            src={`${appUrl}/logo-img.png`}
                                             alt="logo image"
                                         />
                                     }

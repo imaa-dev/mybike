@@ -40,11 +40,6 @@ const mainNavItems: NavItem[] = [
         href: '/client',
         icon: SquareUser,
     },
-    {
-        title: 'Usuarios',
-        href: '/user',
-        icon: User,
-    },
 ];
 
 const footerNavItems: NavItem[] = [

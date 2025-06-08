@@ -19,7 +19,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 interface ClientDataProp {
     clients: User[]
 }
-
+const appUrl = import.meta.env.VITE_APP_URL;
 export default function Client({clients}: ClientDataProp){
 
     return (
@@ -127,10 +127,10 @@ export default function Client({clients}: ClientDataProp){
                                         className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
                                         { client.file && client.file.path ?
                                             <img className="w-10 h-10 rounded-full"
-                                                 src={`http://localhost:8000/storage/${client.file.path}`} alt="AvatarImage" />
+                                                 src={`${appUrl}/storage/${client.file?.path}`} alt="AvatarImage" />
                                             :
                                             <img className="w-10 h-10 rounded-full"
-                                                 src="http://localhost:8000/logo-img.png" alt="DefaultAvatarImage" />
+                                                 src={`${appUrl}/logo-img.png`} alt="DefaultAvatarImage" />
                                         }
                                         <div className="ps-3">
                                             <div className="text-base font-semibold">{client.name}</div>

@@ -33,7 +33,7 @@ interface ClientDataProp {
 interface ProducDataProp {
     products: ProductData[]
 }
-
+const appUrl = import.meta.env.VITE_APP_URL;
 export default function CreateServisForm({clients, products} : ClientDataProp & ProducDataProp) {
     const [uploadImage, setUploadImage] = useState<string | null>(null);
     const handleImageChange = (file: File[]) => {
@@ -78,7 +78,7 @@ export default function CreateServisForm({clients, products} : ClientDataProp & 
                             </div>
                             :
                             <div className="group relative flex justify-center items-center">
-                                <img className="w-60" src="http://localhost:8000/logo-img.png" alt="Upload Image" />
+                                <img className="w-60" src={`${appUrl}/logo-img.png`} alt="Upload Image" />
                             </div>
                         }
                         <div className="grou relative z-0 mb-5 w-full">
@@ -166,7 +166,7 @@ export default function CreateServisForm({clients, products} : ClientDataProp & 
 
                         </div>
                         <Button type="submit" className="mt-4 w-full" tabIndex={4}>
-                            Crear Cliente
+                            Crear Servicio
                         </Button>
                     </form>
                     <Toaster />
