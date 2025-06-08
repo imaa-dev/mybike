@@ -1,6 +1,6 @@
 import { type SharedData } from '@/types';
 import { Head, Link, usePage } from '@inertiajs/react';
-
+const appUrl = import.meta.env.VITE_APP_URL;
 export default function Welcome() {
     const { auth } = usePage<SharedData>().props;
 
@@ -12,7 +12,7 @@ export default function Welcome() {
             </Head>
             <div className="flex min-h-screen flex-col items-center bg-[#FDFDFC] p-6 text-[#1b1b18] lg:justify-center lg:p-8 dark:bg-[#0a0a0a]">
                 <header className="mb-6 w-full max-w-[335px] text-sm not-has-[nav]:hidden lg:max-w-4xl">
-                    <img className="img-mini" src={`http://localhost:8000/logo-img.png`} alt="LogoApp"/>
+                    <img className="img-mini" src={`${appUrl}/logo-img.png`} alt="LogoApp"/>
                     <nav className="flex items-center justify-end gap-4">
                         {auth.user ? (
                             <Link
