@@ -21,7 +21,7 @@ interface ServiDataProp {
 }
 const appUrl = import.meta.env.VITE_APP_URL;
 export default function Service({servis}: ServiDataProp){
-    console.log(appUrl, servis[0].file[0].path);
+
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Servicios" />
