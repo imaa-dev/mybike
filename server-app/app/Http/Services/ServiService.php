@@ -13,13 +13,26 @@ class ServiService
     public function create($request)
     {
         try {
+            foreach ($request->file('file') as $file){
+                $path =  $file->store('servi/'.$request->user()->id, 'public');
+                $servi_paths[] = $path;
+            }
             $servi = new Servi();
-
+            $servi->user_id  = $request->user()->id;
+            $servi->organization_id = $request->organization_id;
+            $servi->product_id = $request->product_id;
+            $servi->name = $request->name;
+            $servi->master_note = $request->master_note;
             $servi->save();
+            foreach ($servi_paths as $path){
+                $servi->file()->create([
+                    'path'=> $path
+                ]);
+            }
             $data = [
                 'status' => 'success',
                 'code' => 200,
-                'message' => 'Servi Created Successfully',
+                'message' => 'Servicio creado satisfactoriamente',
                 'data' => $servi
             ];
         } catch (\Throwable $th) {
@@ -28,7 +41,7 @@ class ServiService
                 'message' => $th->getMessage()
             ];
         }
-        return response()->json($data);
+        return $data;
     }
 
     public function update($request)

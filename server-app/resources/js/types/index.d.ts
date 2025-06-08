@@ -72,6 +72,9 @@ export interface ProductData {
 
 export interface ServiData {
     id: number;
+    user_id: number;
+    product_id: number;
+    organization_id: number;
     name: string;
     master_note: string;
     exit: Date;
