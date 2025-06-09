@@ -5,6 +5,7 @@ import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
 import { FormEventHandler, useState } from 'react';
 import toast from 'react-hot-toast';
+import handleImageUploadSingle from '@/lib/utils';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -34,7 +35,7 @@ type ClientData = {
 }
 export default function EditClientForm({client}: ClientProp) {
     const [uploadImage, setUploadImage] = useState<string | null>(null);
-    const { patch, setData, data, reset, errors } = useForm<Required<ClientData>>({
+    const { post, setData, data, reset, errors } = useForm<Required<ClientData>>({
         id: client.id,
         name: client.name,
         email: client.email,
@@ -42,16 +43,14 @@ export default function EditClientForm({client}: ClientProp) {
         file: null
     })
     const handleUploadImage = (file: File) => {
-        console.log(file, "HANDLE")
         const temporalURL = URL.createObjectURL(file)
         setUploadImage(temporalURL);
     }
     const submit: FormEventHandler = (e) => {
         e.preventDefault()
-        console.log(data)
-        patch(`/update/client/${data.id}`, {
+        post(`/update/client`, {
+            forceFormData: true,
             onSuccess: (page) => {
-                console.log(page)
                 const message = (page.props as { flash?: { message?: string } }).flash?.message;
                 if(message) {
                     toast.success(message);
@@ -105,8 +104,13 @@ export default function EditClientForm({client}: ClientProp) {
                                 onChange={(e) => {
                                     const file = e.target.files?.[0];
                                     if (file) {
-                                        handleUploadImage(file)
-                                        setData('file', file);
+                                        handleImageUploadSingle(file).then((res) =>{
+                                            setData('file', res)
+                                            handleUploadImage(res)
+                                        }).catch((err) => {
+                                            toast.error('Error al comptimir imagen')
+                                            console.log('ONCHANGE_INPUT_FILE_ERROR', err)
+                                        })
                                     }
                                 }}
                             />

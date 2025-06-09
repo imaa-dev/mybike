@@ -5,7 +5,7 @@ import toast, { Toaster } from 'react-hot-toast';
 import AppLayout from '@/layouts/app-layout';
 import { BreadcrumbItem } from '@/types';
 import {useState} from "react";
-import handleImageUpload from '@/lib/utils';
+import handleImageUploadSingle from '@/lib/utils';
 import InputError from '@/components/input-error';
 
 
@@ -114,12 +114,12 @@ const OrganizationForm = () => {
                                     onChange={(e) => {
                                         const fileRes = e.target.files?.[0];
                                         if (fileRes) {
-                                            handleImageUpload(fileRes).then((res) => {
+                                            handleImageUploadSingle(fileRes).then((res) => {
                                                 setData('file', res);
-                                                handleImageChange(fileRes);
+                                                handleImageChange(res);
                                             }).catch((err) => {
                                                 toast.error('Error al comprimir la imagen')
-                                                console.log(err, 'ONCHANGE_INPT_FILE_ERROR')
+                                                console.log('ONCHANGE_INPUT_FILE_ERROR', err)
                                             });
                                         }
                                     }}

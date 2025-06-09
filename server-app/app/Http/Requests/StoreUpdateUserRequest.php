@@ -27,9 +27,11 @@ class StoreUpdateUserRequest extends FormRequest
             'email' => [
                 'required',
                 'email',
-                Rule::unique('users', 'email')->ignore($this->user),
+                Rule::unique('users', 'email')->ignore($this->route('user')),
             ],
             'phone' => ['required', 'string', 'max:12'],
+            'files' => ['nullable', 'array'],
+            'files.*' => ['file', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'],
         ];
     }
 

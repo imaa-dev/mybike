@@ -5,6 +5,7 @@ import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
 import { FormEventHandler, useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
+import { handleImageUploadMultiple } from '@/lib/utils';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -94,9 +95,13 @@ export default function CreateServisForm({clients, products} : ClientDataProp & 
                                 onChange={(e) => {
                                     const file = e.target.files;
                                     if (file) {
-                                        const files = Array.from(file);
-                                        handleImageChange(files)
-                                        setData('file', files);
+                                        handleImageUploadMultiple(file).then((res) => {
+                                            setData('file', res)
+                                            handleImageChange(res)
+                                        }).catch((err) => {
+                                            toast.error('Error al comprimir la imagen')
+                                            console.log('ONCHANGE_INPUT_FILE_ERROR', err)
+                                        })
                                     }
                                 }}
                             />

@@ -6,7 +6,7 @@ export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs));
 }
 
-const handleImageUpload = async (file: File) => {
+const handleImageUploadSingle = async (file: File) => {
     // Función auxiliar para determinar el tipo MIME correcto
     const getProperMimeType = (fileName: string): string => {
         const ext = fileName.split('.').pop()?.toLowerCase() || '';
@@ -74,6 +74,34 @@ const handleImageUpload = async (file: File) => {
         throw new Error('Error al procesar la imagen. Por favor, intenta con otra imagen o reduce su tamaño.');
     }
 };
+export const handleImageUploadMultiple = async (files: FileList): Promise<File[]> => {
+    try {
+        const filesArray = Array.from(files);
 
-export default handleImageUpload;
+        const processedFiles = await Promise.all(
+            filesArray.map(async (file) => {
+                try {
+                    return await handleImageUploadSingle(file);
+                } catch (error) {
+                    console.error(`Error procesando el archivo ${file.name}:`, error);
+                    throw error;
+                }
+            })
+        );
+
+        // Verificar que ningún archivo esté vacío
+        const emptyFiles = processedFiles.filter(file => file.size === 0);
+        if (emptyFiles.length > 0) {
+            throw new Error('Algunos archivos procesados están vacíos');
+        }
+
+        return processedFiles;
+    } catch (error) {
+        console.error('Error procesando múltiples imágenes:', error);
+        throw new Error(error,'Error al procesar las imágenes. Por favor, verifica los archivos e intenta nuevamente.');
+    }
+};
+
+
+export default handleImageUploadSingle;
 

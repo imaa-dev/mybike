@@ -30,7 +30,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('create/client', [UserController::class, 'createClient'])->name('client.create');
     Route::post('create/client', [UserController::class, 'storeClient'])->name('client.store');
     Route::get('update/{user}/client', [UserController::class, 'getClientUpdate'])->name('client.update.view');
-    Route::patch('update/client/{user}', [UserController::class, 'updateClient'])->name('client.update');
+    Route::post('update/client', [UserController::class, 'updateClient'])->name('client.update');
+    Route::post('delete/client/{id}', [UserController::class, 'deleteClient'])->name('clients.destroy');
 
     // Product routes
     Route::get('product', [ProductController::class, 'list'])->name('products.list.view');

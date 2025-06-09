@@ -1,8 +1,9 @@
 import AppLayout from '@/layouts/app-layout';
 import { Head, router } from '@inertiajs/react';
 import type { BreadcrumbItem, ServiData } from '@/types';
-import { Toaster } from 'react-hot-toast';
+import toast, { Toaster } from 'react-hot-toast';
 import { CirclePlus } from 'lucide-react';
+import { useState } from 'react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -18,16 +19,28 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 interface ServiDataProp {
     servis: ServiData[];
+    notOrganization: boolean;
 }
 const appUrl = import.meta.env.VITE_APP_URL;
-export default function Service({servis}: ServiDataProp){
+export default function Service({servis, notOrganization}: ServiDataProp){
+    const [modal, setModal] = useState<boolean>(notOrganization)
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Servicios" />
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
                 <div className="relative">
-                    <button type="button" className="flex" onClick={() => router.visit('/create/service')}>
+                    <button
+                        type="button"
+                        className="flex"
+                        onClick={() => {
+                            if(notOrganization === true){
+                                toast.error('No tienes organizacion No puedes crear servicios')
+                            } else {
+                                router.visit('/create/service');
+                            }
+                        }}
+                    >
                         <CirclePlus />
                         Agregar Servicio
                     </button>
@@ -59,10 +72,9 @@ export default function Service({servis}: ServiDataProp){
                             </thead>
                             <tbody>
                                 {servis.map((servi: ServiData, index: number) => (
-
                                     <tr
                                         key={index}
-                                        className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600"
+                                        className="border-b border-gray-200 bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-600"
                                     >
                                         <td className="p-4">
                                             <img
@@ -122,6 +134,32 @@ export default function Service({servis}: ServiDataProp){
                         </table>
                     </div>
                     <Toaster />
+                    {modal && (
+                        <div className="fixed top-0 right-0 left-0 z-50 flex h-screen w-screen items-center justify-center bg-black/50">
+                            <div className="rounded-lg bg-white p-6 shadow-lg dark:bg-gray-700">
+                                <h3 className="mb-4 text-lg text-gray-800 dark:text-gray-200">
+                                    Notamos que no tienes una organización, ¿deseas crear una?
+                                </h3>
+                                <div className="flex justify-end gap-2">
+                                    <button
+                                        onClick={() => {
+                                            router.visit('/create/organization');
+                                        }}
+                                        className="me-2 mb-2 rounded-lg border border-green-700 px-5 py-2.5 text-center text-sm font-medium text-green-700 hover:bg-green-800 hover:text-white focus:ring-4 focus:ring-green-300 focus:outline-none dark:border-green-500 dark:text-green-500 dark:hover:bg-green-600 dark:hover:text-white dark:focus:ring-green-800"
+                                    >
+                                        Ir a crear organización
+                                    </button>
+                                    <button
+                                        onClick={() => setModal(false)}
+                                        type="button"
+                                        className="me-2 mb-2 rounded-lg border border-gray-800 px-5 py-2.5 text-center text-sm font-medium text-gray-900 hover:bg-gray-900 hover:text-white focus:ring-4 focus:ring-gray-300 focus:outline-none dark:border-gray-600 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-800"
+                                    >
+                                        Cancelar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
         </AppLayout>

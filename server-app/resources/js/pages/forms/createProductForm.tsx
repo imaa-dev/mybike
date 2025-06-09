@@ -5,6 +5,7 @@ import AppLayout from '@/layouts/app-layout';
 import { BreadcrumbItem } from '@/types';
 import { FormEventHandler, useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
+import  { handleImageUploadMultiple } from '@/lib/utils';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -41,7 +42,7 @@ export default function CreateProductForm() {
         file: null
     })
 
-    const handleImageUpload = (file: FileList) => {
+    const handleImageChange = (file: FileList) => {
         const uploadURL = URL.createObjectURL(file[0]);
         setUploadImage(uploadURL);
     }
@@ -92,9 +93,13 @@ export default function CreateProductForm() {
                                 onChange={(e) => {
                                     const file = e.target.files;
                                     if (file) {
-                                        const files = Array.from(file);
-                                        handleImageUpload(file)
-                                        setData('file', files);
+                                        handleImageUploadMultiple(file).then((res) => {
+                                            setData('file', res)
+                                            handleImageChange(res)
+                                        }).catch((err) => {
+                                            console.log("ONCHANGE_INPUT_FILE_ERROR",err);
+                                            toast.error("Error al comprimir la imagen");
+                                        })
                                     }
                                 }}
                             />

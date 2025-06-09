@@ -28,7 +28,7 @@ class UserController extends Controller
             'clients' => $clients,
         ]);
     }
-    public function updateClient(StoreUpdateUserRequest $request, User $user)
+    public function updateClient(Request $request)
     {
         $res = $this->userService->update($request);
         session()->flash('message', $res['message']);
@@ -36,7 +36,6 @@ class UserController extends Controller
     }
     public function getClientUpdate(User $user)
     {
-
         $client = User::where('id', $user->id)->with('file')->first();
         return Inertia::render('forms/editClientForm', [
             'client' => $client
@@ -50,6 +49,13 @@ class UserController extends Controller
     public function storeClient(StoreClientRequest $request)
     {
         $res = $this->userService->createClient($request);
+        session()->flash('message', $res['message']);
+        return redirect()->route('clients.list.view');
+    }
+
+    public function deleteClient(Request $request)
+    {
+        $res = $this->userService->deleteClient($request);
         session()->flash('message', $res['message']);
         return redirect()->route('clients.list.view');
     }

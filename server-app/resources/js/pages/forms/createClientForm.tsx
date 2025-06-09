@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { FormEventHandler, useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 import InputError from '@/components/input-error';
+import handleImageUploadSingle from '@/lib/utils';
 
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -81,9 +82,13 @@ export default function CreateClientForm() {
                                 onChange={(e) => {
                                     const file = e.target.files?.[0];
                                     if (file) {
-                                        handleImageChange(file)
-                                        setData('file', file);
-
+                                        handleImageUploadSingle(file).then((res) =>{
+                                            setData('file', res)
+                                            handleImageChange(res)
+                                        }).catch((err) => {
+                                            toast.error('Error al comptimir imagen')
+                                            console.log('ONCHANGE_INPUT_FILE_ERROR', err)
+                                        })
                                     }
                                 }}
                             />

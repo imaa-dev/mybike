@@ -25,10 +25,17 @@ class ServiController extends Controller
             ->where('active', true)
             ->with('file')
             ->first();
-        $services = Servi::where('organization_id', $organization->id)->with('file')->get();
+        if($organization !== null){
+            $services = Servi::where('organization_id', $organization->id)->with('file')->get();
+            $notOrganization = false;
+        }else{
+            $services = [];
+            $notOrganization = true;
+        }
 
         return Inertia::render('service', [
-            'servis' => $services
+            'servis' => $services,
+            'notOrganization' => $notOrganization
         ]);
     }
     public function create()
