@@ -6,20 +6,22 @@ export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs));
 }
 
-export async function handleImageUpload(event){
-    const imageFiles = event.target.files;
-    console.log(imageFiles);
+const handleImageUpload = async (file: File) => {
     const options = {
         maxSizeMB: 0.5,
-        maxWidthOrHeight: 800,
+        maxWidthOrHeight: 500,
         useWebWorker: true,
+        initialQuality: 0.7,
+        alwaysKeepResolution: false,
+        maxIteration: 10,
     }
     try {
-        const compressedImage = await imageCompression(imageFiles[0], options)
-        return compressedImage;
+        const compressedImage = await imageCompression(file, options)
+        return compressedImage
     } catch (error) {
         console.log(error)
-
+        return error;
     }
 }
+export default handleImageUpload;
 

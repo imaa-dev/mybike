@@ -5,6 +5,9 @@ import toast, { Toaster } from 'react-hot-toast';
 import AppLayout from '@/layouts/app-layout';
 import { BreadcrumbItem } from '@/types';
 import {useState} from "react";
+import handleImageUpload from '@/lib/utils';
+import InputError from '@/components/input-error';
+
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -31,7 +34,7 @@ const appUrl = import.meta.env.VITE_APP_URL;
 
 const OrganizationForm = () => {
 
-    const { data, setData, post, reset } = useForm<Required<CreateOrganizationForm>>({
+    const { data, setData, post, reset, errors } = useForm<Required<CreateOrganizationForm>>({
         file: null,
         name: '',
         description: '',
@@ -102,8 +105,15 @@ const OrganizationForm = () => {
                                     onChange={(e) => {
                                         const file = e.target.files?.[0];
                                         if (file) {
-                                            setData('file', file);
-                                            handleImageChange(file);
+                                            handleImageUpload(file).then((res) => {
+                                                console.log(res, "ONCHANGE_INPUT_FILE_RESPONSE")
+                                                setData('file', file);
+                                                handleImageChange(file);
+                                            }).catch((err) => {
+                                                toast.error('Error al comprimir la imagen')
+                                                console.log(err, 'ONCHANGE_INPT_FILE_ERROR')
+                                            });
+
                                         }
                                     }}
                                 />
@@ -113,6 +123,7 @@ const OrganizationForm = () => {
                                 >
                                     Icono Marca Organizacion
                                 </label>
+                                <InputError message={errors.file} />
                             </div>
                             <div className="group relative z-0 mb-5 w-full">
                                 <input
@@ -134,6 +145,7 @@ const OrganizationForm = () => {
                                 >
                                     Nombre Organización
                                 </label>
+                                <InputError message={errors.name} />
                             </div>
                             <div className="group relative z-0 mb-5 w-full">
                                 <input
@@ -155,6 +167,7 @@ const OrganizationForm = () => {
                                 >
                                     Descripción
                                 </label>
+                                <InputError message={errors.description} />
                             </div>
                             <div className="group relative z-0 mb-5 w-full">
                                 <label className="inline-flex cursor-pointer items-center">
@@ -168,6 +181,7 @@ const OrganizationForm = () => {
                                     <div className="peer relative h-6 w-11 rounded-full bg-gray-200 peer-checked:bg-blue-600 peer-focus:ring-4 peer-focus:ring-blue-300 peer-focus:outline-none after:absolute after:start-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:after:translate-x-full peer-checked:after:border-white rtl:peer-checked:after:-translate-x-full dark:border-gray-600 dark:bg-gray-700 dark:peer-checked:bg-blue-600 dark:peer-focus:ring-blue-800"></div>
                                     <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Dejar organizacion Activa</span>
                                 </label>
+                                <InputError message={errors.active} />
                             </div>
                             <Button type="submit" className="mt-4 w-full">
                                 Crear Organizacion
