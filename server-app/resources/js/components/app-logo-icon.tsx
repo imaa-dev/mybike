@@ -7,10 +7,14 @@ interface OrganizationEditFormProps {
 }
 
 export default function AppLogoIcon({organization}: OrganizationEditFormProps ){
+
     return (
         <>
-            {organization.file?.path && <img src={`${appUrl}/storage/${organization.file?.path}`} alt='Logo' />}
-            {!organization.file?.path && <img src={`${appUrl}/logo-img.png`} alt='Logo' />}
+            {organization?.file?.path ?
+                <img src={`${appUrl}/storage/${organization.file?.path}`} alt='Logo' />
+                :
+                <img src={`${appUrl}/logo-img.png`} alt='Logo' />
+            }
         </>
     );
 }
