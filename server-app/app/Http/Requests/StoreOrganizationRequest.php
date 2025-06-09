@@ -24,7 +24,6 @@ class StoreOrganizationRequest extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'description' => 'required|string|max:255',
-            'file' => 'nullable|file|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'active' => 'required|boolean',
         ];
     }

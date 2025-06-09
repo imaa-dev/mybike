@@ -49,6 +49,15 @@ const OrganizationForm = () => {
     }
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
+        const formData = new FormData();
+        formData.append('name', data.name);
+        formData.append('description', data.description);
+        formData.append('active', String(data.active));
+
+        if (data.file instanceof File) {
+            formData.append('file', data.file);
+        }
+
         post('/create/organization',{
             preserveScroll: true,
             onSuccess: (page) => {
@@ -103,17 +112,15 @@ const OrganizationForm = () => {
                                     tabIndex={1}
                                     autoComplete="file"
                                     onChange={(e) => {
-                                        const file = e.target.files?.[0];
-                                        if (file) {
-                                            handleImageUpload(file).then((res) => {
-                                                console.log(res, "ONCHANGE_INPUT_FILE_RESPONSE")
-                                                setData('file', file);
-                                                handleImageChange(file);
+                                        const fileRes = e.target.files?.[0];
+                                        if (fileRes) {
+                                            handleImageUpload(fileRes).then((res) => {
+                                                setData('file', res);
+                                                handleImageChange(fileRes);
                                             }).catch((err) => {
                                                 toast.error('Error al comprimir la imagen')
                                                 console.log(err, 'ONCHANGE_INPT_FILE_ERROR')
                                             });
-
                                         }
                                     }}
                                 />

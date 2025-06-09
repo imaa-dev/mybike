@@ -13,6 +13,7 @@ class OrganizationService
     {
         try{
             if($request->hasFile('file')){
+
                 $path = $request->file('file')->store('organization/'.$request->user()->id, 'public');
             }
             $organization = new Organization();

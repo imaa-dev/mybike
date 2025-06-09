@@ -35,6 +35,7 @@ class OrganizationController extends Controller
 
     public function store(StoreOrganizationRequest $request)
     {
+
         $res =  $this->organizationService->create($request);
         session()->flash('message', $res['message']);
         return redirect()->route('organization.list.view');
