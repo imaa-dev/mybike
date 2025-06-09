@@ -58,7 +58,6 @@ const footerNavItems: NavItem[] = [
 
 export function AppSidebar() {
     const { organization } = usePage().props;
-    console.log(organization)
     return (
         <Sidebar collapsible="icon" variant="inset">
             <SidebarHeader>

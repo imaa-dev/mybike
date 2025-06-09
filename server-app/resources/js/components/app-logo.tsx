@@ -1,6 +1,9 @@
 import AppLogoIcon from './app-logo-icon';
-
-export default function AppLogo({ organization }) {
+import { OrganizationData } from '@/types';
+interface OrganizationEditFormProps {
+    organization: OrganizationData;
+}
+export default function AppLogo({ organization }: OrganizationEditFormProps) {
     return (
         <>
             <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-md">
