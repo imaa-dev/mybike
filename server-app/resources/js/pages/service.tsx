@@ -24,7 +24,7 @@ interface ServiDataProp {
 const appUrl = import.meta.env.VITE_APP_URL;
 export default function Service({servis, notOrganization}: ServiDataProp){
     const [modal, setModal] = useState<boolean>(notOrganization)
-
+    // agregar alguna funcion a los botones para que no se haga submit dos veces
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Servicios" />
@@ -125,7 +125,7 @@ export default function Service({servis, notOrganization}: ServiDataProp){
                                                 }}
                                                 className="me-2 mb-2 rounded-lg border border-blue-700 px-5 py-2.5 text-center text-sm font-medium text-blue-700 hover:bg-blue-800 hover:text-white focus:ring-4 focus:ring-blue-300 focus:outline-none dark:border-blue-500 dark:text-blue-500 dark:hover:bg-blue-500 dark:hover:text-white dark:focus:ring-blue-800"
                                             >
-                                                Editar
+                                                Gestionar
                                             </button>
 
                                             <button

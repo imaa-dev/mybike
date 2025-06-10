@@ -38,9 +38,9 @@ class ServiController extends Controller
             'notOrganization' => $notOrganization
         ]);
     }
-    public function create()
+    public function create(Request $request)
     {
-        $product = Product::with('file')->get();
+        $product = Product::where('user_id', $request->user()->id)->with('file')->get();
         $client = User::where('role_id', 2)->with('file')->get();
         return Inertia::render('forms/createServisForm', [
             'products' => $product,
