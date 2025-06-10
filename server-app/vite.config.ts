@@ -17,9 +17,12 @@ export default defineConfig({
     esbuild: {
         jsx: 'automatic',
     },
+    //192.168.171.226
     resolve: {
         alias: {
             'ziggy-js': resolve(__dirname, 'vendor/tightenco/ziggy'),
         },
     },
+
+
 });

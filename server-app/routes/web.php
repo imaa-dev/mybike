@@ -23,6 +23,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('update/{servi}/service', [ServiController::class, 'getUpdate'])->name('services.update.view');
     Route::post('create/service', [ServiController::class, 'store'])->name('services.store.view');
     Route::post('update/service', [ServiController::class, 'update'])->name('services.update');
+    Route::post('delete/service/{id}', [ServiController::class, 'delete'])->name('services.destroy');
 
 
     // Client routes

@@ -80,6 +80,8 @@ export interface ServiData {
     exit: Date;
     file: FileMeta[];
     satisfied: string;
+    product: ProductData;
+    user: User;
     created_at: Date;
     updated_at: Date;
 }

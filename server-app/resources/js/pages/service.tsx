@@ -1,5 +1,5 @@
 import AppLayout from '@/layouts/app-layout';
-import { Head, router } from '@inertiajs/react';
+import { Head, router, useForm } from '@inertiajs/react';
 import type { BreadcrumbItem, ServiData } from '@/types';
 import toast, { Toaster } from 'react-hot-toast';
 import { CirclePlus } from 'lucide-react';
@@ -23,8 +23,22 @@ interface ServiDataProp {
 }
 const appUrl = import.meta.env.VITE_APP_URL;
 export default function Service({servis, notOrganization}: ServiDataProp){
-    const [modal, setModal] = useState<boolean>(notOrganization)
+    const [modal, setModal] = useState<boolean>(notOrganization);
+    const [show, setShow] = useState<boolean>(false);
+    const [serviceDelete, setServiceDelete] = useState<number>(0);
+    const { post } = useForm({})
     // agregar alguna funcion a los botones para que no se haga submit dos veces
+    console.log(servis)
+    const deleteServi = (id: number) => {
+        post(`delete/service/${id}`, {
+            onSuccess: (page) => {
+                const message = (page.props as { flash?: { message?: string } }).flash?.message;
+                if (message) {
+                    toast.success(message);
+                }
+            },
+        })
+    }
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Servicios" />
@@ -55,6 +69,12 @@ export default function Service({servis, notOrganization}: ServiDataProp){
                                     </th>
                                     <th scope="col" className="px-6 py-3">
                                         Servicio
+                                    </th>
+                                    <th scope="col" className="px-6 py-3" >
+                                        Cliente
+                                    </th>
+                                    <th>
+                                        Producto
                                     </th>
                                     <th scope="col" className="px-6 py-3">
                                         Maestro nota
@@ -94,6 +114,18 @@ export default function Service({servis, notOrganization}: ServiDataProp){
 
                                         </td>
                                         <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white">{service.name}</td>
+                                        <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
+                                            <div className="ps-3">
+                                                <div className="text-base font-semibold">{service.user.name}</div>
+                                                <div className="font-normal text-gray-500">{service.user.phone}</div>
+                                            </div>
+                                        </td>
+                                        <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
+                                            {service.product.name}
+                                            <div className="font-normal text-gray-500">
+                                                {service.product.description}
+                                            </div>
+                                        </td>
                                         <td className="px-6 py-4">{service.master_note}</td>
                                         <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
                                             {new Date(service.created_at).toLocaleString('es-ES', {
@@ -132,7 +164,8 @@ export default function Service({servis, notOrganization}: ServiDataProp){
                                                 className="me-2 mb-2 rounded-lg border border-red-700 px-5 py-2.5 text-center text-sm font-medium text-red-700 hover:bg-red-800 hover:text-white focus:ring-4 focus:ring-red-300 focus:outline-none dark:border-red-500 dark:text-red-500 dark:hover:bg-red-600 dark:hover:text-white dark:focus:ring-red-900"
                                                 type="button"
                                                 onClick={() => {
-                                                    console.log('ELIMINAR');
+                                                    setShow(true)
+                                                    setServiceDelete(service.id);
                                                 }}
                                             >
                                                 Eliminar
@@ -161,6 +194,33 @@ export default function Service({servis, notOrganization}: ServiDataProp){
                                     </button>
                                     <button
                                         onClick={() => setModal(false)}
+                                        type="button"
+                                        className="me-2 mb-2 rounded-lg border border-gray-800 px-5 py-2.5 text-center text-sm font-medium text-gray-900 hover:bg-gray-900 hover:text-white focus:ring-4 focus:ring-gray-300 focus:outline-none dark:border-gray-600 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-800"
+                                    >
+                                        Cancelar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                    {show && (
+                        <div className="fixed top-0 right-0 left-0 z-50 flex h-screen w-screen items-center justify-center bg-black/50">
+                            <div className="rounded-lg bg-white p-6 shadow-lg dark:bg-gray-700">
+                                <h3 className="mb-4 text-lg text-gray-800 dark:text-gray-200">
+                                    ¿Deseas eliminar el servicio?
+                                </h3>
+                                <div className="flex justify-end gap-2">
+                                    <button
+                                        onClick={() => {
+                                            deleteServi(serviceDelete);
+                                            setShow(false);
+                                        }}
+                                        className="me-2 mb-2 rounded-lg border border-red-700 px-5 py-2.5 text-center text-sm font-medium text-red-700 hover:bg-red-800 hover:text-white focus:ring-4 focus:ring-red-300 focus:outline-none dark:border-red-500 dark:text-red-500 dark:hover:bg-red-600 dark:hover:text-white dark:focus:ring-red-900"
+                                    >
+                                       Si, Eliminar
+                                    </button>
+                                    <button
+                                        onClick={() => setShow(false)}
                                         type="button"
                                         className="me-2 mb-2 rounded-lg border border-gray-800 px-5 py-2.5 text-center text-sm font-medium text-gray-900 hover:bg-gray-900 hover:text-white focus:ring-4 focus:ring-gray-300 focus:outline-none dark:border-gray-600 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-800"
                                     >

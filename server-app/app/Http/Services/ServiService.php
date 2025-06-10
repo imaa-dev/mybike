@@ -3,6 +3,7 @@
 namespace App\Http\Services;
 
 use App\Models\Servi;
+use Illuminate\Support\Facades\Log;
 
 class ServiService
 {
@@ -21,7 +22,7 @@ class ServiService
             }
 
             $servi = new Servi();
-            $servi->user_id  = $request->user()->id;
+            $servi->user_id  = $request->user_id;
             $servi->organization_id = $request->organization_id;
             $servi->product_id = $request->product_id;
             $servi->name = $request->name;
@@ -56,7 +57,28 @@ class ServiService
 
     public function delete($request)
     {
+        try {
+            $serviceDelete = Servi::where('id', $request->id)->with('file')->first();
+            $serviceDelete->delete();
+            $serviceDelete->file()->delete();
+            if($request->hasFile('file')){
+                Storage::disk('public')->delete($request->file->path);
+            }
+            $data = [
+                'code' => 200,
+                'status' => 'success',
+                'message' => 'Servicio eliminado satisfactoriamente',
+            ];
+        } catch (\Throwable $th) {
+            Log::error($th);
+            $data = [
+                'code' => 500,
+                'message' => 'error al eliminar registro',
+                'status' => 'error'
+            ];
 
+        }
+        return $data;
     }
 
     public function getById($id)

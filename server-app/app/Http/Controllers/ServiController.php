@@ -26,7 +26,11 @@ class ServiController extends Controller
             ->with('file')
             ->first();
         if($organization !== null){
-            $services = Servi::where('organization_id', $organization->id)->with('file')->get();
+            $services = Servi::where('organization_id', $organization->id)
+                ->with('file')
+                ->with('product')
+                ->with('user')
+                ->get();
             $notOrganization = false;
         }else{
             $services = [];
@@ -67,6 +71,8 @@ class ServiController extends Controller
     }
 
     public function delete(Request $request){
-        return true;
+        $res = $this->serviService->delete($request);
+        session()->flash('message', $res['message']);
+        return redirect()->route('services.list.view');
     }
 }
