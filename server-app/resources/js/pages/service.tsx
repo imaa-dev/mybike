@@ -24,7 +24,7 @@ interface ServiDataProp {
 const appUrl = import.meta.env.VITE_APP_URL;
 export default function Service({servis, notOrganization}: ServiDataProp){
     const [modal, setModal] = useState<boolean>(notOrganization)
-    console.log(servis)
+
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Servicios" />
