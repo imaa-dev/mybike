@@ -24,7 +24,7 @@ interface ServiDataProp {
 const appUrl = import.meta.env.VITE_APP_URL;
 export default function Service({servis, notOrganization}: ServiDataProp){
     const [modal, setModal] = useState<boolean>(notOrganization)
-
+    console.log(servis)
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Servicios" />
@@ -71,22 +71,32 @@ export default function Service({servis, notOrganization}: ServiDataProp){
                                 </tr>
                             </thead>
                             <tbody>
-                                {servis.map((servi: ServiData, index: number) => (
+                                {servis.map((service: ServiData, index: number) => (
                                     <tr
                                         key={index}
                                         className="border-b border-gray-200 bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-600"
                                     >
                                         <td className="p-4">
-                                            <img
-                                                src={`${appUrl}/storage/${servi.file?.[0].path}`}
-                                                className="max-h-full w-16 max-w-full md:w-32"
-                                                alt="Servi File"
-                                            />
+                                            {service.file?.[0]?.path ? (
+                                                    <img
+                                                        src={`${appUrl}/storage/${service.file?.[0]?.path}`}
+                                                        className="max-h-full w-16 max-w-full md:w-32"
+                                                        alt="Servi File"
+                                                    />
+                                            ):
+                                                (
+                                                    <img
+                                                        src={`${appUrl}/logo-img.png`}
+                                                        className="max-h-full w-16 max-w-full md:w-32"
+                                                        alt="Servi File"
+                                                    />
+                                                )}
+
                                         </td>
-                                        <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white">{servi.name}</td>
-                                        <td className="px-6 py-4">{servi.master_note}</td>
+                                        <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white">{service.name}</td>
+                                        <td className="px-6 py-4">{service.master_note}</td>
                                         <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
-                                            {new Date(servi.created_at).toLocaleString('es-ES', {
+                                            {new Date(service.created_at).toLocaleString('es-ES', {
                                                 year: 'numeric',
                                                 month: 'long',
                                                 day: 'numeric',
@@ -95,7 +105,7 @@ export default function Service({servis, notOrganization}: ServiDataProp){
                                             })}
                                         </td>
                                         <td className="px-6 py-4">
-                                            {servi.exit ? (
+                                            {service.exit ? (
                                                 <div className="flex items-center">
                                                     <div className="me-2 h-2.5 w-2.5 rounded-full bg-red-500"></div>
                                                     Entregada
@@ -111,7 +121,7 @@ export default function Service({servis, notOrganization}: ServiDataProp){
                                             <button
                                                 type="button"
                                                 onClick={() => {
-                                                    router.visit(`/update/${servi.id}/service`);
+                                                    router.visit(`/update/${service.id}/service`);
                                                 }}
                                                 className="me-2 mb-2 rounded-lg border border-blue-700 px-5 py-2.5 text-center text-sm font-medium text-blue-700 hover:bg-blue-800 hover:text-white focus:ring-4 focus:ring-blue-300 focus:outline-none dark:border-blue-500 dark:text-blue-500 dark:hover:bg-blue-500 dark:hover:text-white dark:focus:ring-blue-800"
                                             >

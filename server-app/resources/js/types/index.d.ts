@@ -49,7 +49,7 @@ export interface User {
 }
 export interface FileMeta {
     id: number;
-    path: string;
+    path: string | null;
 }
 
 export interface OrganizationData {
@@ -78,6 +78,7 @@ export interface ServiData {
     name: string;
     master_note: string;
     exit: Date;
+    file: FileMeta[];
     satisfied: string;
     created_at: Date;
     updated_at: Date;
