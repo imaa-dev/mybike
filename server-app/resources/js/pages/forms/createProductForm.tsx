@@ -27,7 +27,6 @@ interface ProductDataProps {
     description: string,
     brand: string,
     model: string,
-    price: string,
     file: File[] | null
 }
 export default function CreateProductForm() {
@@ -38,7 +37,6 @@ export default function CreateProductForm() {
         description: '',
         brand: '',
         model: '',
-        price: '',
         file: null
     })
 
@@ -165,21 +163,7 @@ export default function CreateProductForm() {
                             />
                             <InputError message={errors.model} />
                         </div>
-                        <div className="group relative z-0 mb-5 w-full">
-                            <input
-                                className="peer block w-full appearance-none border-0 border-b-2 border-gray-300 bg-transparent px-0 py-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-0 focus:outline-none dark:border-gray-600 dark:text-white dark:focus:border-blue-500"
-                                type="number"
-                                name="price_product"
-                                id="price_product"
-                                placeholder="Precio"
-                                required
-                                tabIndex={3}
-                                autoComplete="price"
-                                value={data.price}
-                                onChange={(e) => setData('price', e.target.value)}
-                            />
-                            <InputError message={errors.price} />
-                        </div>
+
                         <Button type="submit" className="mt-4 w-full" tabIndex={4}>
                             Crear Producto
                         </Button>

@@ -23,19 +23,38 @@ const breadcrumbs: BreadcrumbItem[] = [
 interface ServiProp {
     servi: ServiData
 }
-
+interface Page {
+    props: {
+        organization: {
+            id: number,
+        }
+    };
+}
+interface Servi {
+    user_id: number;
+    product_id: number;
+    organization_id: number;
+    name: string;
+    master_note: string;
+    note_exit: string;
+    price: number;
+    send: boolean;
+    file: File[] | null;
+}
 export default function ManageServiceForm({ servi }: ServiProp) {
     console.log('MANAGESERVICE', servi);
-    const page = usePage();
+    const page: Page = usePage();
     const [entregar, setEntregar] = useState<boolean>(false);
-    const { data, setData, post, errors } = useForm<Required<ServiData>>({
+    const { data, setData, post, errors } = useForm<Required<Servi>>({
         organization_id: page.props.organization.id,
         product_id: servi.product_id,
         user_id: servi.user_id,
         name: servi.name,
         note_exit: '',
+        send: entregar,
         master_note: servi.master_note,
-        file: servi.file,
+        file: null,
+        price: 0,
     });
     const submit = () => {
         post('/manage/service', {
@@ -156,16 +175,16 @@ export default function ManageServiceForm({ servi }: ServiProp) {
                         </div>
                         <div className="group relative z-0 mb-5 w-full">
                             <input
-                                type="text"
-                                name="master_note_service"
-                                id="master_note_service"
+                                type="number"
+                                name="price_service"
+                                id="price_service"
                                 className="peer block w-full appearance-none border-0 border-b-2 border-gray-300 bg-transparent px-0 py-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-0 focus:outline-none dark:border-gray-600 dark:text-white dark:focus:border-blue-500"
                                 placeholder=" "
                                 autoFocus
                                 tabIndex={1}
                                 autoComplete="price"
                                 value={data.price}
-                                onChange={(e) => setData('price', e.target.value)}
+                                onChange={(e) => setData('price', Number(e.target.value))}
                                 required
                             />
                             <label

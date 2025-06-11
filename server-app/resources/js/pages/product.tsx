@@ -119,9 +119,6 @@ export default function Product({products}: ProductDataProp){
                                     Marca
                                 </th>
                                 <th scope="col" className="px-6 py-3">
-                                    Precio
-                                </th>
-                                <th scope="col" className="px-6 py-3">
                                     Actions
                                 </th>
                             </tr>
@@ -147,9 +144,6 @@ export default function Product({products}: ProductDataProp){
                                     </td>
                                     <td className="px-6 py-4">
                                         {product.brand}
-                                    </td>
-                                    <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
-                                        {product.price}
                                     </td>
                                     <td className="px-6 py-4">
                                         <button

@@ -19,7 +19,6 @@ return new class extends Migration
             $table->string('description')->nullable();
             $table->string('brand');
             $table->string('model');
-            $table->string('price')->nullable();
             $table->timestamps();
         });
     }

@@ -48,7 +48,6 @@ export interface User {
     [key: string]: unknown; // This allows for additional properties...
 }
 export interface FileMeta {
-    id: number;
     path: string | null;
 }
 
@@ -66,7 +65,6 @@ export interface ProductData {
     description: string,
     brand: string,
     model: string,
-    price: number,
     file: FileMeta[]
 }
 

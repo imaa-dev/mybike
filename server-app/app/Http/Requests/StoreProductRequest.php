@@ -26,7 +26,6 @@ class StoreProductRequest extends FormRequest
             'description' => ['nullable', 'string'],
             'brand' => ['required', 'string'],
             'model' => ['required', 'string'],
-            'price' => ['nullable', 'numeric'],
             'files' => ['nullable', 'array'],
             'files.*' => ['file', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'],
         ];
@@ -39,7 +38,6 @@ class StoreProductRequest extends FormRequest
             'description.required' => 'El campo descripcion es obligatorio',
             'brand.required' => 'El campo marca es obligatorio',
             'model.required' => 'El campo modelo es obligatorio',
-            'price.required' => 'El campo precio es obligatorio',
         ];
     }
 }

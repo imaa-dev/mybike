@@ -23,7 +23,6 @@ class ProductService{
             $product->description  = $request->description;
             $product->brand  = $request->brand;
             $product->model  = $request->model;
-            $product->price = $request->price;
             $product->save();
             if($request->file('file')){
                 foreach ($product_paths as $path){
@@ -58,7 +57,6 @@ class ProductService{
             $productUpdate->description =  $request->description;
             $productUpdate->brand =  $request->brand;
             $productUpdate->model =  $request->model;
-            $productUpdate->price = $request->price;
             if($request->hasFile('file')){
                 foreach ($productUpdate->file as $file){
                     Storage::disk('public')->delete($file->path);
