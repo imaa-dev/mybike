@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreServiceRequest;
+use App\Models\Client;
 use App\Models\Organization;
 use App\Models\Product;
 use App\Models\Servi;
@@ -45,7 +46,7 @@ class ServiController extends Controller
     public function create(Request $request)
     {
         $product = Product::where('user_id', $request->user()->id)->with('file')->get();
-        $client = User::where('role_id', 2)->with('file')->get();
+        $client = Client::where('user_id', $request->user()->id)->with('file')->get();
         return Inertia::render('forms/createServisForm', [
             'products' => $product,
             'clients' => $client,

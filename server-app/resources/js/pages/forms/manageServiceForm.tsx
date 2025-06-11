@@ -124,7 +124,7 @@ export default function ManageServiceForm({ servi }: ServiProp) {
                         </div>
                         <div className="group relative z-0 mb-5 w-full">
                             <label htmlFor="products" className="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
-                                Producto
+                                Producto en Reparación 
                             </label>
                             <p>
                                 {servi.product.name} {servi.product.model} {servi.product.brand}{' '}

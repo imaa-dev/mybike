@@ -4,6 +4,7 @@ use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ServiController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ClientController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -27,12 +28,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 
     // Client routes
-    Route::get('client', [UserController::class, 'listClient'])->name('clients.list.view');
-    Route::get('create/client', [UserController::class, 'createClient'])->name('client.create');
-    Route::post('create/client', [UserController::class, 'storeClient'])->name('client.store');
-    Route::get('update/{user}/client', [UserController::class, 'getClientUpdate'])->name('client.update.view');
-    Route::post('update/client', [UserController::class, 'updateClient'])->name('client.update');
-    Route::post('delete/client/{id}', [UserController::class, 'deleteClient'])->name('clients.destroy');
+    Route::get('client', [ClientController::class, 'list'])->name('clients.list.view');
+    Route::get('create/client', [ClientController::class, 'create'])->name('client.create.view');
+    Route::post('create/client', [ClientController::class, 'store'])->name('client.store');
+    Route::get('update/{client}/client', [ClientController::class, 'getUpdate'])->name('client.update.view');
+    Route::post('update/client', [ClientController::class, 'update'])->name('client.update');
+    Route::post('delete/client/{id}', [ClientController::class, 'delete'])->name('clients.destroy');
 
     // Product routes
     Route::get('product', [ProductController::class, 'list'])->name('products.list.view');
