@@ -7,7 +7,6 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 const handleImageUploadSingle = async (file: File) => {
-    // Función auxiliar para determinar el tipo MIME correcto
     const getProperMimeType = (fileName: string): string => {
         const ext = fileName.split('.').pop()?.toLowerCase() || '';
         const mimeTypes: Record<string, string> = {
@@ -30,10 +29,10 @@ const handleImageUploadSingle = async (file: File) => {
         });
 
         const options = {
-            maxSizeMB: 2,
-            maxWidthOrHeight: 1920,
+            maxSizeMB: 1,
+            maxWidthOrHeight: 1000,
             useWebWorker: true,
-            initialQuality: 0.8,
+            initialQuality: 0.7,
             fileType: properMimeType,
             alwaysKeepResolution: false,
             preserveExif: false,
@@ -46,7 +45,7 @@ const handleImageUploadSingle = async (file: File) => {
             const secondOptions = {
                 ...options,
                 maxSizeMB: 1,
-                maxWidthOrHeight: 1280,
+                maxWidthOrHeight: 1000,
                 initialQuality: 0.7
             };
             compressedImage = await imageCompression(compressedImage, secondOptions);
@@ -89,7 +88,6 @@ export const handleImageUploadMultiple = async (files: FileList): Promise<File[]
             })
         );
 
-        // Verificar que ningún archivo esté vacío
         const emptyFiles = processedFiles.filter(file => file.size === 0);
         if (emptyFiles.length > 0) {
             throw new Error('Algunos archivos procesados están vacíos');

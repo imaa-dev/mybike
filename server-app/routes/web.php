@@ -20,9 +20,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Service routes
     Route::get('service', [ServiController::class, 'list'])->name('services.list.view');
     Route::get('create/service', [ServiController::class, 'create'])->name('services.create.view');
-    Route::get('update/{servi}/service', [ServiController::class, 'getUpdate'])->name('services.update.view');
+    Route::get('manage/{servi}/service', [ServiController::class, 'getUpdate'])->name('services.update.view');
     Route::post('create/service', [ServiController::class, 'store'])->name('services.store.view');
-    Route::post('update/service', [ServiController::class, 'update'])->name('services.update');
+    Route::post('manage/service', [ServiController::class, 'update'])->name('services.update');
     Route::post('delete/service/{id}', [ServiController::class, 'delete'])->name('services.destroy');
 
 

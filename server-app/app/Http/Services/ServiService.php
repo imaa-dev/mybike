@@ -52,7 +52,30 @@ class ServiService
 
     public function update($request)
     {
+        try {
+            if($request->hasFile('file')){
+                foreach ($request->file('file') as $file){
+                    $path =  $file->store('servi/'.$request->user()->id, 'public');
+                    $paths[] = $path;
+                }
+            }
+            $serviceUpdate = Servi::where('id', $request->id)->first();
+            $serviceUpdate->name = $request->name;
 
+            $data = [
+                'code' => 200,
+                'status' => 'success',
+                'message' => 'Servicio actualizado satisfactoriamente',
+            ];
+        } catch (\Throwable $th) {
+            Log::error($th);
+            $data = [
+                'code' => 500,
+                'status' => 'error',
+                'message' => 'ERROR'
+            ];
+        }
+        return $data;
     }
 
     public function delete($request)

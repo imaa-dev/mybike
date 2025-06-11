@@ -16,19 +16,17 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 
 ];
-
+const appUrl = import.meta.env.VITE_APP_URL;
 interface ServiDataProp {
     servis: ServiData[];
     notOrganization: boolean;
 }
-const appUrl = import.meta.env.VITE_APP_URL;
 export default function Service({servis, notOrganization}: ServiDataProp){
     const [modal, setModal] = useState<boolean>(notOrganization);
     const [show, setShow] = useState<boolean>(false);
     const [serviceDelete, setServiceDelete] = useState<number>(0);
     const { post } = useForm({})
     // agregar alguna funcion a los botones para que no se haga submit dos veces
-    console.log(servis)
     const deleteServi = (id: number) => {
         post(`delete/service/${id}`, {
             onSuccess: (page) => {
@@ -153,7 +151,7 @@ export default function Service({servis, notOrganization}: ServiDataProp){
                                             <button
                                                 type="button"
                                                 onClick={() => {
-                                                    router.visit(`/update/${service.id}/service`);
+                                                    router.visit(`/manage/${service.id}/service`);
                                                 }}
                                                 className="me-2 mb-2 rounded-lg border border-blue-700 px-5 py-2.5 text-center text-sm font-medium text-blue-700 hover:bg-blue-800 hover:text-white focus:ring-4 focus:ring-blue-300 focus:outline-none dark:border-blue-500 dark:text-blue-500 dark:hover:bg-blue-500 dark:hover:text-white dark:focus:ring-blue-800"
                                             >

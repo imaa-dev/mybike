@@ -61,8 +61,13 @@ class ServiController extends Controller
 
     public function getUpdate(Servi $servi)
     {
-        return Inertia::render('forms/editServiForm', [
-            'servi' => $servi
+        $serviceFile = Servi::where('id', $servi->id)
+            ->with('file')
+            ->with('product')
+            ->with('user')
+            ->first();
+        return Inertia::render('forms/manageServiceForm', [
+            'servi' => $serviceFile
         ]);
     }
 
