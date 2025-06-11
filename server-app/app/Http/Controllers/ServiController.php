@@ -30,7 +30,7 @@ class ServiController extends Controller
             $services = Servi::where('organization_id', $organization->id)
                 ->with('file')
                 ->with('product')
-                ->with('user')
+                ->with('client')
                 ->get();
             $notOrganization = false;
         }else{

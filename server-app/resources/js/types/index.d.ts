@@ -67,7 +67,14 @@ export interface ProductData {
     model: string,
     file: FileMeta[]
 }
-
+export interface Client{
+    id: number;
+    name: string;
+    email: string;
+    phone: string;
+    file: FileMeta | null;
+    [key: string]: unknown;
+}
 export interface ServiData {
     id: number;
     user_id: number;
@@ -81,7 +88,7 @@ export interface ServiData {
     file: FileMeta[] | null;
     satisfied: string;
     product: ProductData;
-    user: User;
+    client: Client;
     created_at: Date;
     updated_at: Date;
 }

@@ -10,9 +10,9 @@ class Servi extends Model
     {
         return $this->belongsTo(Product::class);
     }
-    public function user()
+    public function client()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Client::class);
     }
     public function file()
     {

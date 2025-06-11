@@ -22,6 +22,7 @@ interface ServiDataProp {
     notOrganization: boolean;
 }
 export default function Service({servis, notOrganization}: ServiDataProp){
+    console.log(servis)
     const [modal, setModal] = useState<boolean>(notOrganization);
     const [show, setShow] = useState<boolean>(false);
     const [serviceDelete, setServiceDelete] = useState<number>(0);
@@ -114,8 +115,8 @@ export default function Service({servis, notOrganization}: ServiDataProp){
                                         <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white">{service.name}</td>
                                         <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
                                             <div className="ps-3">
-                                                <div className="text-base font-semibold">{service.user.name}</div>
-                                                <div className="font-normal text-gray-500">{service.user.phone}</div>
+                                                <div className="text-base font-semibold">{service.client.name}</div>
+                                                <div className="font-normal text-gray-500">{service.client.phone}</div>
                                             </div>
                                         </td>
                                         <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
