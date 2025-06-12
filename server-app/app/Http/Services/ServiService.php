@@ -2,6 +2,7 @@
 
 namespace App\Http\Services;
 
+use App\Jobs\ProcessReceipt;
 use App\Models\Servi;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -54,6 +55,7 @@ class ServiService
     public function update($request)
     {
         try {
+            $paths = [];
             if($request->hasFile('file')){
                 foreach ($request->file('file') as $file){
                     $path =  $file->store('servi/'.$request->user()->id, 'public');
@@ -80,7 +82,7 @@ class ServiService
                     ]);
                 }
             }
-            // HERE CALL JOB
+            ProcessReceipt::dispatch($serviceUpdate)->onQueue('high')->afterResponse();
             $data = [
                 'code' => 200,
                 'status' => 'success',
