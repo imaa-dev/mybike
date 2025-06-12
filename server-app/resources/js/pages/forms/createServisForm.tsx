@@ -22,7 +22,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 export interface ServiData {
     organization_id: string;
     product_id: string;
-    user_id: string;
+    client_id: string;
     name: string;
     master_note: string;
     file: File[] | null;
@@ -45,7 +45,7 @@ export default function CreateServisForm({clients, products} : ClientDataProp & 
     const { post, data, setData, errors } = useForm<Required<ServiData>>({
         organization_id: page.props.organization.id,
         product_id: '',
-        user_id: '',
+        client_id: '',
         name: '',
         master_note: '',
         file: null,
@@ -56,6 +56,7 @@ export default function CreateServisForm({clients, products} : ClientDataProp & 
             onSuccess: (page) => {
                 const message = (page.props as { flash?: { message?: string } }).flash?.message;
                 if (message) {
+                    console.log(message)
                     toast.success(message);
                 }
             },
@@ -160,8 +161,8 @@ export default function CreateServisForm({clients, products} : ClientDataProp & 
                             <select
                                 id="client"
                                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                onChange={(e) => setData('user_id', e.target.value)}
-                                value={data.user_id}
+                                onChange={(e) => setData('client_id', e.target.value)}
+                                value={data.client_id}
                             >
                                 <option value="">Selecciona un cliente</option>
                                 {clients.map((client, index) => (

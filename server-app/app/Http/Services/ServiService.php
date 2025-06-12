@@ -22,7 +22,7 @@ class ServiService
             }
 
             $servi = new Servi();
-            $servi->user_id  = $request->user_id;
+            $servi->client_id  = $request->client_id;
             $servi->organization_id = $request->organization_id;
             $servi->product_id = $request->product_id;
             $servi->name = $request->name;

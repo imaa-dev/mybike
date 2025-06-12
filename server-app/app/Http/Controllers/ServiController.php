@@ -65,7 +65,7 @@ class ServiController extends Controller
         $serviceFile = Servi::where('id', $servi->id)
             ->with('file')
             ->with('product')
-            ->with('user')
+            ->with('client')
             ->first();
         return Inertia::render('forms/manageServiceForm', [
             'servi' => $serviceFile

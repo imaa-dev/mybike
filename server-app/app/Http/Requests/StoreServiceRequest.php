@@ -23,7 +23,7 @@ class StoreServiceRequest extends FormRequest
     {
         return [
             'product_id' => 'required|integer',
-            'user_id' => 'required|integer',
+            'client_id' => 'required|integer',
             'organization_id' => 'required|integer',
             'name' => 'required|string|max:255',
             'master_note' => 'required|string|max:255',

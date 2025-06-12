@@ -31,7 +31,7 @@ interface Page {
     };
 }
 interface Servi {
-    user_id: number;
+    client_id: number;
     product_id: number;
     organization_id: number;
     name: string;
@@ -48,7 +48,7 @@ export default function ManageServiceForm({ servi }: ServiProp) {
     const { data, setData, post, errors } = useForm<Required<Servi>>({
         organization_id: page.props.organization.id,
         product_id: servi.product_id,
-        user_id: servi.user_id,
+        client_id: servi.client_id,
         name: servi.name,
         note_exit: '',
         send: entregar,
@@ -124,7 +124,7 @@ export default function ManageServiceForm({ servi }: ServiProp) {
                         </div>
                         <div className="group relative z-0 mb-5 w-full">
                             <label htmlFor="products" className="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
-                                Producto en Reparación 
+                                Producto en Reparación
                             </label>
                             <p>
                                 {servi.product.name} {servi.product.model} {servi.product.brand}{' '}
@@ -135,7 +135,7 @@ export default function ManageServiceForm({ servi }: ServiProp) {
                                 Cliente
                             </label>
                             <p>
-                                {servi.user.name} {servi.user.phone}
+                                {servi.client.name} {servi.client.phone}
                             </p>
                         </div>
                         <div className="group relative z-0 mb-5 w-full">

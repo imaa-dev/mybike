@@ -77,7 +77,7 @@ export interface Client{
 }
 export interface ServiData {
     id: number;
-    user_id: number;
+    client_id: number;
     product_id: number;
     organization_id: number;
     name: string;
