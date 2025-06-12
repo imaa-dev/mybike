@@ -51,18 +51,7 @@ export default function Organization({ organizations }: OrganizationDataProp) {
                         <thead
                             className="bg-gray-50 text-xs text-gray-700 uppercase dark:bg-gray-700 dark:text-gray-400">
                         <tr>
-                            <th scope="col" className="p-4">
-                                <div className="flex items-center">
-                                    <input
-                                        id="checkbox-all-search"
-                                        type="checkbox"
-                                        className="h-4 w-4 rounded-sm border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600 dark:focus:ring-offset-gray-800"
-                                    />
-                                    <label htmlFor="checkbox-all-search" className="sr-only">
-                                        checkbox
-                                    </label>
-                                </div>
-                            </th>
+
                             <th scope="col" className="px-6 py-3">
                                 Organizacion
                             </th>
@@ -80,18 +69,7 @@ export default function Organization({ organizations }: OrganizationDataProp) {
                                 key={index}
                                 className="border-b border-gray-200 bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-600"
                             >
-                                <td key={index} className="w-4 p-4">
-                                    <div key={index} className="flex items-center">
-                                        <input
-                                            id="checkbox-table-search-1"
-                                            type="checkbox"
-                                            className="h-4 w-4 rounded-sm border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600 dark:focus:ring-offset-gray-800"
-                                        />
-                                        <label htmlFor="checkbox-table-search-1" className="sr-only">
-                                            checkbox
-                                        </label>
-                                    </div>
-                                </td>
+
                                 <th scope="row"
                                     className="flex items-center px-6 py-4 whitespace-nowrap text-gray-900 dark:text-white">
                                     {organization.file && organization.file.path ? (
