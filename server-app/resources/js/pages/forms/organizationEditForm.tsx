@@ -5,6 +5,8 @@ import toast from 'react-hot-toast';
 import AppLayout from '@/layouts/app-layout';
 import { BreadcrumbItem, OrganizationData } from '@/types';
 import InputError from '@/components/input-error';
+import handleImageUploadSingle from '@/lib/utils';
+import { useLoading } from '@/context/LoadingContext';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -33,8 +35,8 @@ interface OrganizationEditFormProps {
     organizationUpdate: OrganizationData;
 }
 export default function OrganizationEditForm({organizationUpdate}: OrganizationEditFormProps) {
-    console.log(organizationUpdate)
-    const { data, setData, post, reset, errors } = useForm<Required<EditOrganizationForm>>({
+    const { showLoading, hideLoading } = useLoading();
+    const { data, setData, post, reset, errors, processing } = useForm<Required<EditOrganizationForm>>({
         id: organizationUpdate.id,
         file: null,
         name: organizationUpdate.name,
@@ -108,10 +110,18 @@ export default function OrganizationEditForm({organizationUpdate}: OrganizationE
                                     tabIndex={1}
                                     autoComplete="file"
                                     onChange={(e) => {
+                                        showLoading();
                                         const file =  e.target.files?.[0];
                                         if(file) {
-                                            handleUploadImage(file);
-                                            setData('file', file);
+                                            handleImageUploadSingle(file).then((res) => {
+                                                handleUploadImage(res);
+                                                setData('file', res);
+                                                hideLoading()
+                                            }).catch((err) => {
+                                                toast.error('Error al comprimir la imagen')
+                                                console.log('ONCHANGE_INPUT_FILE_ERROR', err)
+                                                hideLoading()
+                                            });
                                         }
                                     }}
                                 />
@@ -187,7 +197,11 @@ export default function OrganizationEditForm({organizationUpdate}: OrganizationE
                                 </div>
                             </div>
 
-                            <Button type="submit" className="mt-4 w-full">
+                            <Button
+                                type="submit"
+                                className="mt-4 w-full"
+                                disabled={processing}
+                            >
                                 Actualizar Organizacion
                             </Button>
                         </form>

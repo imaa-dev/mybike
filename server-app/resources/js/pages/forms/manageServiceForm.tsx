@@ -3,8 +3,10 @@ import { Head, useForm, usePage } from '@inertiajs/react';
 import { BreadcrumbItem, ServiData } from '@/types';
 import InputError from '@/components/input-error';
 import toast, { Toaster } from 'react-hot-toast';
-import { useState } from 'react';
+import { FormEventHandler, useState } from 'react';
 import { Button } from '@/components/ui/button';
+import { handleImageUploadMultiple } from '@/lib/utils';
+import { useLoading } from '@/context/LoadingContext';
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Servicios',
@@ -30,6 +32,7 @@ interface Page {
         }
     };
 }
+const appUrl = import.meta.env.VITE_APP_URL;
 interface Servi {
     client_id: number;
     product_id: number;
@@ -37,15 +40,16 @@ interface Servi {
     name: string;
     master_note: string;
     note_exit: string;
-    price: number;
+    price: number | undefined;
     send: boolean;
     file: File[] | null;
 }
 export default function ManageServiceForm({ servi }: ServiProp) {
-    console.log('MANAGESERVICE', servi);
+    const [uploadImage, setUploadImage] = useState<string | null>(null);
     const page: Page = usePage();
     const [entregar, setEntregar] = useState<boolean>(false);
-    const { data, setData, post, errors } = useForm<Required<Servi>>({
+    const { showLoading, hideLoading } = useLoading();
+    const { data, setData, post, errors, processing } = useForm<Required<Servi>>({
         organization_id: page.props.organization.id,
         product_id: servi.product_id,
         client_id: servi.client_id,
@@ -54,18 +58,20 @@ export default function ManageServiceForm({ servi }: ServiProp) {
         send: entregar,
         master_note: servi.master_note,
         file: null,
-        price: 0,
+        price: undefined,
     });
-    const submit = () => {
+    const handleUploadImage = (file: File) => {
+        const temporalURL = URL.createObjectURL(file)
+        setUploadImage(temporalURL);
+    }
+    const submit: FormEventHandler = (e) => {
+        e.preventDefault();
         post('/manage/service', {
             onSuccess: (page) => {
                 const message = (page.props as { flash?: { message?: string } }).flash?.message;
                 if (message) {
                     toast.success(message);
                 }
-            },
-            onError: (error) => {
-                console.log(error, 'ERROR POST');
             },
         });
     };
@@ -78,6 +84,63 @@ export default function ManageServiceForm({ servi }: ServiProp) {
                         className="flex w-full flex-col justify-center gap-6 rounded-lg bg-white p-6 shadow-md md:p-10 dark:bg-gray-800"
                         onSubmit={submit}
                     >
+                        {uploadImage ? (
+                                <div className="group relative flex justify-center items-center">
+                                    <img
+                                        className="w-60"
+                                        src={uploadImage}
+                                    />
+                                </div>
+                            ) :
+                            servi.file && servi.file[0]?.path ? (
+                                <div className="group relative flex justify-center items-center">
+                                    <img
+                                        className="w-60"
+                                        src={`http://localhost:8000/storage/${servi.file[0]?.path}`}
+                                    />
+                                </div>
+                            ) : (
+                                <div className="group relative flex justify-center items-center">
+                                    <img
+                                        className="w-60"
+                                        src={`http://localhost:8000/logo-img.png`}
+                                    />
+                                </div>
+                            )
+                        }
+                        <div className="group relative z-0 mb-5 w-full">
+                            <input
+                                type="file"
+                                name="file_product[]"
+                                id="file_product"
+                                className="peer block w-full appearance-none border-0 border-b-2 border-gray-300 bg-transparent px-0 py-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-0 focus:outline-none dark:border-gray-600 dark:text-white dark:focus:border-blue-500"
+                                autoFocus
+                                multiple
+                                tabIndex={1}
+                                autoComplete="file"
+                                onChange={(e) => {
+                                    showLoading()
+                                    const file = e.target.files;
+                                    if (file) {
+                                        handleImageUploadMultiple(file).then((res) => {
+                                            setData('file', res)
+                                            handleUploadImage(res[0])
+                                            hideLoading()
+                                        }).catch((err) => {
+                                            console.log("ONCHANGE_INPUT_FILE_ERROR",err);
+                                            toast.error("Error al comprimir la imagen");
+                                            hideLoading()
+                                        })
+                                    }
+                                }}
+                            />
+                            <label
+                                htmlFor="floating_email"
+                                className="absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:start-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:font-medium peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:text-gray-400 peer-focus:dark:text-blue-500"
+                            >
+                                Actualizar Imagenes Servicio
+                            </label>
+                        </div>
                         <div className="group relative z-0 mb-5 w-full">
                             <input
                                 type="text"
@@ -145,7 +208,7 @@ export default function ManageServiceForm({ servi }: ServiProp) {
                                     tabIndex={5}
                                     autoComplete="entrega"
                                     className="peer sr-only"
-                                    onChange={() => setEntregar(!entregar)}
+                                    onChange={(e) => setEntregar(e.target.checked)}
                                 />
                                 <div className="peer relative h-6 w-11 rounded-full bg-gray-200 peer-checked:bg-blue-600 peer-focus:ring-4 peer-focus:ring-blue-300 peer-focus:outline-none after:absolute after:start-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:after:translate-x-full peer-checked:after:border-white rtl:peer-checked:after:-translate-x-full dark:border-gray-600 dark:bg-gray-700 dark:peer-checked:bg-blue-600 dark:peer-focus:ring-blue-800"></div>
                                 <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Entregar</span>
@@ -195,7 +258,11 @@ export default function ManageServiceForm({ servi }: ServiProp) {
                             </label>
                             <InputError message={errors.price} />
                         </div>
-                        <Button type="submit" className="mt-4 w-full">
+                        <Button
+                            type="submit"
+                            className="mt-4 w-full"
+                            disabled={processing}
+                        >
                             Entregar Servicio
                         </Button>
                     </form>

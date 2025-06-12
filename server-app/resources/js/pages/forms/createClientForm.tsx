@@ -6,6 +6,7 @@ import { FormEventHandler, useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 import InputError from '@/components/input-error';
 import handleImageUploadSingle from '@/lib/utils';
+import { useLoading } from '@/context/LoadingContext';
 
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -31,7 +32,8 @@ type UserData = {
 }
 export default function CreateClientForm() {
     const [uploadImage, setUploadImage] = useState<string | null>(null);
-    const { data, setData, post, errors } = useForm<Required<UserData>>({
+    const { showLoading, hideLoading } = useLoading();
+    const { data, setData, post, errors, processing } = useForm<Required<UserData>>({
         name: '',
         email: '',
         phone: '',
@@ -80,14 +82,17 @@ export default function CreateClientForm() {
                                 tabIndex={1}
                                 autoComplete="file"
                                 onChange={(e) => {
+                                    showLoading()
                                     const file = e.target.files?.[0];
                                     if (file) {
                                         handleImageUploadSingle(file).then((res) =>{
                                             setData('file', res)
                                             handleImageChange(res)
+                                            hideLoading()
                                         }).catch((err) => {
                                             toast.error('Error al comptimir imagen')
                                             console.log('ONCHANGE_INPUT_FILE_ERROR', err)
+                                            hideLoading()
                                         })
                                     }
                                 }}
@@ -139,7 +144,12 @@ export default function CreateClientForm() {
                             />
                             <InputError message={errors.phone} />
                         </div>
-                        <Button type="submit" className="mt-4 w-full" tabIndex={4}>
+                        <Button
+                            type="submit"
+                            className="mt-4 w-full"
+                            tabIndex={4}
+                            disabled={processing}
+                        >
                             Crear Cliente
                         </Button>
                     </form>

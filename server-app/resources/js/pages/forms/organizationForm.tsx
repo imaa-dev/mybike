@@ -7,6 +7,7 @@ import { BreadcrumbItem } from '@/types';
 import {useState} from "react";
 import handleImageUploadSingle from '@/lib/utils';
 import InputError from '@/components/input-error';
+import { useLoading } from '@/context/LoadingContext';
 
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -33,8 +34,8 @@ type CreateOrganizationForm = {
 const appUrl = import.meta.env.VITE_APP_URL;
 
 const OrganizationForm = () => {
-
-    const { data, setData, post, reset, errors } = useForm<Required<CreateOrganizationForm>>({
+    const { showLoading, hideLoading } = useLoading();
+    const { data, setData, post, reset, errors, processing } = useForm<Required<CreateOrganizationForm>>({
         file: null,
         name: '',
         description: '',
@@ -112,14 +113,17 @@ const OrganizationForm = () => {
                                     tabIndex={1}
                                     autoComplete="file"
                                     onChange={(e) => {
+                                        showLoading();
                                         const fileRes = e.target.files?.[0];
                                         if (fileRes) {
                                             handleImageUploadSingle(fileRes).then((res) => {
                                                 setData('file', res);
                                                 handleImageChange(res);
+                                                hideLoading()
                                             }).catch((err) => {
                                                 toast.error('Error al comprimir la imagen')
                                                 console.log('ONCHANGE_INPUT_FILE_ERROR', err)
+                                                hideLoading()
                                             });
                                         }
                                     }}
@@ -190,7 +194,11 @@ const OrganizationForm = () => {
                                 </label>
                                 <InputError message={errors.active} />
                             </div>
-                            <Button type="submit" className="mt-4 w-full">
+                            <Button
+                                type="submit"
+                                className="mt-4 w-full"
+                                disabled={processing}
+                            >
                                 Crear Organizacion
                             </Button>
                         </form>

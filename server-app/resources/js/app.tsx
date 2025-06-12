@@ -4,6 +4,8 @@ import { createInertiaApp } from '@inertiajs/react';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { createRoot } from 'react-dom/client';
 import { initializeTheme } from './hooks/use-appearance';
+import { LoadingProvider } from '@/context/LoadingContext';
+import LoadingModal from '@/components/LoadingModal';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -13,7 +15,12 @@ createInertiaApp({
     setup({ el, App, props }) {
         const root = createRoot(el);
 
-        root.render(<App {...props} />);
+        root.render(
+            <LoadingProvider>
+                <LoadingModal />
+                <App {...props} />
+            </LoadingProvider>
+        );
     },
     progress: {
         color: '#4B5563',

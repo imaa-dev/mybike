@@ -11,7 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::dropIfExists('clients');
+        Schema::table('servis', function (Blueprint $table) {
+            $table->integer('price')->after('status')->nullable();
+        });
     }
 
     /**
@@ -19,6 +21,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
+
     }
 };

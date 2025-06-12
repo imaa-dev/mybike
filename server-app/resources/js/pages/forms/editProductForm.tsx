@@ -4,7 +4,10 @@ import { Head, useForm } from '@inertiajs/react';
 import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
 import toast, { Toaster } from 'react-hot-toast';
-import { FormEventHandler } from 'react';
+import { FormEventHandler, useState } from 'react';
+import * as process from 'node:process';
+import { handleImageUploadMultiple } from '@/lib/utils';
+import { useLoading } from '@/context/LoadingContext';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -31,8 +34,9 @@ interface Product {
     product: ProductData
 }
 export default function EditProducForm ({product}: Product) {
-
-    const { data, setData, post, errors } = useForm<Required<ProductDataProps>>({
+    const [uploadImage, setUploadImage] = useState<string | null>(null);
+    const { showLoading, hideLoading } = useLoading();
+    const { data, setData, post, errors, processing } = useForm<Required<ProductDataProps>>({
         id: product.id,
         name: product.name,
         description: product.description,
@@ -40,7 +44,10 @@ export default function EditProducForm ({product}: Product) {
         model: product.model,
         file: null
     })
-    console.log(product)
+    const handleUploadImage = (file: File) => {
+        const temporalURL = URL.createObjectURL(file)
+        setUploadImage(temporalURL);
+    }
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
         post('/update/product', {
@@ -64,21 +71,29 @@ export default function EditProducForm ({product}: Product) {
                         onSubmit={submit}
                     >
                         <div className="grou relative z-0 mb-5 w-full">
-                            {product.file[0] ? (
-                                <div className="group relative flex justify-center items-center">
-                                    <img
-                                        className="w-60"
-                                        src={`${appUrl}/storage/${product.file[0].path}`}
-                                    />
-                                </div>
-                            ) :
-                            <div className="group relative flex justify-center items-center">
-                                <img
-                                    className="w-60"
-                                    src={`${appUrl}/carousel.png`}
-                                />
-                            </div>
-
+                            {uploadImage ? (
+                                    <div className="group relative flex justify-center items-center">
+                                        <img
+                                            className="w-60"
+                                            src={uploadImage}
+                                        />
+                                    </div>
+                                ) :
+                                product.file && product.file[0]?.path ? (
+                                    <div className="group relative flex justify-center items-center">
+                                        <img
+                                            className="w-60"
+                                            src={`${appUrl}/storage/${product.file[0]?.path}`}
+                                        />
+                                    </div>
+                                ) : (
+                                    <div className="group relative flex justify-center items-center">
+                                        <img
+                                            className="w-60"
+                                            src={`${appUrl}/logo-img.png`}
+                                        />
+                                    </div>
+                                )
                             }
                             <input
                                 type="file"
@@ -90,13 +105,20 @@ export default function EditProducForm ({product}: Product) {
                                 tabIndex={1}
                                 autoComplete="file"
                                 onChange={(e) => {
+                                    showLoading()
                                     const file = e.target.files;
                                     if (file) {
-                                        const files = Array.from(file);
-                                        setData('file', files);
+                                        handleImageUploadMultiple(file).then((res) => {
+                                            setData('file', res)
+                                            handleUploadImage(res[0])
+                                            hideLoading()
+                                        }).catch((err) => {
+                                            console.log("ONCHANGE_INPUT_FILE_ERROR",err);
+                                            toast.error("Error al comprimir la imagen");
+                                            hideLoading()
+                                        })
                                     }
                                 }}
-
                             />
                         </div>
                         <div className="w-11111full group relative z-0 mb-5">
@@ -161,7 +183,12 @@ export default function EditProducForm ({product}: Product) {
                             <InputError message={errors.model} />
                         </div>
 
-                        <Button type="submit" className="mt-4 w-full" tabIndex={4}>
+                        <Button
+                            type="submit"
+                            className="mt-4 w-full"
+                            tabIndex={4}
+                            disabled={processing}
+                        >
                             Actualizar Producto
                         </Button>
                     </form>

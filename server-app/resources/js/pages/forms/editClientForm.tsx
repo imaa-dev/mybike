@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { FormEventHandler, useState } from 'react';
 import toast from 'react-hot-toast';
 import handleImageUploadSingle from '@/lib/utils';
+import { useLoading } from '@/context/LoadingContext';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -35,7 +36,8 @@ type ClientData = {
 }
 export default function EditClientForm({client}: ClientProp) {
     const [uploadImage, setUploadImage] = useState<string | null>(null);
-    const { post, setData, data, reset, errors } = useForm<Required<ClientData>>({
+    const { showLoading, hideLoading } = useLoading();
+    const { post, setData, data, reset, errors, processing } = useForm<Required<ClientData>>({
         id: client.id,
         name: client.name,
         email: client.email,
@@ -102,14 +104,17 @@ export default function EditClientForm({client}: ClientProp) {
                                 tabIndex={1}
                                 autoComplete="file"
                                 onChange={(e) => {
+                                    showLoading()
                                     const file = e.target.files?.[0];
                                     if (file) {
                                         handleImageUploadSingle(file).then((res) =>{
                                             setData('file', res)
                                             handleUploadImage(res)
+                                            hideLoading()
                                         }).catch((err) => {
                                             toast.error('Error al comptimir imagen')
                                             console.log('ONCHANGE_INPUT_FILE_ERROR', err)
+                                            hideLoading()
                                         })
                                     }
                                 }}
@@ -162,7 +167,12 @@ export default function EditClientForm({client}: ClientProp) {
                             />
                             <InputError message={errors.phone} />
                         </div>
-                        <Button type="submit" className="mt-4 w-full" tabIndex={4}>
+                        <Button
+                            type="submit"
+                            className="mt-4 w-full"
+                            tabIndex={4}
+                            disabled={processing}
+                        >
                             Actualizar Cliente
                         </Button>
                     </form>

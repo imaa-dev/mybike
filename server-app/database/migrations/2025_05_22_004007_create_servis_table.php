@@ -25,6 +25,7 @@ return new class extends Migration
             $table->integer('satisfied')->nullable();
             $table->string('status')->nullable();
             $table->string('note_exit')->nullable();
+            $table->integer('price')->nullable();
             $table->timestamps();
         });
     }

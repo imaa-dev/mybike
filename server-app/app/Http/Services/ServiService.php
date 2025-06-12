@@ -4,6 +4,7 @@ namespace App\Http\Services;
 
 use App\Models\Servi;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class ServiService
 {
@@ -27,6 +28,7 @@ class ServiService
             $servi->product_id = $request->product_id;
             $servi->name = $request->name;
             $servi->master_note = $request->master_note;
+            $servi->status = 'REPARACION';
             $servi->save();
             if($request->hasFile('file')){
                 foreach ($servi_paths as $path){
@@ -59,9 +61,26 @@ class ServiService
                     $paths[] = $path;
                 }
             }
-            $serviceUpdate = Servi::where('id', $request->id)->first();
+            $serviceUpdate = Servi::where('id', $request->id)->with('file')->first();
+            if($serviceUpdate->file){
+                foreach ($serviceUpdate->file as $file){
+                    Storage::disk('public')->delete($file->path);
+                }
+            }
             $serviceUpdate->name = $request->name;
-
+            $serviceUpdate->master_note = $request->master_note;
+            $serviceUpdate->status = 'REPARADO';
+            $serviceUpdate->note_exit = $request->note_exit;
+            $serviceUpdate->price = $request->price;
+            $serviceUpdate->save();
+            if($request->hasFile('file')){
+                foreach ($paths as $path){
+                    $serviceUpdate->file()->delete();
+                    $serviceUpdate->file()->create([
+                        'path'=> $path
+                    ]);
+                }
+            }
             $data = [
                 'code' => 200,
                 'status' => 'success',

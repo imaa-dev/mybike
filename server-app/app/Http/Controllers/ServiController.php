@@ -73,7 +73,9 @@ class ServiController extends Controller
     }
 
     public function update(Request $request){
-        return true;
+        $res = $this->serviService->update($request);
+        session()->flash('message', $res['message']);
+        return redirect()->route('services.list.view');
     }
 
     public function delete(Request $request){

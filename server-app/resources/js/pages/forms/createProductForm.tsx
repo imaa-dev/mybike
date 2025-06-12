@@ -6,6 +6,7 @@ import { BreadcrumbItem } from '@/types';
 import { FormEventHandler, useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 import  { handleImageUploadMultiple } from '@/lib/utils';
+import { useLoading } from '@/context/LoadingContext';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -31,8 +32,8 @@ interface ProductDataProps {
 }
 export default function CreateProductForm() {
     const [uploadImage, setUploadImage] = useState<string | null>(null);
-
-    const { data, setData, post, errors } = useForm<Required<ProductDataProps>>({
+    const { showLoading, hideLoading } = useLoading();
+    const { data, setData, post, errors, processing } = useForm<Required<ProductDataProps>>({
         name: '',
         description: '',
         brand: '',
@@ -89,14 +90,17 @@ export default function CreateProductForm() {
                                 tabIndex={1}
                                 autoComplete="file"
                                 onChange={(e) => {
+                                    showLoading()
                                     const file = e.target.files;
                                     if (file) {
                                         handleImageUploadMultiple(file).then((res) => {
                                             setData('file', res)
                                             handleImageChange(res)
+                                            hideLoading()
                                         }).catch((err) => {
                                             console.log("ONCHANGE_INPUT_FILE_ERROR",err);
                                             toast.error("Error al comprimir la imagen");
+                                            hideLoading()
                                         })
                                     }
                                 }}
@@ -164,7 +168,12 @@ export default function CreateProductForm() {
                             <InputError message={errors.model} />
                         </div>
 
-                        <Button type="submit" className="mt-4 w-full" tabIndex={4}>
+                        <Button
+                            type="submit"
+                            className="mt-4 w-full"
+                            tabIndex={4}
+                            disabled={processing}
+                        >
                             Crear Producto
                         </Button>
                     </form>

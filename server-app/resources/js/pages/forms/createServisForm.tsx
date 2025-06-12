@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { FormEventHandler, useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 import { handleImageUploadMultiple } from '@/lib/utils';
+import { useLoading } from '@/context/LoadingContext';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -37,12 +38,13 @@ interface ProducDataProp {
 const appUrl = import.meta.env.VITE_APP_URL;
 export default function CreateServisForm({clients, products} : ClientDataProp & ProducDataProp) {
     const [uploadImage, setUploadImage] = useState<string | null>(null);
+    const { showLoading, hideLoading } = useLoading();
     const handleImageChange = (file: File[]) => {
         const imageURL = URL.createObjectURL(file[0])
         setUploadImage(imageURL);
     }
     const page = usePage();
-    const { post, data, setData, errors } = useForm<Required<ServiData>>({
+    const { post, data, setData, errors, processing } = useForm<Required<ServiData>>({
         organization_id: page.props.organization.id,
         product_id: '',
         client_id: '',
@@ -94,14 +96,17 @@ export default function CreateServisForm({clients, products} : ClientDataProp & 
                                 tabIndex={1}
                                 autoComplete="file"
                                 onChange={(e) => {
+                                    showLoading();
                                     const file = e.target.files;
                                     if (file) {
                                         handleImageUploadMultiple(file).then((res) => {
                                             setData('file', res)
                                             handleImageChange(res)
+                                            hideLoading()
                                         }).catch((err) => {
                                             toast.error('Error al comprimir la imagen')
                                             console.log('ONCHANGE_INPUT_FILE_ERROR', err)
+                                            hideLoading()
                                         })
                                     }
                                 }}
@@ -171,7 +176,12 @@ export default function CreateServisForm({clients, products} : ClientDataProp & 
                             </select>
 
                         </div>
-                        <Button type="submit" className="mt-4 w-full" tabIndex={4}>
+                        <Button
+                            type="submit"
+                            className="mt-4 w-full"
+                            tabIndex={4}
+                            disabled={processing}
+                        >
                             Crear Servicio
                         </Button>
                     </form>

@@ -85,7 +85,7 @@ export interface ServiData {
     note_exit: string;
     price: number;
     exit: Date;
-    file: FileMeta[] | null;
+    file: FileMeta[];
     satisfied: string;
     product: ProductData;
     client: Client;
