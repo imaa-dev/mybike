@@ -34,6 +34,7 @@ interface Page {
 }
 const appUrl = import.meta.env.VITE_APP_URL;
 interface Servi {
+    id: number;
     client_id: number;
     product_id: number;
     organization_id: number;
@@ -50,6 +51,7 @@ export default function ManageServiceForm({ servi }: ServiProp) {
     const [entregar, setEntregar] = useState<boolean>(false);
     const { showLoading, hideLoading } = useLoading();
     const { data, setData, post, errors, processing } = useForm<Required<Servi>>({
+        id: servi.id,
         organization_id: page.props.organization.id,
         product_id: servi.product_id,
         client_id: servi.client_id,

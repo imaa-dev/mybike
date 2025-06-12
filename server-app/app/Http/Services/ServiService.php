@@ -21,14 +21,13 @@ class ServiService
                     $servi_paths[] = $path;
                 }
             }
-
             $servi = new Servi();
             $servi->client_id  = $request->client_id;
             $servi->organization_id = $request->organization_id;
             $servi->product_id = $request->product_id;
             $servi->name = $request->name;
             $servi->master_note = $request->master_note;
-            $servi->status = 'REPARACION';
+            $servi->status = 'EN_REPARACION';
             $servi->save();
             if($request->hasFile('file')){
                 foreach ($servi_paths as $path){
@@ -62,7 +61,7 @@ class ServiService
                 }
             }
             $serviceUpdate = Servi::where('id', $request->id)->with('file')->first();
-            if($serviceUpdate->file){
+            if($request->hasFile('file')){
                 foreach ($serviceUpdate->file as $file){
                     Storage::disk('public')->delete($file->path);
                 }
@@ -81,10 +80,11 @@ class ServiService
                     ]);
                 }
             }
+            // HERE CALL JOB
             $data = [
                 'code' => 200,
                 'status' => 'success',
-                'message' => 'Servicio actualizado satisfactoriamente',
+                'message' => 'Servicio gestionado satisfactoriamente',
             ];
         } catch (\Throwable $th) {
             Log::error($th);

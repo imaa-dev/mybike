@@ -28,6 +28,7 @@ class ServiController extends Controller
             ->first();
         if($organization !== null){
             $services = Servi::where('organization_id', $organization->id)
+                ->where('status', 'EN_REPARACION')
                 ->with('file')
                 ->with('product')
                 ->with('client')
