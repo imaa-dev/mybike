@@ -155,7 +155,7 @@ export default function CreateServisForm({clients, products} : ClientDataProp & 
                             >
                                 <option value="">Selecciona un producto</option>
                                 {products.map((product, index) => (
-                                    <option key={index} value={product.id}>{product.name}{''}{product.model}</option>
+                                    <option key={index} value={product.id}>{product.name}{' '}{product.model}</option>
                                 ))}
                             </select>
                         </div>

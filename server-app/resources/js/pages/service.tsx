@@ -2,7 +2,7 @@ import AppLayout from '@/layouts/app-layout';
 import { Head, router, useForm } from '@inertiajs/react';
 import type { BreadcrumbItem, ServiData } from '@/types';
 import toast, { Toaster } from 'react-hot-toast';
-import { CirclePlus } from 'lucide-react';
+import { CirclePlus, List } from 'lucide-react';
 import { useState } from 'react';
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -11,10 +11,9 @@ const breadcrumbs: BreadcrumbItem[] = [
         href: '/service',
     },
     {
-        title: 'Listar',
+        title: 'Listar Servicios A Reparar',
         href: '/service',
     },
-
 ];
 const appUrl = import.meta.env.VITE_APP_URL;
 interface ServiDataProp {
@@ -27,7 +26,7 @@ export default function Service({servis, notOrganization}: ServiDataProp){
     const [show, setShow] = useState<boolean>(false);
     const [serviceDelete, setServiceDelete] = useState<number>(0);
     const { post } = useForm({})
-    // agregar alguna funcion a los botones para que no se haga submit dos veces
+
     const deleteServi = (id: number) => {
         post(`delete/service/${id}`, {
             onSuccess: (page) => {
@@ -42,21 +41,39 @@ export default function Service({servis, notOrganization}: ServiDataProp){
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Servicios" />
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
-                <div className="relative">
-                    <button
-                        type="button"
-                        className="flex"
-                        onClick={() => {
-                            if(notOrganization === true){
-                                toast.error('No tienes organizacion No puedes crear servicios')
-                            } else {
-                                router.visit('/create/service');
-                            }
-                        }}
-                    >
-                        <CirclePlus />
-                        Agregar Servicio
-                    </button>
+                <div className="flex p-5" >
+                    <div className="relative">
+                        <button
+                            type="button"
+                            className="flex"
+                            onClick={() => {
+                                if(notOrganization === true){
+                                    toast.error('No tienes organizacion No puedes crear servicios')
+                                } else {
+                                    router.visit('/create/service');
+                                }
+                            }}
+                        >
+                            <CirclePlus />
+                            Agregar Servicio
+                        </button>
+                    </div>
+                    <div className="relative ml-5">
+                        <button
+                            type="button"
+                            className="flex"
+                            onClick={() => {
+                                if(notOrganization === true){
+                                    toast.error('No tienes organizacion No puedes listar servicios')
+                                } else {
+                                    router.visit('/list-repair/service');
+                                }
+                            }}
+                        >
+                            <List />
+                            Listar Servicios Reparados
+                        </button>
+                    </div>
                 </div>
                 <div className="border-sidebar-border/70 dark:border-sidebar-border relative min-h-[100vh] flex-1 overflow-hidden rounded-xl border md:min-h-min">
                     <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
@@ -136,17 +153,10 @@ export default function Service({servis, notOrganization}: ServiDataProp){
                                             })}
                                         </td>
                                         <td className="px-6 py-4">
-                                            {service.exit ? (
                                                 <div className="flex items-center">
                                                     <div className="me-2 h-2.5 w-2.5 rounded-full bg-red-500"></div>
-                                                    Entregada
+                                                    {service.status}
                                                 </div>
-                                            ) : (
-                                                <div className="flex items-center">
-                                                    <div className="me-2 h-2.5 w-2.5 rounded-full bg-green-500"></div>
-                                                    En curso
-                                                </div>
-                                            )}
                                         </td>
                                         <td className="px-6 py-4">
                                             <button

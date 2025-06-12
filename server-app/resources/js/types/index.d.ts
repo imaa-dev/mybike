@@ -89,6 +89,7 @@ export interface ServiData {
     satisfied: string;
     product: ProductData;
     client: Client;
+    status: string;
     created_at: Date;
     updated_at: Date;
 }

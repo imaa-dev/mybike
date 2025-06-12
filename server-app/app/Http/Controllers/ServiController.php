@@ -44,6 +44,30 @@ class ServiController extends Controller
             'notOrganization' => $notOrganization
         ]);
     }
+
+    public function listRepair(Request $request)
+    {
+        $organization = Organization::where('user_id', $request->user()->id)
+            ->where('active', true)
+            ->with('file')
+            ->first();
+        if($organization !== null){
+            $services = Servi::where('organization_id', $organization->id)
+                ->where('status', 'REPARADO')
+                ->with('file')
+                ->with('product')
+                ->with('client')
+                ->get();
+            $notOrganization = false;
+        }else{
+            $services = [];
+            $notOrganization = true;
+        }
+        return Inertia::render('forms/listRepairService', [
+            'servis' => $services,
+            'notOrganization' => $notOrganization
+        ]);
+    }
     public function create(Request $request)
     {
         $product = Product::where('user_id', $request->user()->id)->with('file')->get();
