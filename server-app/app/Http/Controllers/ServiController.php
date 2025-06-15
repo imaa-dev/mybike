@@ -28,7 +28,7 @@ class ServiController extends Controller
             ->first();
         if($organization !== null){
             $services = Servi::where('organization_id', $organization->id)
-                ->where('status', 'EN_REPARACION')
+                ->where('status', 'RECEPCIONADO')
                 ->with('file')
                 ->with('product')
                 ->with('client')
@@ -70,6 +70,7 @@ class ServiController extends Controller
     }
     public function create(Request $request)
     {
+        $servi = new Servi;
         $product = Product::where('user_id', $request->user()->id)->with('file')->get();
         $client = Client::where('user_id', $request->user()->id)->with('file')->get();
         return Inertia::render('forms/createServisForm', [

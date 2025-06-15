@@ -12,7 +12,7 @@ const breadcrumbs: BreadcrumbItem[] = [
         href: '/service',
     },
     {
-        title: 'Listar Servicios A Reparar',
+        title: 'Listar Servicios A Reparados',
         href: '/service',
     },
 ];
@@ -73,7 +73,7 @@ export default function ListRepairService({servis}: ServiceDataProp) {
                                 Fecha Ingreso/Salida
                             </th>
                             <th scope="col" className="px-6 py-3">
-                                Estado Reaparacion
+                                Estado Reparación
                             </th>
 
                             <th scope="col" className="px-6 py-3">

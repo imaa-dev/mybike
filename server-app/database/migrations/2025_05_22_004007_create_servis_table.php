@@ -19,13 +19,10 @@ return new class extends Migration
             $table->foreign('client_id')->references('id')->on('clients');
             $table->foreign('organization_id')->references('id')->on('organizations');
             $table->foreign('product_id')->references('id')->on('products');
-            $table->string('name');
-            $table->string('master_note');
-            $table->dateTime('exit')->nullable();
+            $table->dateTime('date_start');
+            $table->dateTime('date_end')->nullable();
             $table->integer('satisfied')->nullable();
             $table->string('status')->nullable();
-            $table->string('note_exit')->nullable();
-            $table->integer('price')->nullable();
             $table->timestamps();
         });
     }

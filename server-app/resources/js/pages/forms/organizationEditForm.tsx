@@ -129,7 +129,7 @@ export default function OrganizationEditForm({organizationUpdate}: OrganizationE
                                     htmlFor="floating_email"
                                     className="absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:start-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:font-medium peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:text-gray-400 peer-focus:dark:text-blue-500"
                                 >
-                                    Icono Marca Organizacion
+                                    Icono Marca Organización
                                 </label>
 
                             </div>
@@ -188,9 +188,9 @@ export default function OrganizationEditForm({organizationUpdate}: OrganizationE
                                         />
                                         <div className="peer relative h-6 w-11 rounded-full bg-gray-200 peer-checked:bg-blue-600 peer-focus:ring-4 peer-focus:ring-blue-300 peer-focus:outline-none after:absolute after:start-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:after:translate-x-full peer-checked:after:border-white rtl:peer-checked:after:-translate-x-full dark:border-gray-600 dark:bg-gray-700 dark:peer-checked:bg-blue-600 dark:peer-focus:ring-blue-800"></div>
                                         {active ? (
-                                            <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Desactivar Organizacion</span>
+                                            <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Desactivar Organización</span>
                                         ) : (
-                                            <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Activar Organizacion</span>
+                                            <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Activar Organización</span>
                                         )}
                                     </label>
                                     <InputError message={errors.active} />
@@ -202,7 +202,7 @@ export default function OrganizationEditForm({organizationUpdate}: OrganizationE
                                 className="mt-4 w-full"
                                 disabled={processing}
                             >
-                                Actualizar Organizacion
+                                Actualizar Organizacón
                             </Button>
                         </form>
                     </div>

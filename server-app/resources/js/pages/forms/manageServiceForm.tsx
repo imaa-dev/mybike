@@ -98,14 +98,14 @@ export default function ManageServiceForm({ servi }: ServiProp) {
                                 <div className="group relative flex justify-center items-center">
                                     <img
                                         className="w-60"
-                                        src={`http://localhost:8000/storage/${servi.file[0]?.path}`}
+                                        src={`${appUrl}/storage/${servi.file[0]?.path}`}
                                     />
                                 </div>
                             ) : (
                                 <div className="group relative flex justify-center items-center">
                                     <img
                                         className="w-60"
-                                        src={`http://localhost:8000/logo-img.png`}
+                                        src={`${appUrl}/logo-img.png`}
                                     />
                                 </div>
                             )
