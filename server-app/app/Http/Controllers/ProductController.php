@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Services\ProductService;
 use App\Models\Product;
+use App\Models\ProductType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -20,14 +21,17 @@ class ProductController extends Controller
     }
 
     public function list(Request $request){
-        $products = Product::where('user_id', $request->user()->id)->with('file')->get();
+        $products = Product::where('user_id', $request->user()->id)->with('file')->with('type')->get();
         return Inertia::render('product', [
             'products' => $products,
         ]);
     }
 
     public function create(){
-        return Inertia::render('forms/createProductForm');
+        $product_types = ProductType::all();
+        return Inertia::render('forms/createProductForm', [
+            'product_types' => $product_types,
+        ]);
     }
 
     public function store(StoreProductRequest $request){
@@ -38,8 +42,10 @@ class ProductController extends Controller
     public function getUpdate(Product $product)
     {
         $productFile = Product::where('id', $product->id)->with('file')->first();
+        $productType = ProductType::all();
         return Inertia::render('forms/editProductForm', [
-            'product' => $productFile
+            'product' => $productFile,
+            'productType' => $productType,
         ]);
     }
     public function update(StoreProductRequest $request)

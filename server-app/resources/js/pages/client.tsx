@@ -7,11 +7,7 @@ import { useState } from 'react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Cliente',
-        href: '/client'
-    },
-    {
-        title: 'Listar',
+        title: 'Clientes',
         href: '/client'
     },
 ];
@@ -43,7 +39,6 @@ export default function Client({clients}: ClientDataProp){
                 <div className="relative">
                     <button type="button" className="flex" onClick={() => router.visit('/create/client')}  >
                         <CirclePlus />
-                        Agregar Cliente
                     </button>
                 </div>
                 <div
@@ -57,16 +52,16 @@ export default function Client({clients}: ClientDataProp){
                             <tr>
 
                                 <th scope="col" className="px-6 py-3">
-                                    Name
+                                    Nombre
                                 </th>
                                 <th scope="col" className="px-6 py-3">
-                                    email
+                                    Email
                                 </th>
                                 <th scope="col" className="px-6 py-3">
-                                    phone
+                                    Celular
                                 </th>
                                 <th scope="col" className="px-6 py-3">
-                                    Action
+                                    Accion
                                 </th>
                             </tr>
                             </thead>

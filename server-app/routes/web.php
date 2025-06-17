@@ -47,6 +47,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('list/organization', [OrganizationController::class, 'list'])->name('organization.list.view');
     Route::get('create/organization', [OrganizationController::class, 'create'])->name('organization.create.view');
     Route::get('organization/{organization}/edit', [OrganizationController::class, 'getUpdate'])->name('organization.update.view');
+    Route::get('organization/show', [OrganizationController::class, 'show'])->name('organization.show.view');
     Route::post('create/organization', [OrganizationController::class, 'store'])->name('organizations.store');
     Route::post('organization/edit', [OrganizationController::class, 'update'])->name('organizations.update');
     Route::post('organization/delete/{id}', [OrganizationController::class, 'delete'])->name('organizations.destroy');

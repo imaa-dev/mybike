@@ -23,9 +23,8 @@ class StoreClientRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'phone' => 'required|string|max:12',
-            'email' => 'nullable|string|email|max:255|unique:users,email',
-            'file' => 'nullable|file|mimes:jpeg,png,jpg,gif,svg|max:2048'
+            'phone' => 'required|unique:clients,phone|string|max:11',
+            'email' => 'nullable|string|email|max:255|unique:clients,email',
         ];
     }
 
@@ -38,9 +37,9 @@ class StoreClientRequest extends FormRequest
             'phone.required' => 'El telefono es requerido',
             'phone.string' => 'El telefono debe ser una cadena de caracteres',
             'phone.max' => 'El telefono debe tener maximo de 11 caracteres',
-            'file.mimes' => 'El Archivo debe ser un archivo valido',
+            'phone.unique' => 'El telefono ya esta registrado',
             'email.unique' => 'El correo ya esta registrado',
-            'email.email' => 'El correo debe ser un correo valido'
+            'email.email' => 'El correo debe ser un correo valido',
         ];
     }
 }

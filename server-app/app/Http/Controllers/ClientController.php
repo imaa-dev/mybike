@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreClientRequest;
+use App\Http\Requests\UpdateClientRequest;
 use App\Http\Services\ClientService;
 use App\Models\Client;
 use Illuminate\Http\Request;
@@ -25,7 +27,7 @@ class ClientController extends Controller
     {
         return Inertia::render('forms/createClientForm');
     }
-    public function store(Request $request)
+    public function store(StoreClientRequest $request)
     {
         $res = $this->clientService->create($request);
         session()->flash('message', $res['message']);
@@ -38,7 +40,7 @@ class ClientController extends Controller
             'client' => $clientFile
         ]);
     }
-    public function update(Request $request)
+    public function update(UpdateClientRequest $request)
     {
         $res = $this->clientService->update($request);
         session()->flash('message', $res['message']);

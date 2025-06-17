@@ -7,13 +7,9 @@ import { useState } from 'react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Producto',
+        title: 'Productos',
         href: '/product',
-    },
-    {
-        title: 'Listado ',
-        href: '/product',
-    },
+    }
 ];
 interface ProductDataProp {
     products: ProductData[];
@@ -23,7 +19,6 @@ export default function Product({products}: ProductDataProp){
     const { post } = useForm({});
     const [modal, setModal] = useState(false);
     const [productDelete, setProductDelete] = useState(0);
-
     const deleteProduct = (id: number) => {
         post(`/delete/product/${id}`, {
             onSuccess: (page) => {
@@ -44,7 +39,6 @@ export default function Product({products}: ProductDataProp){
                 <div className="relative">
                     <button type="button" className="flex" onClick={() => router.visit('/create/product')}  >
                         <CirclePlus />
-                        Agregar Producto
                     </button>
                 </div>
                 <div className="border-sidebar-border/70 dark:border-sidebar-border relative min-h-[100vh] flex-1 overflow-hidden rounded-xl border md:min-h-min">
@@ -54,11 +48,9 @@ export default function Product({products}: ProductDataProp){
                             <thead
                                 className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                             <tr>
-                                <th scope="col" className="px-16 py-3">
-                                    <span className="sr-only">Image</span>
-                                </th>
+
                                 <th scope="col" className="px-6 py-3">
-                                    Producto
+                                    Tipo
                                 </th>
                                 <th scope="col" className="px-6 py-3">
                                     Modelo
@@ -74,18 +66,8 @@ export default function Product({products}: ProductDataProp){
                             <tbody>
                             {products.map((product: ProductData, index) => (
                                 <tr key={index} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
-                                    <td className="p-4">
-                                        { product.file && product.file[0] && product.file[0].path ?
-                                            <img  src={`${appUrl}/storage/${product.file?.[0].path}`} className="w-16 md:w-32 max-w-full max-h-full" alt="ImagenTable"/>
-                                            :
-                                            <img src={`${appUrl}/logo-img.png`} className="w-16 md:w-32 max-w-full max-h-full" alt="Apple Watch" />
-                                        }
-                                    </td>
                                     <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
-                                        <div className="ps-3">
-                                            <div className="text-base font-semibold">{product.name}</div>
-                                            <div className="font-normal text-gray-500">{product.description}</div>
-                                        </div>
+                                        {product.type.name}
                                     </td>
                                     <td className="px-6 py-4">
                                         {product.model}
@@ -101,7 +83,7 @@ export default function Product({products}: ProductDataProp){
                                             }}
                                             className="me-2 mb-2 rounded-lg border border-blue-700 px-5 py-2.5 text-center text-sm font-medium text-blue-700 hover:bg-blue-800 hover:text-white focus:ring-4 focus:ring-blue-300 focus:outline-none dark:border-blue-500 dark:text-blue-500 dark:hover:bg-blue-500 dark:hover:text-white dark:focus:ring-blue-800"
                                         >
-                                            Editar
+                                            Actualizar
                                         </button>
 
                                         <button

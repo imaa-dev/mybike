@@ -11,7 +11,7 @@ const LoadingModal = () => {
     return (
         <div className="loading-overlay">
             <div className="spinner" />
-            <p>Cargando...</p>
+            <p>Cargando Imagen...</p>
         </div>
     );
 };

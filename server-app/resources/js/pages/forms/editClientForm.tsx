@@ -3,18 +3,16 @@ import { Head, useForm } from '@inertiajs/react';
 import { BreadcrumbItem, User } from '@/types';
 import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
-import { FormEventHandler, useState } from 'react';
-import toast from 'react-hot-toast';
-import handleImageUploadSingle from '@/lib/utils';
-import { useLoading } from '@/context/LoadingContext';
+import { FormEventHandler } from 'react';
+import toast, { Toaster } from 'react-hot-toast';
+import PhoneInput from 'react-phone-input-2';
+import 'react-phone-input-2/lib/style.css'
+import { SidebarGroupLabel } from '@/components/ui/sidebar';
+import { useAppearance } from '@/hooks/use-appearance';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Cliente',
-        href: '/client'
-    },
-    {
-        title: 'Listar',
         href: '/client'
     },
     {
@@ -35,8 +33,7 @@ type ClientData = {
     file: File | null
 }
 export default function EditClientForm({client}: ClientProp) {
-    const [uploadImage, setUploadImage] = useState<string | null>(null);
-    const { showLoading, hideLoading } = useLoading();
+
     const { post, setData, data, reset, errors, processing } = useForm<Required<ClientData>>({
         id: client.id,
         name: client.name,
@@ -44,10 +41,7 @@ export default function EditClientForm({client}: ClientProp) {
         phone: client.phone,
         file: null
     })
-    const handleUploadImage = (file: File) => {
-        const temporalURL = URL.createObjectURL(file)
-        setUploadImage(temporalURL);
-    }
+    const { appearance } = useAppearance();
     const submit: FormEventHandler = (e) => {
         e.preventDefault()
         post(`/update/client`, {
@@ -61,73 +55,24 @@ export default function EditClientForm({client}: ClientProp) {
             }
         })
     }
+
     return(
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Editar cliente" />
-            <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
-                <div className="border-sidebar-border/70 dark:border-sidebar-border relative min-h-[100vh] flex-1 overflow-hidden rounded-xl border md:min-h-min">
-                    <form
+            <div className="flex h-full flex-1 flex-col items-center justify-center gap-4 rounded-xl">
+                <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+                <form
                         className="flex w-full flex-col justify-center gap-6 rounded-lg bg-white p-6 shadow-md md:p-10 dark:bg-gray-800"
                         onSubmit={submit}
                     >
-                        <div className="grou relative z-0 mb-5 w-full">
-                            {uploadImage ? (
-                                    <div className="group relative flex justify-center items-center">
-                                        <img
-                                            className="w-60"
-                                            src={uploadImage}
-                                        />
-                                    </div>
-                                ) :
-                                client.file && client.file.path ? (
-                                    <div className="group relative flex justify-center items-center">
-                                        <img
-                                            className="w-60"
-                                            src={`http://localhost:8000/storage/${client.file.path}`}
-                                        />
-                                    </div>
-                                    ) : (
-                                    <div className="group relative flex justify-center items-center">
-                                        <img
-                                            className="w-60"
-                                            src={`http://localhost:8000/logo-img.png`}
-                                        />
-                                    </div>
-                                )
-                            }
-                            <input
-                                type="file"
-                                name="file_client"
-                                id="file_client"
-                                className="peer block w-full appearance-none border-0 border-b-2 border-gray-300 bg-transparent px-0 py-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-0 focus:outline-none dark:border-gray-600 dark:text-white dark:focus:border-blue-500"
-                                autoFocus
-                                tabIndex={1}
-                                autoComplete="file"
-                                onChange={(e) => {
-                                    showLoading()
-                                    const file = e.target.files?.[0];
-                                    if (file) {
-                                        handleImageUploadSingle(file).then((res) =>{
-                                            setData('file', res)
-                                            handleUploadImage(res)
-                                            hideLoading()
-                                        }).catch((err) => {
-                                            toast.error('Error al comptimir imagen')
-                                            console.log('ONCHANGE_INPUT_FILE_ERROR', err)
-                                            hideLoading()
-                                        })
-                                    }
-                                }}
-                            />
-                            <InputError message={errors.file} />
-                        </div>
-                        <div className="w-11111full group relative z-0 mb-5">
+                    <SidebarGroupLabel> Actualizar Cliente </SidebarGroupLabel>
+
+                    <div className="w-11111full group relative z-0 mb-5">
                             <input
                                 type="text"
                                 name="name_client"
                                 id="name_client"
                                 className="peer block w-full appearance-none border-0 border-b-2 border-gray-300 bg-transparent px-0 py-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-0 focus:outline-none dark:border-gray-600 dark:text-white dark:focus:border-blue-500"
-                                placeholder="Nombre Cliente"
                                 autoFocus
                                 tabIndex={1}
                                 autoComplete="name"
@@ -135,6 +80,12 @@ export default function EditClientForm({client}: ClientProp) {
                                 onChange={(e) => setData('name', e.target.value)}
                                 required
                             />
+                            <label
+                                htmlFor="floating_name"
+                                className="absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:start-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:font-medium peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:text-gray-400 peer-focus:dark:text-blue-500"
+                            >
+                                Nombre
+                            </label>
                             <InputError message={errors.name} />
                         </div>
                         <div className="group relative z-0 mb-5 w-full">
@@ -143,27 +94,41 @@ export default function EditClientForm({client}: ClientProp) {
                                 type="text"
                                 name="email_client"
                                 id="email_client"
-                                placeholder="Email"
                                 required
                                 tabIndex={3}
                                 autoComplete="email"
                                 value={data.email}
                                 onChange={(e) => setData('email', e.target.value)}
                             />
+                            <label
+                                htmlFor="floating_email"
+                                className="absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:start-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:font-medium peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:text-gray-400 peer-focus:dark:text-blue-500"
+                            >
+                                Email
+                            </label>
                             <InputError message={errors.email} />
                         </div>
                         <div className="group relative z-0 mb-5 w-full">
-                            <input
-                                className="peer block w-full appearance-none border-0 border-b-2 border-gray-300 bg-transparent px-0 py-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-0 focus:outline-none dark:border-gray-600 dark:text-white dark:focus:border-blue-500"
-                                type="text"
-                                name="phone_client"
-                                id="phone_client"
-                                placeholder="Celular"
-                                required
-                                tabIndex={3}
-                                autoComplete="phone"
+                            <label
+                                htmlFor="floating_client"
+                                className="absolute -z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:start-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:font-medium peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:text-gray-400 peer-focus:dark:text-blue-500"
+                            >
+                                Celular
+                            </label>
+                            <PhoneInput
+                                country={'cl'}
                                 value={data.phone}
-                                onChange={(e) => setData('phone', e.target.value)}
+                                onChange={phone => setData('phone', phone)}
+                                inputStyle={{
+                                    backgroundColor: appearance === 'dark' ? '#374151' : '#f9fafb',
+                                    color: appearance === 'dark' ? '#ffffff' : '#111827',
+                                    border: '1px solid',
+                                    borderColor: appearance === 'dark' ? '#4b5563' : '#d1d5db',
+                                    borderRadius: '0.5rem',
+                                    width: '100%',
+                                    padding: '0.625rem',
+                                    fontSize: '0.875rem'
+                                }}
                             />
                             <InputError message={errors.phone} />
                         </div>
@@ -177,6 +142,7 @@ export default function EditClientForm({client}: ClientProp) {
                         </Button>
                     </form>
                 </div>
+                <Toaster />
             </div>
         </AppLayout>
     )

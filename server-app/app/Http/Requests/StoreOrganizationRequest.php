@@ -24,7 +24,22 @@ class StoreOrganizationRequest extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'description' => 'required|string|max:255',
-            'active' => 'required|boolean',
+                 'active' => [
+                        'required',
+                        'boolean',
+                        function ($attribute, $value, $fail) {
+                            if ($value) {
+                                $exists = \App\Models\Organization::where('active', true)
+                                    ->when($this->Organization, function ($query) {
+                                        $query->where('id', '!=', $this->Organization->id);
+                                    })
+                                    ->exists();
+                                if ($exists) {
+                                    $fail('Ya existe otro registro activo.');
+                                }
+                            }
+                        },
+                    ],
             'file' => 'nullable|file|mimes:jpeg,png,jpg,gif,svg|max:2048'
         ];
     }

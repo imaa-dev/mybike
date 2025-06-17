@@ -1,14 +1,13 @@
 import { Button } from '@/components/ui/button';
+import { FormEventHandler, useState } from 'react';
 import { Head, useForm } from '@inertiajs/react';
-import { FormEventHandler } from 'react';
-import toast, { Toaster } from 'react-hot-toast';
+import toast from 'react-hot-toast';
 import AppLayout from '@/layouts/app-layout';
-import { BreadcrumbItem } from '@/types';
-import {useState} from "react";
-import handleImageUploadSingle from '@/lib/utils';
+import { BreadcrumbItem, OrganizationData } from '@/types';
 import InputError from '@/components/input-error';
+import handleImageUploadSingle from '@/lib/utils';
 import { useLoading } from '@/context/LoadingContext';
-
+import { SidebarGroupLabel } from '@/components/ui/sidebar';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -20,105 +19,105 @@ const breadcrumbs: BreadcrumbItem[] = [
         href: '/list/organization',
     },
     {
-        title: 'Crear',
+        title: 'Actualizar',
         href: '/list/organization',
     }
-];
 
-type CreateOrganizationForm = {
-    file: File | null,
-    name: string,
-    description: string,
-    active: boolean,
+];
+type EditOrganizationForm = {
+    id: number;
+    name: string;
+    description: string;
+    active:  boolean;
+    file: File | null;
 }
 const appUrl = import.meta.env.VITE_APP_URL;
-
-const OrganizationForm = () => {
+interface OrganizationEditFormProps {
+    organizationUpdate: OrganizationData;
+}
+export default function EditOrganizationForm({organizationUpdate}: OrganizationEditFormProps) {
     const { showLoading, hideLoading } = useLoading();
-    const { data, setData, post, reset, errors, processing } = useForm<Required<CreateOrganizationForm>>({
+    const { data, setData, post, reset, errors, processing } = useForm<Required<EditOrganizationForm>>({
+        id: organizationUpdate.id,
         file: null,
-        name: '',
-        description: '',
-        active: false,
+        name: organizationUpdate.name,
+        description: organizationUpdate.description,
+        active: organizationUpdate.active,
     })
 
-    const [uploadImage, setUploadImage] = useState<string | null>(null);
-
-    const handleImageChange = (file: File) => {
-        const imageUrl = URL.createObjectURL(file);
-        setUploadImage(imageUrl)
+    const active = organizationUpdate.active;
+    const [uploadImage, setUploadImage] = useState<string | null>(null)
+    const handleUploadImage = (file: File) => {
+        const temporalURL = URL.createObjectURL(file)
+        setUploadImage(temporalURL)
     }
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
-        const formData = new FormData();
-        formData.append('name', data.name);
-        formData.append('description', data.description);
-        formData.append('active', String(data.active));
-
-        if (data.file instanceof File) {
-            formData.append('file', data.file);
-        }
-
-        post('/create/organization',{
-            preserveScroll: true,
+        post('/organization/edit', {
             onSuccess: (page) => {
                 const message = (page.props as { flash?: { message?: string } }).flash?.message;
                 if(message) {
-                    toast.success(message);
+                    toast.success(message)
                 }
                 reset()
-            },
-            onError: (res) => {
-                if(res.file){
-                    toast.error(res.file);
-                }
-                if(res.description){
-                    toast.error(res.description);
-                }
-                if(res.active){
-                    toast.error(res.active);
-                }
-                if(res.name){
-                    toast.error(res.name);
-                }
             }
         })
     }
+
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Organization" />
-            <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
-                <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
+            <Head title="Organizacion" />
+            <div className="flex h-full flex-1 flex-col items-center justify-center gap-4 rounded-xl">
+                <div className="relative m-5 overflow-x-auto shadow-md sm:rounded-lg">
                     <div className="inline-flex rounded-md shadow-xs">
                         <form
                             className="flex w-full flex-col justify-center gap-6 rounded-lg bg-white p-6 shadow-md md:p-10 dark:bg-gray-800"
                             onSubmit={submit}
                         >
-                            {uploadImage ? (
-                                <div className="group relative flex items-center justify-center">
-                                    <img className="w-60" src={uploadImage} alt="Imagen Logo" />
+                            <SidebarGroupLabel>Actualizar Organización</SidebarGroupLabel>
+                            {
+                                uploadImage ?
+                                (
+                                    <div className="group relative flex justify-center items-center">
+                                        <img className="w-50" src={uploadImage} alt="Organization Edit" />
+                                    </div>
+                                ) :
+                                    organizationUpdate.file ? (
+                                <div className="group relative flex justify-center items-center">
+                                  <img
+                                      className="w-50"
+                                      src={`${appUrl}/storage/${organizationUpdate.file.path}`}
+                                      alt={'Organization Edit'}
+                                    />
                                 </div>
-                            ) : (
-                                <div className="group relative flex items-center justify-center">
-                                    <img className="w-60" src={`${appUrl}/logo-img.png`} alt="Imagen Logo" />
-                                </div>
-                            )}
+                                ) :
+                                (
+                                    <div className="group relative flex justify-center items-center">
+                                        <img
+                                            className="w-50"
+                                            src={`${appUrl}/logo-img.png`}
+                                            alt={'Organization Edit'}
+                                          />
+                                      </div>
+                                )
+                            }
+
                             <div className="group relative z-0 mb-12 w-full">
                                 <input
                                     type="file"
-                                    name="file"
-                                    id="file"
+                                    name="file_organization"
+                                    id="file_organization"
                                     className="peer block w-full appearance-none border-0 border-b-2 border-gray-300 bg-transparent px-0 py-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-0 focus:outline-none dark:border-gray-600 dark:text-white dark:focus:border-blue-500"
                                     autoFocus
                                     tabIndex={1}
                                     autoComplete="file"
                                     onChange={(e) => {
                                         showLoading();
-                                        const fileRes = e.target.files?.[0];
-                                        if (fileRes) {
-                                            handleImageUploadSingle(fileRes).then((res) => {
+                                        const file =  e.target.files?.[0];
+                                        if(file) {
+                                            handleImageUploadSingle(file).then((res) => {
+                                                handleUploadImage(res);
                                                 setData('file', res);
-                                                handleImageChange(res);
                                                 hideLoading()
                                             }).catch((err) => {
                                                 toast.error('Error al comprimir la imagen')
@@ -132,9 +131,9 @@ const OrganizationForm = () => {
                                     htmlFor="floating_email"
                                     className="absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:start-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:font-medium peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:text-gray-400 peer-focus:dark:text-blue-500"
                                 >
-                                    Icono Marca Organizacion
+                                    Icono Marca Organización
                                 </label>
-                                <InputError message={errors.file} />
+
                             </div>
                             <div className="group relative z-0 mb-5 w-full">
                                 <input
@@ -156,7 +155,7 @@ const OrganizationForm = () => {
                                 >
                                     Nombre Organización
                                 </label>
-                                <InputError message={errors.name} />
+                                <InputError message={errors.file} />
                             </div>
                             <div className="group relative z-0 mb-5 w-full">
                                 <input
@@ -179,34 +178,40 @@ const OrganizationForm = () => {
                                     Descripción
                                 </label>
                                 <InputError message={errors.description} />
+                                <div className="group relative z-0 mt-10 mb-5 w-full">
+                                    <label className="inline-flex cursor-pointer items-center">
+                                        <input
+                                            type="checkbox"
+                                            tabIndex={5}
+                                            autoComplete="active"
+                                            className="peer sr-only"
+                                            checked={data.active}
+                                            onChange={(e) => setData('active', e.target.checked)}
+                                        />
+                                        <div className="peer relative h-6 w-11 rounded-full bg-gray-200 peer-checked:bg-blue-600 peer-focus:ring-4 peer-focus:ring-blue-300 peer-focus:outline-none after:absolute after:start-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:after:translate-x-full peer-checked:after:border-white rtl:peer-checked:after:-translate-x-full dark:border-gray-600 dark:bg-gray-700 dark:peer-checked:bg-blue-600 dark:peer-focus:ring-blue-800"></div>
+                                        {active ? (
+                                            <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Desactivar Organización</span>
+                                        ) : (
+                                            <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Activar Organización</span>
+                                        )}
+                                    </label>
+                                    <InputError message={errors.active} />
+                                </div>
                             </div>
-                            <div className="group relative z-0 mb-5 w-full">
-                                <label className="inline-flex cursor-pointer items-center">
-                                    <input
-                                        type="checkbox"
-                                        tabIndex={5}
-                                        autoComplete="active"
-                                        className="peer sr-only"
-                                        onChange={(e) => setData('active', e.target.checked)}
-                                    />
-                                    <div className="peer relative h-6 w-11 rounded-full bg-gray-200 peer-checked:bg-blue-600 peer-focus:ring-4 peer-focus:ring-blue-300 peer-focus:outline-none after:absolute after:start-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:after:translate-x-full peer-checked:after:border-white rtl:peer-checked:after:-translate-x-full dark:border-gray-600 dark:bg-gray-700 dark:peer-checked:bg-blue-600 dark:peer-focus:ring-blue-800"></div>
-                                    <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Dejar organizacion Activa</span>
-                                </label>
-                                <InputError message={errors.active} />
-                            </div>
+
                             <Button
                                 type="submit"
                                 className="mt-4 w-full"
                                 disabled={processing}
                             >
-                                Crear Organizacion
+                                Actualizar Organizacón
                             </Button>
                         </form>
                     </div>
-                    <Toaster />
                 </div>
             </div>
         </AppLayout>
     );
 }
-export default OrganizationForm;
+
+

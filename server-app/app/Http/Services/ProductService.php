@@ -16,11 +16,9 @@ class ProductService{
                     $product_paths[] = $path;
                 }
             }
-
             $product = new Product();
             $product->user_id  = $request->user()->id;
-            $product->name =  $request->name;
-            $product->description  = $request->description;
+            $product->product_type_id =  $request->product_type_id;
             $product->brand  = $request->brand;
             $product->model  = $request->model;
             $product->save();

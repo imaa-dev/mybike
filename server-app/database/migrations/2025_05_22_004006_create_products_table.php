@@ -17,8 +17,6 @@ return new class extends Migration
             $table->unsignedBigInteger('product_type_id');
             $table->foreign('product_type_id')->references('id')->on('product_types');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->string('name');
-            $table->string('description')->nullable();
             $table->string('brand');
             $table->string('model');
             $table->timestamps();

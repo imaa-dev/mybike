@@ -66,18 +66,19 @@ export default function CreateServisForm({clients, products} : ClientDataProp & 
     })
     const submit:FormEventHandler = (e) => {
         e.preventDefault();
-        post('/create/service', {
-            onSuccess: (page) => {
-                const message = (page.props as { flash?: { message?: string } }).flash?.message;
-                if (message) {
-                    console.log(message)
-                    toast.success(message);
-                }
-            },
-            onError: (error) => {
-                console.log(error,'ERROR POST')
-            }
-        })
+        console.log(data)
+        // post('/create/service', {
+        //     onSuccess: (page) => {
+        //         const message = (page.props as { flash?: { message?: string } }).flash?.message;
+        //         if (message) {
+        //             console.log(message)
+        //             toast.success(message);
+        //         }
+        //     },
+        //     onError: (error) => {
+        //         console.log(error,'ERROR POST')
+        //     }
+        // })
     }
      return(
         <AppLayout breadcrumbs={breadcrumbs} >
@@ -88,15 +89,15 @@ export default function CreateServisForm({clients, products} : ClientDataProp & 
                         onSubmit={submit}
                     >
                         <h2 className="text-xl font-bold leading-none text-gray-900 dark:text-white m-5" > Crear Nuevo Servicio </h2>
-                        <Card className="max-w-xl p-6" >
+                        <Card className="max-w-xl p-6 mt-10 m-5" >
                             <h2> Datos del servicio </h2>
                                 <div className="group relative z-0 mb-5 w-full" >
                                     <input
+                                        tabIndex={0}
                                         type="datetime-local"
                                         name="date_entry"
                                         id="date_entry"
                                         className="peer block w-full appearance-none border-0 border-b-2 border-gray-300 bg-transparent px-0 py-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-0 focus:outline-none dark:border-gray-600 dark:text-white dark:focus:border-blue-500"
-                                        tabIndex={1}
                                         autoComplete="off"
                                         value={data.date_enty}
                                         onChange={(e) => setData('date_enty', e.target.value)}
@@ -145,7 +146,7 @@ export default function CreateServisForm({clients, products} : ClientDataProp & 
                                 </div>
 
                         </Card>
-                        <Card className="max-w-xl p-6" >
+                        <Card className="max-w-xl p-6 mt-10 m-5" >
                             <h2> Detalles del Ingreso</h2>
 
                                 <div className="group relative z-0 mb-5 w-full">
@@ -154,8 +155,7 @@ export default function CreateServisForm({clients, products} : ClientDataProp & 
                                         name="reason"
                                         id="reason"
                                         className="peer block w-full appearance-none border-0 border-b-2 border-gray-300 bg-transparent px-0 py-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-0 focus:outline-none dark:border-gray-600 dark:text-white dark:focus:border-blue-500"
-                                        autoFocus
-                                        tabIndex={0}
+                                        tabIndex={3}
                                         value={data.reason}
                                         onChange={(e) => { setData('reason', e.target.value) }}
                                         required
@@ -178,7 +178,7 @@ export default function CreateServisForm({clients, products} : ClientDataProp & 
                                 </Button>
 
                         </Card>
-                    <Card className="max-w-xl p-6" >
+                    <Card className="max-w-xl p-6 mt-5 m-5" >
                         <h2> Fotos y registros servicio </h2>
                         {uploadImage ?
                             <div className="group relative flex justify-center items-center">
@@ -196,9 +196,8 @@ export default function CreateServisForm({clients, products} : ClientDataProp & 
                                 name="file_servi[]"
                                 id="file_servi"
                                 className="peer block w-full appearance-none border-0 border-b-2 border-gray-300 bg-transparent px-0 py-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-0 focus:outline-none dark:border-gray-600 dark:text-white dark:focus:border-blue-500"
-                                autoFocus
                                 multiple
-                                tabIndex={1}
+                                tabIndex={5}
                                 autoComplete="file"
                                 onChange={(e) => {
                                     showLoading();
@@ -226,14 +225,17 @@ export default function CreateServisForm({clients, products} : ClientDataProp & 
 
                         </div>
                     </Card>
-                    <Button
-                        type="submit"
-                        className="mt-4 p-8 w-full"
-                        tabIndex={4}
-                        disabled={processing}
-                    >
-                        <Save /> Crear Servicio
-                    </Button>
+                        <div className="grou relative z-0 p-5 mt-5 w-full">
+                            <Button
+                                type="submit"
+                                className="p-8 w-full"
+                                tabIndex={6}
+                                disabled={processing}
+                            >
+                                <Save /> Crear Servicio
+                            </Button>
+                        </div>
+
                     <Toaster />
                     </form>
                 </div>

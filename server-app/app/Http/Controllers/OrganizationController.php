@@ -24,15 +24,21 @@ class OrganizationController extends Controller
     public function list(Request $request)
     {
         $organizations = Organization::where('user_id', $request->user()->id)->with('file')->get();
-        return Inertia::render('organization',[
+        return Inertia::render('forms/listOrganization',[
             'organizations' => $organizations,
         ]);
     }
     public function create()
     {
-        return Inertia::render('forms/organizationForm');
+        return Inertia::render('forms/createOrganizationForm');
     }
-
+    public function show($request)
+    {
+        $organization = Organization::where('user_id', $request->user()->id)->where('active', true)->with('file')->first();
+        return Inertia::render('organization', [
+            'organization' => $organization
+        ]);
+    }
     public function store(StoreOrganizationRequest $request)
     {
         $res =  $this->organizationService->create($request);
@@ -43,7 +49,7 @@ class OrganizationController extends Controller
     {
         $organizationFile = Organization::where('id', $organization->id)->with('file')->first();
 
-        return Inertia::render('forms/organizationEditForm',[
+        return Inertia::render('forms/editOrganizationForm',[
             'organizationUpdate' => $organizationFile,
         ]);
     }
