@@ -3,7 +3,7 @@ import { OrganizationData } from '@/types';
 const appUrl = import.meta.env.VITE_APP_URL;
 
 interface OrganizationEditFormProps {
-    organization: OrganizationData;
+    organization?: OrganizationData;
 }
 
 export default function AppLogoIcon({organization}: OrganizationEditFormProps ){

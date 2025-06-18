@@ -48,17 +48,31 @@ export interface User {
     [key: string]: unknown; // This allows for additional properties...
 }
 export interface FileMeta {
+    id: number;
+    fileable_id: number;
+    fileable_type: string;
     path: string | null;
+    created_at: string;
+    updated_at: string;
 }
 
 export interface OrganizationData {
     id: number;
+    user_id: number;
     file: FileMeta;
     name: string;
     description: string;
-    active: boolean;
+    active: number;
+    phone: string;
+    address: string;
+    email: string;
+    city: string;
+    state: string;
+    postal_code: string;
+    website: string;
+    created_at: string;
+    updated_at: string;
 }
-
 export interface ProductData {
     id: number;
     product_type_id: number,

@@ -32,7 +32,7 @@ class OrganizationController extends Controller
     {
         return Inertia::render('forms/createOrganizationForm');
     }
-    public function show($request)
+    public function show(Request $request)
     {
         $organization = Organization::where('user_id', $request->user()->id)->where('active', true)->with('file')->first();
         return Inertia::render('organization', [

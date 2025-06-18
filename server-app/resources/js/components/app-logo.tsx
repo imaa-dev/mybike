@@ -1,7 +1,7 @@
 import AppLogoIcon from './app-logo-icon';
 import { OrganizationData } from '@/types';
 interface OrganizationEditFormProps {
-    organization: OrganizationData;
+    organization?: OrganizationData;
 }
 export default function AppLogo({ organization }: OrganizationEditFormProps) {
     return (

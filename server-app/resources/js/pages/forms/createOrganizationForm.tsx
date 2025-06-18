@@ -14,15 +14,11 @@ import { SidebarGroupLabel } from '@/components/ui/sidebar';
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Organización',
-        href: '/list/organization',
-    },
-    {
-        title: 'Listar',
-        href: '/list/organization',
+        href: '/organization/show',
     },
     {
         title: 'Crear',
-        href: '/list/organization',
+        href: '/organization/show',
     }
 ];
 

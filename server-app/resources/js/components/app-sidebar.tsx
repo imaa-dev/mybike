@@ -12,6 +12,7 @@ import {
     SquareUser
 } from 'lucide-react';
 import AppLogo from './app-logo';
+import { OrganizationData } from '@/types';
 
 const mainNavItems: NavItem[] = [
     {
@@ -21,7 +22,7 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: 'Organización',
-        href: '/list/organization',
+        href: '/organization/show',
         icon: Building2,
     },
     {
@@ -54,9 +55,13 @@ const footerNavItems: NavItem[] = [
 //    },
 ];
 
-
+export interface PageProps {
+    organization?: OrganizationData;
+    [key: string]: unknown;
+}
 export function AppSidebar() {
-    const { organization } = usePage().props;
+    const { organization } = usePage<PageProps>().props;
+
     return (
         <Sidebar collapsible="icon" variant="inset">
             <SidebarHeader>

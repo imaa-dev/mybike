@@ -117,10 +117,7 @@ export default function CreateClientForm() {
                                     color: appearance === 'dark' ? '#ffffff' : '#111827',
                                     border: '1px solid',
                                     borderColor: appearance === 'dark' ? '#4b5563' : '#d1d5db',
-                                    borderRadius: '0.5rem',
                                     width: '100%',
-                                    padding: '0.625rem',
-                                    fontSize: '0.875rem'
                                 }}
                             />
                             <InputError message={errors.phone} />
