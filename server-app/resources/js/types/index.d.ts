@@ -75,16 +75,12 @@ export interface OrganizationData {
 }
 export interface ProductData {
     id: number;
-    product_type_id: number,
     brand: string,
     model: string,
-    type: ProductTypeData,
+    type: string,
     file: FileMeta[]
 }
-export interface ProductTypeData {
-    id: number;
-    name: string;
-}
+
 export interface Client{
     id: number;
     name: string;

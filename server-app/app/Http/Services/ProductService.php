@@ -18,7 +18,7 @@ class ProductService{
             }
             $product = new Product();
             $product->user_id  = $request->user()->id;
-            $product->product_type_id =  $request->product_type_id;
+            $product->type =  $request->type;
             $product->brand  = $request->brand;
             $product->model  = $request->model;
             $product->save();
@@ -51,8 +51,7 @@ class ProductService{
             }
 
             $productUpdate = Product::where('id', $request->id)->with('file')->first();
-            $productUpdate->name =  $request->name;
-            $productUpdate->description =  $request->description;
+            $productUpdate->type =  $request->type;
             $productUpdate->brand =  $request->brand;
             $productUpdate->model =  $request->model;
             if($request->hasFile('file')){

@@ -2,8 +2,10 @@ import AppLayout from '@/layouts/app-layout';
 import { BreadcrumbItem, User } from '@/types';
 import { Head, router, useForm } from '@inertiajs/react';
 import toast, { Toaster } from 'react-hot-toast';
-import { CirclePlus } from 'lucide-react';
 import { useState } from 'react';
+import { useInitials } from '@/hooks/use-initials';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import ButtonAdd from '@/components/button-add';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -16,11 +18,11 @@ const breadcrumbs: BreadcrumbItem[] = [
 interface ClientDataProp {
     clients: User[]
 }
-const appUrl = import.meta.env.VITE_APP_URL;
+
 export default function Client({clients}: ClientDataProp){
     const [dropData, setDropData] = useState<number | null>(null)
     const [modal, setModal] = useState<boolean>(false);
-
+    const getInitials = useInitials();
     const { post } = useForm({});
     const deleteClient = (id: number) => {
         post(`/delete/client/${id}`, {
@@ -36,21 +38,14 @@ export default function Client({clients}: ClientDataProp){
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Cliente" />
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
-                <div className="relative">
-                    <button type="button" className="flex" onClick={() => router.visit('/create/client')}  >
-                        <CirclePlus />
-                    </button>
-                </div>
-                <div
-                    className="border-sidebar-border/70 dark:border-sidebar-border relative min-h-[100vh] flex-1 overflow-hidden rounded-xl border md:min-h-min">
-
-                    <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-
+            <ButtonAdd route="/create/client" />
+                <div className="flex h-full flex-1 flex-col items-center  gap-4 rounded-xl">
+                    <div className="w-full overflow-x-auto">
+                    <div className="min-w-[600px] relative shadow-md sm:rounded-lg">
                         <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                             <thead
                                 className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                             <tr>
-
                                 <th scope="col" className="px-6 py-3">
                                     Nombre
                                 </th>
@@ -71,13 +66,12 @@ export default function Client({clients}: ClientDataProp){
 
                                     <th scope="row"
                                         className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
-                                        { client.file && client.file.path ?
-                                            <img className="w-10 h-10 rounded-full"
-                                                 src={`${appUrl}/storage/${client.file?.path}`} alt="AvatarImage" />
-                                            :
-                                            <img className="w-10 h-10 rounded-full"
-                                                 src={`${appUrl}/logo-img.png`} alt="DefaultAvatarImage" />
-                                        }
+                                        <Avatar className="h-8 w-8 overflow-hidden rounded-full">
+
+                                            <AvatarFallback className="rounded-lg bg-neutral-200 text-black dark:bg-neutral-700 dark:text-white">
+                                                {getInitials(client.name)}
+                                            </AvatarFallback>
+                                        </Avatar>
                                         <div className="ps-3">
                                             <div className="text-base font-semibold">{client.name}</div>
                                             <div className="font-normal text-gray-500">{client.email}</div>
@@ -110,11 +104,9 @@ export default function Client({clients}: ClientDataProp){
                             ))}
                             </tbody>
                         </table>
-
                     </div>
-
+                    </div>
                 </div>
-            </div>
             <Toaster />
             {modal && (
                 <div
@@ -141,7 +133,9 @@ export default function Client({clients}: ClientDataProp){
                         </div>
                     </div>
                 </div>
+
             )}
+            </div>
         </AppLayout>
     )
 }

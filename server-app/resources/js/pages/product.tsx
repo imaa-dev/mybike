@@ -2,8 +2,8 @@ import AppLayout from '@/layouts/app-layout';
 import type { BreadcrumbItem, ProductData } from '@/types';
 import { Head, router, useForm } from '@inertiajs/react';
 import toast, { Toaster } from 'react-hot-toast';
-import { CirclePlus } from 'lucide-react';
 import { useState } from 'react';
+import ButtonAdd from '@/components/button-add';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -14,7 +14,6 @@ const breadcrumbs: BreadcrumbItem[] = [
 interface ProductDataProp {
     products: ProductData[];
 }
-const appUrl = import.meta.env.VITE_APP_URL;
 export default function Product({products}: ProductDataProp){
     const { post } = useForm({});
     const [modal, setModal] = useState(false);
@@ -36,14 +35,10 @@ export default function Product({products}: ProductDataProp){
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Productos" />
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
-                <div className="relative">
-                    <button type="button" className="flex" onClick={() => router.visit('/create/product')}  >
-                        <CirclePlus />
-                    </button>
-                </div>
-                <div className="border-sidebar-border/70 dark:border-sidebar-border relative min-h-[100vh] flex-1 overflow-hidden rounded-xl border md:min-h-min">
-                    <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-
+                <ButtonAdd route="/create/product" />
+                <div className="flex h-full flex-1 flex-col items-center  gap-4 rounded-xl">
+                    <div className="w-full overflow-x-auto">
+                        <div className="min-w-[600px] relative shadow-md sm:rounded-lg">
                         <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                             <thead
                                 className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -67,7 +62,7 @@ export default function Product({products}: ProductDataProp){
                             {products.map((product: ProductData, index) => (
                                 <tr key={index} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
                                     <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
-                                        {product.type.name}
+                                        {product.type}
                                     </td>
                                     <td className="px-6 py-4">
                                         {product.model}
@@ -102,7 +97,7 @@ export default function Product({products}: ProductDataProp){
                             </tbody>
                         </table>
                     </div>
-
+                    </div>
                 </div>
             </div>
             {modal && (

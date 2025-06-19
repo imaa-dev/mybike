@@ -9,6 +9,7 @@ import { SidebarGroupLabel } from '@/components/ui/sidebar';
 import PhoneInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/style.css'
 import { useAppearance } from '@/hooks/use-appearance';
+import ButtonBack from '@/components/button-back';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -36,7 +37,6 @@ export default function CreateClientForm() {
         file: null
     })
     const { appearance } = useAppearance();
-    console.log(appearance)
     const submit:FormEventHandler = (e) => {
         e.preventDefault();
 
@@ -53,7 +53,9 @@ export default function CreateClientForm() {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Clientes" />
-            <div className="flex h-full flex-1 flex-col items-center justify-center gap-4 rounded-xl">
+            <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
+            <ButtonBack />
+            <div className="flex h-full flex-1 flex-col items-center gap-4 rounded-xl">
                 <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
                     <form
                         className="flex w-full flex-col justify-center gap-6 rounded-lg bg-white p-6 shadow-md md:p-10 dark:bg-gray-800"
@@ -133,6 +135,7 @@ export default function CreateClientForm() {
                         </Button>
                     </form>
                 </div>
+            </div>
             </div>
             <Toaster />
         </AppLayout>

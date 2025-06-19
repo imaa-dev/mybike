@@ -1,7 +1,9 @@
 import AppLayout from '@/layouts/app-layout';
 import { Head, router } from '@inertiajs/react';
 import { BreadcrumbItem, OrganizationData } from '@/types';
-import { CirclePlus } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import ButtonAdd from '@/components/button-add';
+import ButtonList from '@/components/button-list';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -12,19 +14,51 @@ const breadcrumbs: BreadcrumbItem[] = [
 interface OrganizationDataProp {
     organization:  OrganizationData;
 }
+const appUrl = import.meta.env.VITE_APP_URL;
 
 export default function Organization({ organization }: OrganizationDataProp) {
-    console.log(organization);
-    return (
 
+    return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Organizacion" />
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
-                <div className="relative">
-                    <button type="button" className="flex" onClick={() => router.visit('/create/organization')}  >
-                        <CirclePlus />
-                    </button>
+                <div className="flex">
+                    <ButtonAdd  route="/create/organization" />
+                    <ButtonList route="/list/organization" />
                 </div>
+                <div className="flex h-full flex-1 flex-col items-center gap-4 rounded-xl">
+                <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+                    {organization ? (
+                        <div className="max-w-sm overflow-hidden rounded shadow-lg">
+                            <img className="w-110" src={`${appUrl}/storage/${organization.file.path}`} alt="Sunset in the mountains" />
+                            <div className="px-6 py-4">
+                                <div className="mb-2 text-xl font-bold">{organization.name}</div>
+                                <p className="text-base text-gray-700">
+                                    {organization.description}
+                                </p>
+                            </div>
+                        </div>
+                    ) : (
+                        <div className="max-w-sm overflow-hidden rounded shadow-lg">
+                            <img className="w-110 p-20" src={`${appUrl}/images/organization.png`} alt="Sunset in the mountains" />
+                            <div className="px-6 py-4">
+                                <div className="mb-2 text-xl font-bold">Tu Organizacion</div>
+                                <p className="text-base text-gray-700">
+                                    Descripcion de organizacion
+                                </p>
+                                <Button
+                                    onClick={() => router.visit('/create/organization')}
+                                    className="mt-4 w-full"
+                                >
+                                    Crear Organizacion
+                                </Button>
+                            </div>
+
+                        </div>
+                    )}
+
+                </div>
+            </div>
             </div>
         </AppLayout>
     );

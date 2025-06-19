@@ -2,12 +2,11 @@ import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
 import { Head, useForm } from '@inertiajs/react';
 import AppLayout from '@/layouts/app-layout';
-import { BreadcrumbItem, ProductData, ProductTypeData } from '@/types';
-import { FormEventHandler, useState } from 'react';
+import { BreadcrumbItem } from '@/types';
+import { FormEventHandler } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
-import  { handleImageUploadMultiple } from '@/lib/utils';
-import { useLoading } from '@/context/LoadingContext';
 import { SidebarGroupLabel } from '@/components/ui/sidebar';
+import ButtonBack from '@/components/button-back';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -20,19 +19,15 @@ const breadcrumbs: BreadcrumbItem[] = [
     }
 ];
 interface ProductDataProps {
-    product_type_id: string;
+    type: string;
     brand: string,
     model: string,
     file: File[] | null
 }
 
-interface ProductTypeDataProps {
-    product_types: ProductTypeData[];
-}
-
-export default function CreateProductForm({product_types}: ProductTypeDataProps) {
+export default function CreateProductForm() {
     const { data, setData, post, errors, processing } = useForm<Required<ProductDataProps>>({
-        product_type_id: '',
+        type: '',
         brand: '',
         model: '',
         file: null
@@ -55,8 +50,11 @@ export default function CreateProductForm({product_types}: ProductTypeDataProps)
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Productos" />
-            <div className="flex h-full flex-1 flex-col items-center justify-center gap-4 rounded-xl">
+            <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
+            <ButtonBack />
+            <div className="flex h-full flex-1 flex-col items-center gap-4 rounded-xl">
                 <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+
                     <form
                         className="flex w-full flex-col justify-center gap-6 rounded-lg bg-white p-6 shadow-md md:p-10 dark:bg-gray-800"
                         onSubmit={submit}
@@ -64,20 +62,24 @@ export default function CreateProductForm({product_types}: ProductTypeDataProps)
                         <SidebarGroupLabel> Crear Producto </SidebarGroupLabel>
 
                         <div className="group relative z-0 mb-5 w-full">
-                            <label htmlFor="product_type_id" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                                Tipos de productos
-                            </label>
-                            <select
-                                id="product_type_id"
-                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                onChange={(e) => setData('product_type_id', e.target.value)}
-                                value={data.product_type_id}
+                            <input
+                                className="peer block w-full appearance-none border-0 border-b-2 border-gray-300 bg-transparent px-0 py-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-0 focus:outline-none dark:border-gray-600 dark:text-white dark:focus:border-blue-500"
+                                type="text"
+                                name="type_product"
+                                id="type_product"
+                                required
+                                tabIndex={1}
+                                autoComplete="type_product"
+                                value={data.type}
+                                onChange={(e) => setData('type', e.target.value)}
+                            />
+                            <label
+                                htmlFor="floating_brand"
+                                className="absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:start-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:font-medium peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:text-gray-400 peer-focus:dark:text-blue-500"
                             >
-                                <option value="">Selecciona un tipo de producto</option>
-                                {product_types.map((product: ProductTypeData, index: number) => (
-                                    <option key={index} value={product.id}>{product.name}</option>
-                                ))}
-                            </select>
+                                Tipo de producto
+                            </label>
+                            <InputError message={errors.brand} />
                         </div>
                         <div className="group relative z-0 mb-5 w-full">
                             <input
@@ -85,13 +87,18 @@ export default function CreateProductForm({product_types}: ProductTypeDataProps)
                                 type="text"
                                 name="brand_product"
                                 id="brand_product"
-                                placeholder="Marca"
                                 required
                                 tabIndex={3}
                                 autoComplete="marca"
                                 value={data.brand}
                                 onChange={(e) => setData('brand', e.target.value)}
                             />
+                            <label
+                                htmlFor="floating_brand"
+                                className="absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:start-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:font-medium peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:text-gray-400 peer-focus:dark:text-blue-500"
+                            >
+                                Marca
+                            </label>
                             <InputError message={errors.brand} />
                         </div>
                         <div className="group relative z-0 mb-5 w-full">
@@ -100,13 +107,18 @@ export default function CreateProductForm({product_types}: ProductTypeDataProps)
                                 type="text"
                                 name="model_product"
                                 id="model_product"
-                                placeholder="Modelo"
                                 required
                                 tabIndex={3}
                                 autoComplete="model"
                                 value={data.model}
                                 onChange={(e) => setData('model', e.target.value)}
                             />
+                            <label
+                                htmlFor="floating_model"
+                                className="absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:start-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:font-medium peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:text-gray-400 peer-focus:dark:text-blue-500"
+                            >
+                                Modelo
+                            </label>
                             <InputError message={errors.model} />
                         </div>
 
@@ -120,6 +132,7 @@ export default function CreateProductForm({product_types}: ProductTypeDataProps)
                         </Button>
                     </form>
                 </div>
+            </div>
             </div>
             <Toaster />
         </AppLayout>

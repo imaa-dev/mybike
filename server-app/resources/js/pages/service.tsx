@@ -1,8 +1,8 @@
 import AppLayout from '@/layouts/app-layout';
-import { Head, router, useForm } from '@inertiajs/react';
-import type { BreadcrumbItem, ServiData } from '@/types';
+import { Head, router } from '@inertiajs/react';
+import type { BreadcrumbItem } from '@/types';
 import toast, { Toaster } from 'react-hot-toast';
-import { CirclePlus, FileBox, FilePlus2, List, Truck, Wrench } from 'lucide-react';
+import {  FileBox, FilePlus2, List, Truck, Wrench } from 'lucide-react';
 import { useState } from 'react';
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -11,28 +11,11 @@ const breadcrumbs: BreadcrumbItem[] = [
         href: '/service',
     },
 ];
-const appUrl = import.meta.env.VITE_APP_URL;
 interface ServiDataProp {
-    servis: ServiData[];
     notOrganization: boolean;
 }
-export default function Service({servis, notOrganization}: ServiDataProp){
-    console.log(servis)
+export default function Service({ notOrganization}: ServiDataProp){
     const [modal, setModal] = useState<boolean>(notOrganization);
-    const [show, setShow] = useState<boolean>(false);
-    const [serviceDelete, setServiceDelete] = useState<number>(0);
-    const { post } = useForm({})
-
-    const deleteServi = (id: number) => {
-        post(`delete/service/${id}`, {
-            onSuccess: (page) => {
-                const message = (page.props as { flash?: { message?: string } }).flash?.message;
-                if (message) {
-                    toast.success(message);
-                }
-            },
-        })
-    }
     return (
 
         <AppLayout breadcrumbs={breadcrumbs}>

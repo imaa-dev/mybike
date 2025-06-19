@@ -9,6 +9,7 @@ import handleImageUploadSingle from '@/lib/utils';
 import InputError from '@/components/input-error';
 import { useLoading } from '@/context/LoadingContext';
 import { SidebarGroupLabel } from '@/components/ui/sidebar';
+import ButtonBack from '@/components/button-back';
 
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -47,15 +48,6 @@ const CreateOrganizationForm = () => {
     }
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
-        const formData = new FormData();
-        formData.append('name', data.name);
-        formData.append('description', data.description);
-        formData.append('active', String(data.active));
-
-        if (data.file instanceof File) {
-            formData.append('file', data.file);
-        }
-
         post('/create/organization',{
             preserveScroll: true,
             onSuccess: (page) => {
@@ -84,6 +76,8 @@ const CreateOrganizationForm = () => {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Organization" />
+            <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
+            <ButtonBack />
             <div className="flex h-full flex-1 flex-col items-center justify-center gap-4 rounded-xl">
                 <div className="relative m-5 overflow-x-auto shadow-md sm:rounded-lg">
                     <div className="inline-flex rounded-md shadow-xs">
@@ -99,7 +93,7 @@ const CreateOrganizationForm = () => {
                                 </div>
                             ) : (
                                 <div className="group relative flex items-center justify-center">
-                                    <img className="w-50" src={`${appUrl}/logo-img.png`} alt="Imagen Logo" />
+                                    <img className="w-50 p-5" src={`${appUrl}/images/organization.png `} alt="Imagen Logo" />
                                 </div>
                             )}
                             <div className="group relative z-0 mb-12 w-full">
@@ -108,7 +102,6 @@ const CreateOrganizationForm = () => {
                                     name="file"
                                     id="file"
                                     className="peer block w-full appearance-none border-0 border-b-2 border-gray-300 bg-transparent px-0 py-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-0 focus:outline-none dark:border-gray-600 dark:text-white dark:focus:border-blue-500"
-                                    autoFocus
                                     tabIndex={1}
                                     autoComplete="file"
                                     onChange={(e) => {
@@ -143,9 +136,8 @@ const CreateOrganizationForm = () => {
                                     className="peer block w-full appearance-none border-0 border-b-2 border-gray-300 bg-transparent px-0 py-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-0 focus:outline-none dark:border-gray-600 dark:text-white dark:focus:border-blue-500"
                                     placeholder=" "
                                     required
-                                    autoFocus
                                     autoComplete="name"
-                                    tabIndex={1}
+                                    tabIndex={2}
                                     value={data.name}
                                     onChange={(e) => setData('name', e.target.value)}
                                 />
@@ -165,9 +157,8 @@ const CreateOrganizationForm = () => {
                                     className="peer block w-full appearance-none border-0 border-b-2 border-gray-300 bg-transparent px-0 py-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-0 focus:outline-none dark:border-gray-600 dark:text-white dark:focus:border-blue-500"
                                     placeholder=" "
                                     required
-                                    autoFocus
                                     autoComplete="description"
-                                    tabIndex={1}
+                                    tabIndex={3}
                                     value={data.description}
                                     onChange={(e) => setData('description', e.target.value)}
                                 />
@@ -183,7 +174,7 @@ const CreateOrganizationForm = () => {
                                 <label className="inline-flex cursor-pointer items-center">
                                     <input
                                         type="checkbox"
-                                        tabIndex={5}
+                                        tabIndex={4}
                                         autoComplete="active"
                                         className="peer sr-only"
                                         onChange={(e) => setData('active', e.target.checked)}
@@ -204,6 +195,7 @@ const CreateOrganizationForm = () => {
                     </div>
                     <Toaster />
                 </div>
+            </div>
             </div>
         </AppLayout>
     );

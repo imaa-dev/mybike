@@ -6,14 +6,13 @@ export default function Welcome() {
 
     return (
         <>
-            <Head title="Welcome">
-                <link rel="preconnect" href="https://fonts.bunny.net" />
-                <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
-            </Head>
+
             <div className="flex min-h-screen flex-col items-center bg-[#FDFDFC] p-6 text-[#1b1b18] lg:justify-center lg:p-8 dark:bg-[#0a0a0a]">
+                <img className="img-mini" src={`${appUrl}/images/MYAPP.png`} alt="LogoApp"/>
+
                 <header className="mb-6 w-full max-w-[335px] text-sm not-has-[nav]:hidden lg:max-w-4xl">
-                    <img className="img-mini" src={`${appUrl}/logo-img.png`} alt="LogoApp"/>
-                    <nav className="flex items-center justify-end gap-4">
+
+                    <nav className="flex items-center justify-center gap-4 mt-10">
                         {auth.user ? (
                             <Link
                                 href={route('dashboard')}
@@ -25,7 +24,7 @@ export default function Welcome() {
                             <>
                                 <Link
                                     href={route('login')}
-                                    className="inline-block rounded-sm border border-transparent px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#19140035] dark:text-[#EDEDEC] dark:hover:border-[#3E3E3A]"
+                                    className="inline-block rounded-sm border border-[#19140035] px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#19140035] dark:text-[#EDEDEC] dark:hover:border-[#3E3E3A]"
                                 >
                                     Iniciar sesión
                                 </Link>

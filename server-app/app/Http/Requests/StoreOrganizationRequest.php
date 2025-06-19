@@ -28,10 +28,11 @@ class StoreOrganizationRequest extends FormRequest
                         'required',
                         'boolean',
                         function ($attribute, $value, $fail) {
+
                             if ($value) {
-                                $exists = \App\Models\Organization::where('active', true)
-                                    ->when($this->Organization, function ($query) {
-                                        $query->where('id', '!=', $this->Organization->id);
+                                $exists = \App\Models\Organization::where('active', true)->where('user_id', $this->user()->id)
+                                    ->when($this->id, function ($query) {
+                                        $query->where('id', '!=', $this->id);
                                     })
                                     ->exists();
                                 if ($exists) {

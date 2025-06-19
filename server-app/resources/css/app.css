@@ -160,7 +160,10 @@
     }
 }
 .img-mini {
-    width: 200px;
+    width: 250px;
+    border-radius: 15px;
+    border: 2px solid #ccc;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 .loading-overlay {
     position: fixed;

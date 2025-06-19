@@ -21,17 +21,14 @@ class ProductController extends Controller
     }
 
     public function list(Request $request){
-        $products = Product::where('user_id', $request->user()->id)->with('file')->with('type')->get();
+        $products = Product::where('user_id', $request->user()->id)->with('file')->get();
         return Inertia::render('product', [
             'products' => $products,
         ]);
     }
 
     public function create(){
-        $product_types = ProductType::all();
-        return Inertia::render('forms/createProductForm', [
-            'product_types' => $product_types,
-        ]);
+        return Inertia::render('forms/createProductForm');
     }
 
     public function store(StoreProductRequest $request){
@@ -42,10 +39,8 @@ class ProductController extends Controller
     public function getUpdate(Product $product)
     {
         $productFile = Product::where('id', $product->id)->with('file')->first();
-        $productType = ProductType::all();
         return Inertia::render('forms/editProductForm', [
-            'product' => $productFile,
-            'productType' => $productType,
+            'product' => $productFile
         ]);
     }
     public function update(StoreProductRequest $request)

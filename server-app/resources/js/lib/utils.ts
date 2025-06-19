@@ -96,7 +96,7 @@ export const handleImageUploadMultiple = async (files: FileList): Promise<File[]
         return processedFiles;
     } catch (error) {
         console.error('Error procesando múltiples imágenes:', error);
-        throw new Error(error,'Error al procesar las imágenes. Por favor, verifica los archivos e intenta nuevamente.');
+        throw new Error('Error al procesar las imágenes. Por favor, verifica los archivos e intenta nuevamente.');
     }
 };
 

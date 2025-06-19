@@ -3,12 +3,13 @@ import { Head, router, useForm } from '@inertiajs/react';
 import { BreadcrumbItem, OrganizationData } from '@/types';
 import toast, { Toaster } from 'react-hot-toast';
 import { useState } from 'react';
-import { CirclePlus } from 'lucide-react';
+import { Undo2 } from 'lucide-react';
+import ButtonBack from '@/components/button-back';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Organización',
-        href: '/list/organization',
+        href: '/organization/show',
     },
     {
         title: 'Listar',
@@ -38,15 +39,10 @@ export default function ListOrganization({ organizations }: OrganizationDataProp
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Organizacion" />
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
-                <div className="relative">
-                    <button type="button" className="flex" onClick={() => router.visit('/create/organization')}  >
-                        <CirclePlus />
-                        Agregar Organización
-                    </button>
-                </div>
-                <div className="border-sidebar-border/70 dark:border-sidebar-border relative min-h-[100vh] flex-1 overflow-hidden rounded-xl border md:min-h-min">
-
-                    <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+                <ButtonBack />
+                <div className="flex h-full flex-1 flex-col items-center  gap-4 rounded-xl">
+                    <div className="w-full overflow-x-auto">
+                        <div className="min-w-[600px] relative shadow-md sm:rounded-lg">
                         <table className="w-full text-left text-sm text-gray-500 rtl:text-right dark:text-gray-400">
                             <thead
                                 className="bg-gray-50 text-xs text-gray-700 uppercase dark:bg-gray-700 dark:text-gray-400">
@@ -130,6 +126,7 @@ export default function ListOrganization({ organizations }: OrganizationDataProp
                             ))}
                             </tbody>
                         </table>
+                    </div>
                     </div>
                 </div>
                 {modal && (

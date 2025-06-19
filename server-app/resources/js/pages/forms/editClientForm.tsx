@@ -9,6 +9,8 @@ import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css'
 import { SidebarGroupLabel } from '@/components/ui/sidebar';
 import { useAppearance } from '@/hooks/use-appearance';
+import { Undo2 } from 'lucide-react';
+import ButtonBack from '@/components/button-back';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -59,7 +61,9 @@ export default function EditClientForm({client}: ClientProp) {
     return(
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Editar cliente" />
-            <div className="flex h-full flex-1 flex-col items-center justify-center gap-4 rounded-xl">
+            <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
+            <ButtonBack />
+            <div className="flex h-full flex-1 flex-col items-center gap-4 rounded-xl">
                 <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
                 <form
                         className="flex w-full flex-col justify-center gap-6 rounded-lg bg-white p-6 shadow-md md:p-10 dark:bg-gray-800"
@@ -143,6 +147,7 @@ export default function EditClientForm({client}: ClientProp) {
                     </form>
                 </div>
                 <Toaster />
+            </div>
             </div>
         </AppLayout>
     )
