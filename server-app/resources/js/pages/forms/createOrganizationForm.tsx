@@ -86,7 +86,6 @@ const CreateOrganizationForm = () => {
                             onSubmit={submit}
                         >
                             <SidebarGroupLabel> Crear Organización </SidebarGroupLabel>
-
                             {uploadImage ? (
                                 <div className="group relative flex items-center justify-center">
                                     <img className="w-50" src={uploadImage} alt="Imagen Logo" />

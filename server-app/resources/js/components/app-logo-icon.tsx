@@ -13,7 +13,7 @@ export default function AppLogoIcon({organization}: OrganizationEditFormProps ){
             {organization?.file?.path ?
                 <img src={`${appUrl}/storage/${organization.file?.path}`} alt='Logo' />
                 :
-                <img src={`${appUrl}/logo-img.png`} alt='Logo' />
+                <img src={`${appUrl}/images/MYAPP.png`} alt='Logo' />
             }
         </>
     );
