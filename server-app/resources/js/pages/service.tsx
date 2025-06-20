@@ -17,12 +17,12 @@ interface ServiDataProp {
 export default function Service({ notOrganization}: ServiDataProp){
     const [modal, setModal] = useState<boolean>(notOrganization);
     return (
-
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Servicios" />
-            <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
-                <div className="flex p-5" >
-                    <div className="relative ml-7">
+            <div className="flex h-full flex-1 flex-col items-center gap-4 rounded-xl">
+                <div className="relative overflow-x-auto shadow-md sm:rounded-lg ">
+                <div className="flex p-5 " >
+                    <div className="relative">
                         <button
                             type="button"
                             className="flex"
@@ -35,7 +35,6 @@ export default function Service({ notOrganization}: ServiDataProp){
                             }}
                         >
                             <FilePlus2 />
-
                         </button>
                     </div>
                     <div className="relative ml-7">
@@ -51,7 +50,6 @@ export default function Service({ notOrganization}: ServiDataProp){
                             }}
                         >
                             <Wrench />
-
                         </button>
                     </div>
                     <div className="relative ml-7">
@@ -67,7 +65,6 @@ export default function Service({ notOrganization}: ServiDataProp){
                             }}
                         >
                             <Truck />
-
                         </button>
                     </div>
 
@@ -84,7 +81,6 @@ export default function Service({ notOrganization}: ServiDataProp){
                             }}
                         >
                             <List />
-
                         </button>
                     </div>
                     <div className="relative ml-7">
@@ -103,7 +99,6 @@ export default function Service({ notOrganization}: ServiDataProp){
                         </button>
                     </div>
                 </div>
-
                     <Toaster />
                     {modal && (
                         <div className="fixed top-0 right-0 left-0 z-50 flex h-screen w-screen items-center justify-center bg-black/50">
@@ -131,7 +126,7 @@ export default function Service({ notOrganization}: ServiDataProp){
                             </div>
                         </div>
                     )}
-
+            </div>
             </div>
         </AppLayout>
     );

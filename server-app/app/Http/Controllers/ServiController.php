@@ -26,21 +26,11 @@ class ServiController extends Controller
             ->where('active', true)
             ->with('file')
             ->first();
+        $notOrganization = true;
         if($organization !== null){
-            $services = Servi::where('organization_id', $organization->id)
-                ->where('status', 'RECEPCIONADO')
-                ->with('file')
-                ->with('product')
-                ->with('client')
-                ->get();
             $notOrganization = false;
-        }else{
-            $services = [];
-            $notOrganization = true;
         }
-
         return Inertia::render('service', [
-            'servis' => $services,
             'notOrganization' => $notOrganization
         ]);
     }
@@ -59,9 +49,6 @@ class ServiController extends Controller
                 ->with('client')
                 ->get();
             $notOrganization = false;
-        }else{
-            $services = [];
-            $notOrganization = true;
         }
         return Inertia::render('forms/listRepairService', [
             'servis' => $services,
@@ -70,7 +57,6 @@ class ServiController extends Controller
     }
     public function create(Request $request)
     {
-        $servi = new Servi;
         $product = Product::where('user_id', $request->user()->id)->with('file')->get();
         $client = Client::where('user_id', $request->user()->id)->with('file')->get();
         return Inertia::render('forms/createServisForm', [
@@ -79,11 +65,9 @@ class ServiController extends Controller
         ]);
     }
     public function store(StoreServiceRequest $request){
-
         $res = $this->serviService->create($request);
         session()->flash('message', $res['message']);
         return redirect()->route('services.list.view');
-
     }
 
     public function getUpdate(Servi $servi)

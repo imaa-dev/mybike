@@ -21,10 +21,8 @@ return new class extends Migration
             $table->foreign('organization_id')->references('id')->on('organizations');
             $table->foreign('product_id')->references('id')->on('products');
             $table->foreign('status_id')->references('id')->on('status');
-            $table->dateTime('date_start');
-            $table->dateTime('date_end')->nullable();
-            $table->integer('satisfied')->nullable();
-            $table->string('status')->nullable();
+            $table->dateTime('date_entry');
+            $table->dateTime('date_exit')->nullable();
             $table->timestamps();
         });
     }

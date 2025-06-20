@@ -9,6 +9,7 @@ import { handleImageUploadMultiple } from '@/lib/utils';
 import { useLoading } from '@/context/LoadingContext';
 import { Card } from '@/components/ui/card';
 import { Plus, Save } from 'lucide-react';
+import { SidebarGroupLabel } from '@/components/ui/sidebar';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -16,28 +17,21 @@ const breadcrumbs: BreadcrumbItem[] = [
         href: '/service',
     },
     {
-        title: 'Crear Servicio',
+        title: 'Crear',
         href: '/',
     },
-
 ];
-
-export interface ServiData {
+interface ServiData {
     organization_id: number;
-    product_id: string;
-    client_id: string;
-    date_enty: string;
-    date_exit: string;
-    reason: Reason;
+    product_id: number;
+    client_id: number;
+    date_entry: string;
     file: File[] | null;
-}
-export interface Reason {
-    reason_note: string;
+    reason_notes: { note: string }[];
 }
 interface ClientDataProp {
     clients: User[]
 }
-
 interface ProducDataProp {
     products: ProductData[]
 }
@@ -50,197 +44,247 @@ interface Page {
 }
 const appUrl = import.meta.env.VITE_APP_URL;
 export default function CreateServisForm({clients, products} : ClientDataProp & ProducDataProp) {
-    const [uploadImage, setUploadImage] = useState<string | null>(null);
+
+    const [reason, setReason] = useState<string>('');
+    const [uploadImage, setUploadImage] = useState<string[]>([]);
     const { showLoading, hideLoading } = useLoading();
-    const handleImageChange = (file: File[]) => {
-        const imageURL = URL.createObjectURL(file[0])
-        setUploadImage(imageURL);
+    const handleImageChange = (files: File[]) => {
+
+        const urls = Array.from(files).map((file) => URL.createObjectURL(file));
+        setUploadImage((prev) => [...prev, ...urls]);
     }
     const page: Page = usePage();
     const { post, data, setData, errors, processing } = useForm<Required<ServiData>>({
-        organization_id: page.props.organization.id,
-        product_id: '',
-        client_id: '',
-        date_enty: '',
-        file: null,
+            organization_id: page.props.organization.id,
+            product_id: 0,
+            client_id: 0,
+            date_entry: '',
+            reason_notes: [],
+            file: null,
     })
+    const handleRemoveImage = (indexToRemove: number) => {
+        setUploadImage((prev) => prev.filter((_, index) => index !== indexToRemove));
+    };
     const submit:FormEventHandler = (e) => {
         e.preventDefault();
-        console.log(data)
-        // post('/create/service', {
-        //     onSuccess: (page) => {
-        //         const message = (page.props as { flash?: { message?: string } }).flash?.message;
-        //         if (message) {
-        //             console.log(message)
-        //             toast.success(message);
-        //         }
-        //     },
-        //     onError: (error) => {
-        //         console.log(error,'ERROR POST')
-        //     }
-        // })
+
+         post('/create/service', {
+             onSuccess: (page) => {
+                 const message = (page.props as { flash?: { message?: string } }).flash?.message;
+                 if (message) {
+                     toast.success(message);
+                 }
+             },
+             onError: (error) => {
+                 console.log(error,'ERROR POST')
+             }
+         })
     }
-     return(
-        <AppLayout breadcrumbs={breadcrumbs} >
-            <Head title="Servicio" />
-            <div className="flex h-full flex-1 flex-col items-center justify-center gap-4 rounded-xl">
-                <div className="relative m-5 overflow-x-auto shadow-md sm:rounded-lg">
-                    <form
-                        onSubmit={submit}
-                    >
-                        <h2 className="text-xl font-bold leading-none text-gray-900 dark:text-white m-5" > Crear Nuevo Servicio </h2>
-                        <Card className="max-w-xl p-6 mt-10 m-5" >
-                            <h2> Datos del servicio </h2>
-                                <div className="group relative z-0 mb-5 w-full" >
-                                    <input
-                                        tabIndex={0}
-                                        type="datetime-local"
-                                        name="date_entry"
-                                        id="date_entry"
-                                        className="peer block w-full appearance-none border-0 border-b-2 border-gray-300 bg-transparent px-0 py-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-0 focus:outline-none dark:border-gray-600 dark:text-white dark:focus:border-blue-500"
-                                        autoComplete="off"
-                                        value={data.date_enty}
-                                        onChange={(e) => setData('date_enty', e.target.value)}
-                                        required
-                                    />
-                                    <label
-                                        htmlFor="floating_email"
-                                        className="absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:start-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:font-medium peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:text-gray-400 peer-focus:dark:text-blue-500"
-                                    >
-                                        Fecha Ingreso Servicio
-                                    </label>
-                                </div>
-                                <div className="group relative z-0 mb-5 w-full">
-                                    <label htmlFor="products" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                                        Producto
-                                    </label>
-                                    <select
-                                        id="product"
-                                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                        onChange={(e) => setData('product_id', e.target.value)}
-                                        value={data.product_id}
-                                    >
-                                        <option value="">Selecciona un producto</option>
-                                        {products.map((product, index) => (
-                                            <option key={index} value={product.id}>{product.name}{' '}{product.model}</option>
-                                        ))}
-                                    </select>
-                                </div>
+     return (
+         <AppLayout breadcrumbs={breadcrumbs}>
+             <Head title="Servicio" />
+             <div className="flex h-full flex-1 flex-col items-center justify-center gap-4 rounded-xl">
+                 <div className="relative m-5 overflow-x-auto shadow-md sm:rounded-lg">
+                     <form onSubmit={submit}>
+                         <h2
+                            className="text-sidebar-foreground/70 ring-sidebar-ring flex shrink-0 items-center rounded-md pl-7 pt-7 text-base font-medium outline-hidden transition-[margin,opacity] duration-200 ease-linear focus-visible:ring-2 [&>svg]:size-4 [&>svg]:shrink-0"
+                         >
+                            Crear nuevo servicio
+                         </h2>
+                         <Card className="m-5 mt-10 max-w-xl p-6">
+                             <SidebarGroupLabel> Datos del servicio </SidebarGroupLabel>
+                             <div className="group relative z-0 mb-5 w-full">
+                                 <input
+                                     tabIndex={0}
+                                     type="datetime-local"
+                                     name="date_entry"
+                                     id="date_entry"
+                                     className="peer block w-full appearance-none border-0 border-b-2 border-gray-300 bg-transparent px-0 py-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-0 focus:outline-none dark:border-gray-600 dark:text-white dark:focus:border-blue-500"
+                                     autoComplete="off"
+                                     value={data.date_entry}
+                                     onChange={(e) => setData('date_entry', e.target.value)}
+                                     required
+                                 />
+                                 <label
+                                     htmlFor="floating_email"
+                                     className="absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:start-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:font-medium peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:text-gray-400 peer-focus:dark:text-blue-500"
+                                 >
+                                     Fecha Ingreso Servicio
+                                 </label>
+                                 <InputError message={errors.date_entry} />
+                             </div>
+                             <div className="group relative z-0 mb-5 w-full">
+                                 <label htmlFor="products" className="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
+                                     Producto
+                                 </label>
+                                 <select
+                                     id="product"
+                                     className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                                     onChange={(e) => setData('product_id', Number(e.target.value))}
+                                     value={data.product_id}
+                                 >
+                                     <option value="">Selecciona un producto</option>
+                                     {products.map((product, index) => (
+                                         <option key={index} value={product.id}>
+                                             {product.type}{' '}{product.brand}{' '}{product.model}
+                                         </option>
+                                     ))}
+                                 </select>
+                                 <InputError message={errors.product_id} />
+                             </div>
 
-                                <div className="group relative z-0 mb-5 w-full">
-                                    <label htmlFor="clients" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                                        Cliente
-                                    </label>
-                                    <select
-                                        id="client"
-                                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                        onChange={(e) => setData('client_id', e.target.value)}
-                                        value={data.client_id}
-                                    >
-                                        <option value="">Selecciona un cliente</option>
-                                        {clients.map((client, index) => (
-                                            <option key={index} value={client.id}>{client.name}</option>
-                                        ))}
-                                    </select>
+                             <div className="group relative z-0 mb-5 w-full">
+                                 <label htmlFor="clients" className="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
+                                     Cliente
+                                 </label>
+                                 <select
+                                     id="client"
+                                     className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                                     onChange={(e) => setData('client_id', Number(e.target.value))}
+                                     value={data.client_id}
+                                 >
+                                     <option value="">Selecciona un cliente</option>
+                                     {clients.map((client, index) => (
+                                         <option key={index} value={client.id}>
+                                             {client.name}
+                                         </option>
+                                     ))}
+                                 </select>
+                             </div>
+                         </Card>
+                         <Card className="m-5 mt-10 max-w-xl p-6">
+                             <SidebarGroupLabel> Detalles del ingreso </SidebarGroupLabel>
+                             <div className="group relative z-0 mb-5 w-full">
+                                 <input
+                                     type="text"
+                                     name="reason"
+                                     id="reason"
+                                     className="peer block w-full appearance-none border-0 border-b-2 border-gray-300 bg-transparent px-0 py-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-0 focus:outline-none dark:border-gray-600 dark:text-white dark:focus:border-blue-500"
+                                     tabIndex={3}
+                                     value={reason}
+                                     onChange={(e) => {
+                                         setReason(e.target.value);
+                                     }}
+                                 />
+                                 <label
+                                     htmlFor="floating_email"
+                                     className="absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:start-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:font-medium peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:text-gray-400 peer-focus:dark:text-blue-500"
+                                 >
+                                     Agregar detalle ingreso de servicio
+                                 </label>
+                             </div>
+                             <Button
+                                 type="button"
+                                 onClick={() => {
+                                     if(reason.trim() === ''){
+                                         toast.error('El detalle de ingreso no puede ir vacio')
+                                         return
+                                     }
+                                     setData('reason_notes', [...data.reason_notes, {note: reason}])
+                                     setReason('')
+                                 }}
+                                 className="mt-4 w-full"
+                             >
+                                 <Plus /> Agregar Detalle
+                             </Button>
+                             {data.reason_notes.length > 0 && (
+                                 <div className="mt-6">
+                                   <h3 className="text-sm font-semibold text-gray-700 dark:text-white mb-2">Detalles agregados:</h3>
+                                   <ul className="list-disc pl-5 text-sm text-gray-800 dark:text-white space-y-1">
+                                     {data.reason_notes.map((item, index) => (
+                                       <li key={index} className="flex justify-between items-center">
+                                         {item.note}
+                                         <button
+                                           type="button"
+                                           className="text-red-500 text-xs ml-2"
+                                           onClick={() => {
+                                             const updated = data.reason_notes.filter((_, i) => i !== index);
+                                             setData('reason_notes', updated);
+                                           }}
+                                         >
+                                           Eliminar
+                                         </button>
+                                       </li>
+                                     ))}
+                                   </ul>
+                                 </div>
+                               )}
+                         </Card>
+                         <Card className="m-5 mt-5 max-w-xl p-6">
+                             <SidebarGroupLabel> Fotos y registros del servicio </SidebarGroupLabel>
+                             {uploadImage.length > 0 ? (
+                                 <div className="mt-4 grid grid-cols-3 gap-3">
+                                     {uploadImage.map((src, index) => (
+                                         <div key={index} className="relative">
+                                             <img
+                                                 src={src}
+                                                 alt={`preview-${index}`}
+                                                 className="w-full h-28 object-cover rounded border"
+                                             />
+                                             <button
+                                                 type="button"
+                                                 onClick={() => handleRemoveImage(index)}
+                                                 className="absolute top-1 right-1 rounded-full bg-red-500 text-white p-2 text-xs opacity-80 hover:opacity-100"
+                                                 title="Eliminar imagen"
+                                             >
+                                                 x
+                                             </button>
+                                         </div>
+                                     ))}
+                                 </div>
+                             ) : (
+                                 <div className="group relative flex justify-center items-center">
+                                     <img className="w-50" src={`${appUrl}/images/max-img.png`} alt="Upload Image" />
+                                 </div>
+                             )}
+                             <div className="grou relative z-0 mb-5 w-full">
+                                 <input
+                                     type="file"
+                                     name="file_servi[]"
+                                     id="file_servi"
+                                     className="peer block w-full appearance-none border-0 border-b-2 border-gray-300 bg-transparent px-0 py-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-0 focus:outline-none dark:border-gray-600 dark:text-white dark:focus:border-blue-500"
+                                     multiple
+                                     tabIndex={5}
+                                     autoComplete="file"
+                                     onChange={(e) => {
+                                         setUploadImage([])
+                                         showLoading();
+                                         const file = e.target.files;
 
-                                </div>
+                                         if (file) {
+                                             handleImageUploadMultiple(file)
+                                                 .then((res) => {
+                                                     setData('file', res);
+                                                     handleImageChange(res);
+                                                     hideLoading();
+                                                 })
+                                                 .catch((err) => {
+                                                     toast.error('Error al comprimir la imagen');
+                                                     console.log('ONCHANGE_INPUT_FILE_ERROR', err);
+                                                     hideLoading();
+                                                 });
+                                         }
+                                     }}
+                                 />
+                                 <label
+                                     htmlFor="floating_email"
+                                     className="absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:start-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:font-medium peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:text-gray-400 peer-focus:dark:text-blue-500"
+                                 >
+                                     Fotos
+                                 </label>
+                                 <InputError message={errors.file} />
+                             </div>
+                         </Card>
+                         <div className="grou relative z-0 mt-5 w-full p-5">
+                             <Button type="submit" className="w-full p-8" tabIndex={6} disabled={processing}>
+                                 <Save /> Crear Servicio
+                             </Button>
+                         </div>
 
-                        </Card>
-                        <Card className="max-w-xl p-6 mt-10 m-5" >
-                            <h2> Detalles del Ingreso</h2>
-
-                                <div className="group relative z-0 mb-5 w-full">
-                                    <input
-                                        type="text"
-                                        name="reason"
-                                        id="reason"
-                                        className="peer block w-full appearance-none border-0 border-b-2 border-gray-300 bg-transparent px-0 py-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-0 focus:outline-none dark:border-gray-600 dark:text-white dark:focus:border-blue-500"
-                                        tabIndex={3}
-                                        value={data.reason}
-                                        onChange={(e) => { setData('reason', e.target.value) }}
-                                        required
-                                    />
-                                    <label
-                                        htmlFor="floating_email"
-                                        className="absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:start-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:font-medium peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:text-gray-400 peer-focus:dark:text-blue-500"
-                                    >
-                                        Agregar detalle ingreso de servicio
-                                    </label>
-                                    <InputError message={errors.reason} />
-                                </div>
-                                <Button
-                                    type="submit"
-                                    className="mt-4 w-full"
-                                    tabIndex={4}
-                                    disabled={processing}
-                                >
-                                    <Plus />  Agregar Detalle
-                                </Button>
-
-                        </Card>
-                    <Card className="max-w-xl p-6 mt-5 m-5" >
-                        <h2> Fotos y registros servicio </h2>
-                        {uploadImage ?
-                            <div className="group relative flex justify-center items-center">
-                                <img className="w-30" src={uploadImage} alt="Upload Image" />
-                            </div>
-                            :
-                            <div className="group relative flex justify-center items-center">
-                                <img className="w-30" src={`${appUrl}/logo-img.png`} alt="Upload Image" />
-                            </div>
-                        }
-
-                        <div className="grou relative z-0 mb-5 w-full">
-                            <input
-                                type="file"
-                                name="file_servi[]"
-                                id="file_servi"
-                                className="peer block w-full appearance-none border-0 border-b-2 border-gray-300 bg-transparent px-0 py-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-0 focus:outline-none dark:border-gray-600 dark:text-white dark:focus:border-blue-500"
-                                multiple
-                                tabIndex={5}
-                                autoComplete="file"
-                                onChange={(e) => {
-                                    showLoading();
-                                    const file = e.target.files;
-                                    if (file) {
-                                        handleImageUploadMultiple(file).then((res) => {
-                                            setData('file', res)
-                                            handleImageChange(res)
-                                            hideLoading()
-                                        }).catch((err) => {
-                                            toast.error('Error al comprimir la imagen')
-                                            console.log('ONCHANGE_INPUT_FILE_ERROR', err)
-                                            hideLoading()
-                                        })
-                                    }
-                                }}
-                            />
-                            <label
-                                htmlFor="floating_email"
-                                className="absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:start-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:font-medium peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:text-gray-400 peer-focus:dark:text-blue-500"
-                            >
-                                Fotos
-                            </label>
-                            <InputError message={errors.file} />
-
-                        </div>
-                    </Card>
-                        <div className="grou relative z-0 p-5 mt-5 w-full">
-                            <Button
-                                type="submit"
-                                className="p-8 w-full"
-                                tabIndex={6}
-                                disabled={processing}
-                            >
-                                <Save /> Crear Servicio
-                            </Button>
-                        </div>
-
-                    <Toaster />
-                    </form>
-                </div>
-            </div>
-
-        </AppLayout>
-     )
+                         <Toaster />
+                     </form>
+                 </div>
+             </div>
+         </AppLayout>
+     );
 }

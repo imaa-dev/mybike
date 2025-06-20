@@ -25,9 +25,9 @@ class StoreServiceRequest extends FormRequest
             'product_id' => 'required|integer',
             'client_id' => 'required|integer',
             'organization_id' => 'required|integer',
-            'name' => 'required|string|max:255',
-            'master_note' => 'required|string|max:255',
-            'files' => ['nullable', 'array'],
+            'date_entry' => 'required|string',
+            'reason_notes' => 'required|array',
+            'files' => ['nullable', 'array', 'max:5'],
             'files.*' => ['file', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'],
         ];
     }
@@ -38,14 +38,12 @@ class StoreServiceRequest extends FormRequest
             'product_id.required' => 'El producto es requerido',
             'user_id.required' => 'El cliente es requerido',
             'organization_id.required' => 'La Organizacion es requerida',
-            'name.required' => 'El nombre es requerido',
-            'name.string' => 'El nombre tiene que ser una cadena de caracteres',
-            'name.max' => 'El nombre tiene que tener maximo de 255 caracteres',
-            'master_note.required' => 'La master_note es requerido',
-            'master_note.string' => 'La master_note tiene que ser una cadena de caracteres',
-            'master_note.max' => 'La master_note tiene que tener maximo de 255 caracteres',
+            'date_entry.required' => 'La fecha ingreso es requerida',
+            'date_entry.string' => 'La fecha debe ser una cadena de texto',
+            'reason_notes.required' => 'Los detalles de ingreso son requiridos',
             'file.required' => 'El archivo es requerido',
-            'file.mimes' => 'El archivo debe ser un archivo valido'
+            'file.mimes' => 'El archivo debe ser un archivo valido',
+            'file.max' => 'La cantidad de imagenes no puede ser superior a 5'
         ];
     }
 }

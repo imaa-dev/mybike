@@ -4,6 +4,7 @@ namespace App\Http\Services;
 
 use App\Jobs\ProcessReceipt;
 use App\Models\Servi;
+use App\Models\Status;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
@@ -15,6 +16,7 @@ class ServiService
     }
     public function create($request)
     {
+        $reasonService = new ReasonService();
         try {
             if($request->hasFile('file')){
                 foreach ($request->file('file') as $file){
@@ -26,10 +28,10 @@ class ServiService
             $servi->client_id  = $request->client_id;
             $servi->organization_id = $request->organization_id;
             $servi->product_id = $request->product_id;
-            $servi->name = $request->name;
-            $servi->master_note = $request->master_note;
-            $servi->status = 'EN_REPARACION';
+            $servi->status_id = 1;
+            $servi->date_entry = $request->date_entry;
             $servi->save();
+            $reasonService->storeReasons($request->reason_notes, $servi->id);
             if($request->hasFile('file')){
                 foreach ($servi_paths as $path){
                     $servi->file()->create([
