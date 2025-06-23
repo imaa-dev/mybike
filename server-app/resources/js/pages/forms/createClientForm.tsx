@@ -10,6 +10,7 @@ import PhoneInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/style.css'
 import { useAppearance } from '@/hooks/use-appearance';
 import ButtonBack from '@/components/button-back';
+import InputPhone from '@/components/input-phone';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -110,18 +111,7 @@ export default function CreateClientForm() {
                             >
                                 Celular
                             </label>
-                            <PhoneInput
-                                country={'cl'}
-                                value={data.phone}
-                                onChange={phone => setData('phone', phone)}
-                                inputStyle={{
-                                    backgroundColor: appearance === 'dark' ? '#374151' : '#f9fafb',
-                                    color: appearance === 'dark' ? '#ffffff' : '#111827',
-                                    border: '1px solid',
-                                    borderColor: appearance === 'dark' ? '#4b5563' : '#d1d5db',
-                                    width: '100%',
-                                }}
-                            />
+                            <InputPhone data={data} setData={setData} />
                             <InputError message={errors.phone} />
                         </div>
                         <Button

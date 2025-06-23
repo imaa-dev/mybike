@@ -3,8 +3,8 @@
 namespace App\Http\Services;
 
 use App\Jobs\ProcessReceipt;
+use App\Models\File;
 use App\Models\Servi;
-use App\Models\Status;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
@@ -47,8 +47,9 @@ class ServiService
             ];
         } catch (\Throwable $th) {
             $data = [
-                'status' => 'error',
-                'message' => $th->getMessage()
+                'code' => 500,
+                'status' => 'fail',
+                'message' => 'ERROR',
             ];
         }
         return $data;
@@ -56,6 +57,7 @@ class ServiService
 
     public function update($request)
     {
+        $reasonService = new ReasonService();
         try {
             $paths = [];
             if($request->hasFile('file')){
@@ -70,12 +72,13 @@ class ServiService
                     Storage::disk('public')->delete($file->path);
                 }
             }
-            $serviceUpdate->name = $request->name;
-            $serviceUpdate->master_note = $request->master_note;
-            $serviceUpdate->status = 'REPARADO';
-            $serviceUpdate->note_exit = $request->note_exit;
-            $serviceUpdate->price = $request->price;
+            $serviceUpdate->client_id  = $request->client_id;
+            $serviceUpdate->organization_id = $request->organization_id;
+            $serviceUpdate->product_id = $request->product_id;
+            $serviceUpdate->status_id = $request->status_id;
+            $serviceUpdate->date_entry = $request->date_entry;
             $serviceUpdate->save();
+            //$reasonService->storeReasons($request->reason_notes, $serviceUpdate->id);
             if($request->hasFile('file')){
                 foreach ($paths as $path){
                     $serviceUpdate->file()->delete();
@@ -84,11 +87,11 @@ class ServiService
                     ]);
                 }
             }
-            ProcessReceipt::dispatch($serviceUpdate)->onQueue('high')->afterResponse();
+            //ProcessReceipt::dispatch($serviceUpdate)->onQueue('high')->afterResponse();
             $data = [
                 'code' => 200,
                 'status' => 'success',
-                'message' => 'Servicio gestionado satisfactoriamente',
+                'message' => 'Servicio actualizado satisfactoriamente',
             ];
         } catch (\Throwable $th) {
             Log::error($th);
@@ -119,13 +122,14 @@ class ServiService
             Log::error($th);
             $data = [
                 'code' => 500,
-                'message' => 'error al eliminar registro',
-                'status' => 'error'
+                'message' => 'ERROR',
+                'status' => 'fail'
             ];
 
         }
         return $data;
     }
+
 
     public function getById($id)
     {

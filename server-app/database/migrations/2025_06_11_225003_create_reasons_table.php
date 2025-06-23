@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('reasons', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('servi_id');
-            $table->foreign('servi_id')->references('id')->on('servis');
+            $table->foreign('servi_id')->references('id')->on('servis')->onDelete('cascade');
             $table->string('reason_note');
             $table->timestamps();
         });

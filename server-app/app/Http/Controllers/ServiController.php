@@ -20,7 +20,7 @@ class ServiController extends Controller
     {
         $this->serviService = $serviService;
     }
-    public function list(Request $request)
+    public function show(Request $request)
     {
         $organization = Organization::where('user_id', $request->user()->id)
             ->where('active', true)
@@ -55,6 +55,25 @@ class ServiController extends Controller
             'notOrganization' => $notOrganization
         ]);
     }
+    public function listReception(Request $request)
+    {
+        $organization = Organization::where('user_id', $request->user()->id)
+            ->where('active', true)
+            ->with('file')
+            ->first();
+        if($organization->id)
+            $services = Servi::where('organization_id', $organization->id)
+                ->where('status_id', 1)
+                ->with('file')
+                ->with('product')
+                ->with('client')
+                ->with('reasons')
+                ->with('status')
+                ->get();
+        return Inertia::render('forms/listReceptionService',[
+            'servis' => $services,
+        ]);
+    }
     public function create(Request $request)
     {
         $product = Product::where('user_id', $request->user()->id)->with('file')->get();
@@ -67,30 +86,36 @@ class ServiController extends Controller
     public function store(StoreServiceRequest $request){
         $res = $this->serviService->create($request);
         session()->flash('message', $res['message']);
-        return redirect()->route('services.list.view');
+        return redirect()->route('services.list.reception.view');
     }
 
-    public function getUpdate(Servi $servi)
+    public function getUpdate(Request $request,Servi $servi)
     {
         $serviceFile = Servi::where('id', $servi->id)
             ->with('file')
             ->with('product')
             ->with('client')
+            ->with('reasons')
             ->first();
+        $products = Product::where('user_id', $request->user()->id)->with('file')->get();
+        $clients = Client::where('user_id', $request->user()->id)->with('file')->get();
         return Inertia::render('forms/manageServiceForm', [
-            'servi' => $serviceFile
+            'servi' => $serviceFile,
+            'clients' => $clients,
+            'products' => $products
         ]);
     }
 
-    public function update(Request $request){
+    public function update(StoreServiceRequest $request){
         $res = $this->serviService->update($request);
         session()->flash('message', $res['message']);
-        return redirect()->route('services.list.view');
+        return redirect()->route('services.view');
     }
 
     public function delete(Request $request){
         $res = $this->serviService->delete($request);
         session()->flash('message', $res['message']);
-        return redirect()->route('services.list.view');
+        return redirect()->route('services.list.reception.view');
     }
+
 }

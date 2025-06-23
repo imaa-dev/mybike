@@ -1,6 +1,11 @@
 import AppLayout from '@/layouts/app-layout';
 import { Head, useForm, usePage } from '@inertiajs/react';
-import { BreadcrumbItem, ProductData, User } from '@/types';
+import {
+    BreadcrumbItem,
+    ClientDataProp,
+    ProductDataProp,
+    Page, ServiDataForm
+} from '@/types';
 import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
 import { FormEventHandler, useState } from 'react';
@@ -21,40 +26,20 @@ const breadcrumbs: BreadcrumbItem[] = [
         href: '/',
     },
 ];
-interface ServiData {
-    organization_id: number;
-    product_id: number;
-    client_id: number;
-    date_entry: string;
-    file: File[] | null;
-    reason_notes: { note: string }[];
-}
-interface ClientDataProp {
-    clients: User[]
-}
-interface ProducDataProp {
-    products: ProductData[]
-}
-interface Page {
-    props: {
-        organization: {
-            id: number,
-        }
-    };
-}
+
 const appUrl = import.meta.env.VITE_APP_URL;
-export default function CreateServisForm({clients, products} : ClientDataProp & ProducDataProp) {
+
+export default function CreateServisForm({clients, products} : ClientDataProp & ProductDataProp) {
 
     const [reason, setReason] = useState<string>('');
     const [uploadImage, setUploadImage] = useState<string[]>([]);
     const { showLoading, hideLoading } = useLoading();
     const handleImageChange = (files: File[]) => {
-
         const urls = Array.from(files).map((file) => URL.createObjectURL(file));
         setUploadImage((prev) => [...prev, ...urls]);
     }
     const page: Page = usePage();
-    const { post, data, setData, errors, processing } = useForm<Required<ServiData>>({
+    const { post, data, setData, errors, processing } = useForm<Required<ServiDataForm>>({
             organization_id: page.props.organization.id,
             product_id: 0,
             client_id: 0,
@@ -67,7 +52,6 @@ export default function CreateServisForm({clients, products} : ClientDataProp & 
     };
     const submit:FormEventHandler = (e) => {
         e.preventDefault();
-
          post('/create/service', {
              onSuccess: (page) => {
                  const message = (page.props as { flash?: { message?: string } }).flash?.message;
@@ -180,7 +164,7 @@ export default function CreateServisForm({clients, products} : ClientDataProp & 
                                          toast.error('El detalle de ingreso no puede ir vacio')
                                          return
                                      }
-                                     setData('reason_notes', [...data.reason_notes, {note: reason}])
+                                     setData('reason_notes', [...data.reason_notes, {reason_note: reason}])
                                      setReason('')
                                  }}
                                  className="mt-4 w-full"
@@ -193,7 +177,7 @@ export default function CreateServisForm({clients, products} : ClientDataProp & 
                                    <ul className="list-disc pl-5 text-sm text-gray-800 dark:text-white space-y-1">
                                      {data.reason_notes.map((item, index) => (
                                        <li key={index} className="flex justify-between items-center">
-                                         {item.note}
+                                         {item.reason_note}
                                          <button
                                            type="button"
                                            className="text-red-500 text-xs ml-2"

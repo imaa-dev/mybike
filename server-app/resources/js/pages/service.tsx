@@ -2,7 +2,7 @@ import AppLayout from '@/layouts/app-layout';
 import { Head, router } from '@inertiajs/react';
 import type { BreadcrumbItem } from '@/types';
 import toast, { Toaster } from 'react-hot-toast';
-import {  FileBox, FilePlus2, List, Truck, Wrench } from 'lucide-react';
+import {  FileBox, FilePlus2, List, Truck, Wrench, ConciergeBell } from 'lucide-react';
 import { useState } from 'react';
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -27,7 +27,7 @@ export default function Service({ notOrganization}: ServiDataProp){
                             type="button"
                             className="flex"
                             onClick={() => {
-                                if(notOrganization === true){
+                                if(notOrganization){
                                     toast.error('No tienes organización No puedes crear servicios')
                                 } else {
                                     router.visit('/create/service');
@@ -42,7 +42,22 @@ export default function Service({ notOrganization}: ServiDataProp){
                             type="button"
                             className="flex"
                             onClick={() => {
-                                if(notOrganization === true){
+                                if(notOrganization){
+                                    toast.error('No tienes organización No puedes crear servicios')
+                                } else {
+                                    router.visit('/list-reception/service');
+                                }
+                            }}
+                        >
+                            <ConciergeBell />
+                        </button>
+                    </div>
+                    <div className="relative ml-7">
+                        <button
+                            type="button"
+                            className="flex"
+                            onClick={() => {
+                                if(notOrganization){
                                     toast.error('No tienes organización No puedes crear servicios')
                                 } else {
                                     router.visit('/create/service');
@@ -57,7 +72,7 @@ export default function Service({ notOrganization}: ServiDataProp){
                             type="button"
                             className="flex"
                             onClick={() => {
-                                if(notOrganization === true){
+                                if(notOrganization){
                                     toast.error('No tienes organización No puedes crear servicios')
                                 } else {
                                     router.visit('/create/service');
@@ -73,7 +88,7 @@ export default function Service({ notOrganization}: ServiDataProp){
                             type="button"
                             className="flex"
                             onClick={() => {
-                                if(notOrganization === true){
+                                if(notOrganization){
                                     toast.error('No tienes organización No puedes listar servicios')
                                 } else {
                                     router.visit('/list-repair/service');
@@ -88,7 +103,7 @@ export default function Service({ notOrganization}: ServiDataProp){
                             type="button"
                             className="flex"
                             onClick={() => {
-                                if(notOrganization === true){
+                                if(notOrganization){
                                     toast.error('No tienes organización No puedes listar servicios')
                                 } else {
                                     router.visit('/list-repair/service');

@@ -18,4 +18,12 @@ class Servi extends Model
     {
         return $this->morphMany(File::class, 'fileable');
     }
+    public function reasons()
+    {
+        return $this->hasMany(Reason::class);
+    }
+    public function status()
+    {
+        return $this->belongsTo(Statu::class);
+    }
 }

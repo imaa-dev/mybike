@@ -4,29 +4,24 @@ import type { Config } from 'ziggy-js';
 export interface Auth {
     user: User;
 }
-
 export interface BreadcrumbItem {
     title: string;
     href: string;
 }
-
 export interface ButtonItem {
     title: string;
     href: string;
 }
-
 export interface NavGroup {
     title: string;
     items: NavItem[];
 }
-
 export interface NavItem {
     title: string;
     href: string;
     icon?: LucideIcon | null;
     isActive?: boolean;
 }
-
 export interface SharedData {
     name: string;
     quote: { message: string; author: string };
@@ -35,7 +30,6 @@ export interface SharedData {
     sidebarOpen: boolean;
     [key: string]: unknown;
 }
-
 export interface User {
     id: number;
     name: string;
@@ -55,11 +49,10 @@ export interface FileMeta {
     created_at: string;
     updated_at: string;
 }
-
 export interface OrganizationData {
     id: number;
     user_id: number;
-    file: FileMeta;
+    file: FileMeta | null;
     name: string;
     description: string;
     active: number;
@@ -80,7 +73,6 @@ export interface ProductData {
     type: string,
     file: FileMeta[]
 }
-
 export interface Client{
     id: number;
     name: string;
@@ -89,23 +81,65 @@ export interface Client{
     file: FileMeta | null;
     [key: string]: unknown;
 }
+export interface Page {
+    props: {
+        organization: {
+            id: number,
+        }
+    };
+}
+export interface ClientDataProp {
+    clients: User[];
+}
+export interface ProductDataProp {
+    products: ProductData[];
+}
+export interface ServiDataForm {
+    organization_id: number;
+    product_id: number;
+    client_id: number;
+    date_entry: string;
+    file: File[] | null;
+    reason_notes: { reason_note: string }[];
+}
+export interface Reasons{
+    id: number;
+    servi_id: number;
+    reason_note: string;
+    created_at: string;
+    updated_at: string;
+}
+export interface Status {
+    id: number;
+    name: string;
+}
 export interface ServiData {
     id: number;
     client_id: number;
     product_id: number;
     organization_id: number;
-    name: string;
-    master_note: string;
-    note_exit: string;
-    price: number;
-    exit: Date;
+    status_id: number;
+    date_entry: string;
+    date_exit: string;
+    satisfied: number;
+    reasons: Reasons[];
     file: FileMeta[];
-    satisfied: string;
     product: ProductData;
     client: Client;
-    status: string;
+    status: Status;
     created_at: Date;
     updated_at: Date;
 }
 
-
+export interface FileResponse {
+    code: number;
+    message: string;
+    success: boolean;
+    file: FileMeta[];
+}
+export interface ReasonResponse {
+    code: number;
+    message: string;
+    success: boolean;
+    reasons: Reasons[];
+}

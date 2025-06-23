@@ -2,31 +2,30 @@ import AppLayout from '@/layouts/app-layout';
 import { Head, router, useForm } from '@inertiajs/react';
 import type { BreadcrumbItem, ServiData } from '@/types';
 import toast, { Toaster } from 'react-hot-toast';
-import { CirclePlus, List } from 'lucide-react';
 import { useState } from 'react';
+import { Eye, Pencil, Trash2 } from 'lucide-react';
+
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Servicio',
+        title: 'Servicios',
         href: '/service',
     },
     {
-        title: 'Servicios A Reparar',
+        title: 'Recepcionados',
         href: '/service',
     },
 ];
 const appUrl = import.meta.env.VITE_APP_URL;
 interface ServiDataProp {
     servis: ServiData[];
-    notOrganization: boolean;
 }
-export default function ListReceptionService ({servis, notOrganization}: ServiDataProp) {
-    const [modal, setModal] = useState<boolean>(notOrganization);
+
+export default function ListReceptionService ({servis}: ServiDataProp) {
     const [show, setShow] = useState<boolean>(false);
     const [serviceDelete, setServiceDelete] = useState<number>(0);
     const { post } = useForm({})
-
     const deleteServi = (id: number) => {
-        post(`delete/service/${id}`, {
+        post(`/delete/service/${id}`, {
             onSuccess: (page) => {
                 const message = (page.props as { flash?: { message?: string } }).flash?.message;
                 if (message) {
@@ -38,51 +37,13 @@ export default function ListReceptionService ({servis, notOrganization}: ServiDa
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Servicios" />
-            <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
-                <div className="flex p-5" >
-                    <div className="relative">
-                        <button
-                            type="button"
-                            className="flex"
-                            onClick={() => {
-                                if(notOrganization === true){
-                                    toast.error('No tienes organización No puedes crear servicios')
-                                } else {
-                                    router.visit('/create/service');
-                                }
-                            }}
-                        >
-                            <CirclePlus />
-                            Agregar Servicio
-                        </button>
-                    </div>
-                    <div className="relative ml-5">
-                        <button
-                            type="button"
-                            className="flex"
-                            onClick={() => {
-                                if(notOrganization === true){
-                                    toast.error('No tienes organización No puedes listar servicios')
-                                } else {
-                                    router.visit('/list-repair/service');
-                                }
-                            }}
-                        >
-                            <List />
-                            Listar Servicios Reparados
-                        </button>
-                    </div>
-                </div>
-                <div className="border-sidebar-border/70 dark:border-sidebar-border relative min-h-[100vh] flex-1 overflow-hidden rounded-xl border md:min-h-min">
-                    <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+            <div className="flex h-full flex-1 flex-col items-center gap-4 rounded-xl">
+                <div className="relative m-5 overflow-x-auto shadow-md sm:rounded-lg">
                         <table className="w-full text-left text-sm text-gray-500 rtl:text-right dark:text-gray-400">
                             <thead className="bg-gray-50 text-xs text-gray-700 uppercase dark:bg-gray-700 dark:text-gray-400">
                             <tr>
                                 <th scope="col" className="px-16 py-3">
                                     <span className="sr-only">Image</span>
-                                </th>
-                                <th scope="col" className="px-6 py-3">
-                                    Servicio
                                 </th>
                                 <th scope="col" className="px-6 py-3" >
                                     Cliente
@@ -91,13 +52,13 @@ export default function ListReceptionService ({servis, notOrganization}: ServiDa
                                     Producto
                                 </th>
                                 <th scope="col" className="px-6 py-3">
-                                    Maestro nota
+                                    Detalles de ingreso
                                 </th>
                                 <th scope="col" className="px-6 py-3">
-                                    Fecha Ingreso/Salida
+                                    Fecha Ingreso
                                 </th>
                                 <th scope="col" className="px-6 py-3">
-                                    Estado Reparación
+                                    Estado
                                 </th>
                                 <th scope="col" className="px-6 py-3">
                                     Acciones
@@ -120,14 +81,13 @@ export default function ListReceptionService ({servis, notOrganization}: ServiDa
                                             ):
                                             (
                                                 <img
-                                                    src={`${appUrl}/logo-img.png`}
+                                                    src={`${appUrl}/images/image.png`}
                                                     className="max-h-full w-16 max-w-full md:w-32"
                                                     alt="Servi File"
                                                 />
                                             )}
 
                                     </td>
-                                    <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white">{service.name}</td>
                                     <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
                                         <div className="ps-3">
                                             <div className="text-base font-semibold">{service.client.name}</div>
@@ -135,14 +95,18 @@ export default function ListReceptionService ({servis, notOrganization}: ServiDa
                                         </div>
                                     </td>
                                     <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
-                                        {service.product.name}
+                                        {service.product.type}
                                         <div className="font-normal text-gray-500">
-                                            {service.product.description}
+                                            {service.product.brand}{' '}{service.product.model}
                                         </div>
                                     </td>
-                                    <td className="px-6 py-4">{service.master_note}</td>
+                                    <td className="px-6 py-4">
+                                        {service.reasons.map((reason, index) => (
+                                            <div className="p-1" key={index}>{reason.reason_note}</div>
+                                        ))}
+                                    </td>
                                     <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
-                                        {new Date(service.created_at).toLocaleString('es-ES', {
+                                        {new Date(service.date_entry).toLocaleString('es-ES', {
                                             year: 'numeric',
                                             month: 'long',
                                             day: 'numeric',
@@ -152,39 +116,39 @@ export default function ListReceptionService ({servis, notOrganization}: ServiDa
                                     </td>
                                     <td className="px-6 py-4">
                                         <div className="flex items-center">
-                                            <div className="me-2 h-2.5 w-2.5 rounded-full bg-red-500"></div>
-                                            {service.status}
+                                            <div className="me-2 h-2.5 w-2.5 rounded-full bg-blue-500"></div>
+                                            {service.status.name}
                                         </div>
                                     </td>
-                                    <td className="px-6 py-4">
-                                        <button
-                                            type="button"
-                                            onClick={() => {
-                                                router.visit(`/manage/${service.id}/service`);
-                                            }}
-                                            className="me-2 mb-2 rounded-lg border border-blue-700 px-5 py-2.5 text-center text-sm font-medium text-blue-700 hover:bg-blue-800 hover:text-white focus:ring-4 focus:ring-blue-300 focus:outline-none dark:border-blue-500 dark:text-blue-500 dark:hover:bg-blue-500 dark:hover:text-white dark:focus:ring-blue-800"
-                                        >
-                                            Editar
-                                        </button>
-                                        <button
-                                            type="button"
-                                            onClick={() => {
-                                                router.visit(`/manage/${service.id}/service`);
-                                            }}
-                                            className="me-2 mb-2 rounded-lg border border-blue-700 px-5 py-2.5 text-center text-sm font-medium text-blue-700 hover:bg-blue-800 hover:text-white focus:ring-4 focus:ring-blue-300 focus:outline-none dark:border-blue-500 dark:text-blue-500 dark:hover:bg-blue-500 dark:hover:text-white dark:focus:ring-blue-800"
-                                        >
-                                            Revicion
-                                        </button>
-                                        <button
-                                            className="me-2 mb-2 rounded-lg border border-red-700 px-5 py-2.5 text-center text-sm font-medium text-red-700 hover:bg-red-800 hover:text-white focus:ring-4 focus:ring-red-300 focus:outline-none dark:border-red-500 dark:text-red-500 dark:hover:bg-red-600 dark:hover:text-white dark:focus:ring-red-900"
-                                            type="button"
-                                            onClick={() => {
-                                                setShow(true)
-                                                setServiceDelete(service.id);
-                                            }}
-                                        >
-                                            Eliminar
-                                        </button>
+                                    <td className="px-6 py-4 items-center">
+                                            <button
+                                                type="button"
+                                                className="p-2"
+                                                onClick={() => {
+                                                    router.visit(`/edit/${service.id}/service`)
+                                                }}
+                                            >
+                                                <Pencil />
+                                            </button>
+                                            <button
+                                                type="button"
+                                                className="p-2"
+                                                onClick={() => {
+                                                    setShow(true)
+                                                    setServiceDelete(service.id)
+                                                }}
+                                            >
+                                                <Trash2 />
+                                            </button>
+                                            <button
+                                                type="button"
+                                                className="p-2"
+                                                onClick={() => {
+                                                    console.log('DIAGNOSTICAR SERVICIO')
+                                                }}
+                                            >
+                                                <Eye />
+                                            </button>
                                     </td>
                                 </tr>
                             ))}
@@ -192,32 +156,7 @@ export default function ListReceptionService ({servis, notOrganization}: ServiDa
                         </table>
                     </div>
                     <Toaster />
-                    {modal && (
-                        <div className="fixed top-0 right-0 left-0 z-50 flex h-screen w-screen items-center justify-center bg-black/50">
-                            <div className="rounded-lg bg-white p-6 shadow-lg dark:bg-gray-700">
-                                <h3 className="mb-4 text-lg text-gray-800 dark:text-gray-200">
-                                    Notamos que no tienes una organización, ¿deseas crear una?
-                                </h3>
-                                <div className="flex justify-end gap-2">
-                                    <button
-                                        onClick={() => {
-                                            router.visit('/create/organization');
-                                        }}
-                                        className="me-2 mb-2 rounded-lg border border-green-700 px-5 py-2.5 text-center text-sm font-medium text-green-700 hover:bg-green-800 hover:text-white focus:ring-4 focus:ring-green-300 focus:outline-none dark:border-green-500 dark:text-green-500 dark:hover:bg-green-600 dark:hover:text-white dark:focus:ring-green-800"
-                                    >
-                                        Ir a crear organización
-                                    </button>
-                                    <button
-                                        onClick={() => setModal(false)}
-                                        type="button"
-                                        className="me-2 mb-2 rounded-lg border border-gray-800 px-5 py-2.5 text-center text-sm font-medium text-gray-900 hover:bg-gray-900 hover:text-white focus:ring-4 focus:ring-gray-300 focus:outline-none dark:border-gray-600 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-800"
-                                    >
-                                        Cancelar
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    )}
+
                     {show && (
                         <div className="fixed top-0 right-0 left-0 z-50 flex h-screen w-screen items-center justify-center bg-black/50">
                             <div className="rounded-lg bg-white p-6 shadow-lg dark:bg-gray-700">
@@ -246,7 +185,6 @@ export default function ListReceptionService ({servis, notOrganization}: ServiDa
                         </div>
                     )}
                 </div>
-            </div>
         </AppLayout>
     );
 }

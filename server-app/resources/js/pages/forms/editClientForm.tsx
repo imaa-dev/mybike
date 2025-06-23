@@ -5,12 +5,11 @@ import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
 import { FormEventHandler } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
-import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css'
 import { SidebarGroupLabel } from '@/components/ui/sidebar';
 import { useAppearance } from '@/hooks/use-appearance';
-import { Undo2 } from 'lucide-react';
 import ButtonBack from '@/components/button-back';
+import InputPhone from '@/components/input-phone';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -119,21 +118,7 @@ export default function EditClientForm({client}: ClientProp) {
                             >
                                 Celular
                             </label>
-                            <PhoneInput
-                                country={'cl'}
-                                value={data.phone}
-                                onChange={phone => setData('phone', phone)}
-                                inputStyle={{
-                                    backgroundColor: appearance === 'dark' ? '#374151' : '#f9fafb',
-                                    color: appearance === 'dark' ? '#ffffff' : '#111827',
-                                    border: '1px solid',
-                                    borderColor: appearance === 'dark' ? '#4b5563' : '#d1d5db',
-                                    borderRadius: '0.5rem',
-                                    width: '100%',
-                                    padding: '0.625rem',
-                                    fontSize: '0.875rem'
-                                }}
-                            />
+                            <InputPhone data={data} setData={setData} />
                             <InputError message={errors.phone} />
                         </div>
                         <Button

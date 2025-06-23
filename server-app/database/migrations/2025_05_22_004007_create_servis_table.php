@@ -23,6 +23,7 @@ return new class extends Migration
             $table->foreign('status_id')->references('id')->on('status');
             $table->dateTime('date_entry');
             $table->dateTime('date_exit')->nullable();
+            $table->integer('satisfied')->nullable();
             $table->timestamps();
         });
     }

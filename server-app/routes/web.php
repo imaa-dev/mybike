@@ -1,10 +1,12 @@
 <?php
 
+use App\Http\Controllers\FileController;
 use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ServiController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\ReasonController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -19,10 +21,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->name('dashboard');
 
     // Service routes
-    Route::get('service', [ServiController::class, 'list'])->name('services.list.view');
+    Route::get('service', [ServiController::class, 'show'])->name('services.view');
     Route::get('create/service', [ServiController::class, 'create'])->name('services.create.view');
-    Route::get('manage/{servi}/service', [ServiController::class, 'getUpdate'])->name('services.update.view');
-    Route::post('create/service', [ServiController::class, 'store'])->name('services.store.view');
+    Route::get('edit/{servi}/service', [ServiController::class, 'getUpdate'])->name('services.update.view');
+    Route::get('list-reception/service', [ServiController::class, 'listReception'])->name('services.list.reception.view');
+    Route::post('create/service', [ServiController::class, 'store'])->name('services.store');
     Route::post('manage/service', [ServiController::class, 'update'])->name('services.update');
     Route::post('delete/service/{id}', [ServiController::class, 'delete'])->name('services.destroy');
     Route::get('list-repair/service', [ServiController::class, 'listRepair'])->name('services.list.repair.view');
@@ -54,6 +57,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // User routes
     Route::get('user', [UserController::class, 'create'])->name('users.create');
+
+    // File routes
+    Route::delete('delete-image-service/{id}', [FileController::class, 'removeImage'])->name('service.file.delete');
+    Route::post('upload-image-service', [FileController::class, 'uploadImage'])->name('service.file.upload');
+
+    // Reason routes
+    Route::post('store-reason-service', [ReasonController::class, 'store'])->name('reason.store');
+    
 });
 
 require __DIR__.'/settings.php';
