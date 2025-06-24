@@ -57,36 +57,14 @@ class ServiService
 
     public function update($request)
     {
-        $reasonService = new ReasonService();
         try {
-            $paths = [];
-            if($request->hasFile('file')){
-                foreach ($request->file('file') as $file){
-                    $path =  $file->store('servi/'.$request->user()->id, 'public');
-                    $paths[] = $path;
-                }
-            }
-            $serviceUpdate = Servi::where('id', $request->id)->with('file')->first();
-            if($request->hasFile('file')){
-                foreach ($serviceUpdate->file as $file){
-                    Storage::disk('public')->delete($file->path);
-                }
-            }
+            
+            $serviceUpdate = Servi::where('id', $request->id)->first();
             $serviceUpdate->client_id  = $request->client_id;
             $serviceUpdate->organization_id = $request->organization_id;
             $serviceUpdate->product_id = $request->product_id;
-            $serviceUpdate->status_id = $request->status_id;
             $serviceUpdate->date_entry = $request->date_entry;
             $serviceUpdate->save();
-            //$reasonService->storeReasons($request->reason_notes, $serviceUpdate->id);
-            if($request->hasFile('file')){
-                foreach ($paths as $path){
-                    $serviceUpdate->file()->delete();
-                    $serviceUpdate->file()->create([
-                        'path'=> $path
-                    ]);
-                }
-            }
             //ProcessReceipt::dispatch($serviceUpdate)->onQueue('high')->afterResponse();
             $data = [
                 'code' => 200,

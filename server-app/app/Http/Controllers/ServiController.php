@@ -7,7 +7,6 @@ use App\Models\Client;
 use App\Models\Organization;
 use App\Models\Product;
 use App\Models\Servi;
-use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Services\ServiService;
 use Inertia\Inertia;
@@ -107,9 +106,10 @@ class ServiController extends Controller
     }
 
     public function update(StoreServiceRequest $request){
+
         $res = $this->serviService->update($request);
         session()->flash('message', $res['message']);
-        return redirect()->route('services.view');
+        return redirect()->route('services.list.reception.view');
     }
 
     public function delete($id){

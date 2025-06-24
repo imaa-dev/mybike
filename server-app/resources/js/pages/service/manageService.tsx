@@ -35,6 +35,7 @@ export default function ManageService({ servi, clients, products }: ServiProp & 
     const [reasons, setReasons] = useState<Reasons[]>(servi.reasons)
     const { success, error } = useToast()
     const { data, setData, post, errors, processing } = useForm<Required<ServiForm>>({
+        id: servi.id,
         organization_id: servi.organization_id,
         product_id: servi.product_id,
         client_id: servi.client_id,
@@ -70,6 +71,7 @@ export default function ManageService({ servi, clients, products }: ServiProp & 
                 }
             },
             onError: ((e) => {
+                console.log(e)
                 error(e.message)
             })
         });
@@ -95,7 +97,7 @@ export default function ManageService({ servi, clients, products }: ServiProp & 
                          onReasonChange={setReason}
                          onAddReason={() => {
                              if (reason.trim() === '') {
-                                 toast.error('El detalle de ingreso no puede ir vacío');
+                                 error('El detalle de ingreso no puede ir vacío');
                                  return;
                              }
                              uploadReason(reason, servi.id);

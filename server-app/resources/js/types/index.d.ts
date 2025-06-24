@@ -131,6 +131,7 @@ export interface ServiData {
     updated_at: Date;
 }
 export interface ServiForm {
+    id: number;
     organization_id: number;
     product_id: number;
     client_id: number;
