@@ -69,8 +69,6 @@ export default function ServiceImages({ initialFiles, serviceId }: ServiceImages
               <button
                 type="button"
                 onClick={() => {
-                  //setShowConfirm(true);
-                  //setFileToDelete(item.id);
                   handleDelete(item.id)
                 }}
                 className="absolute top-1 right-1 p-1 m-1 rounded-full bg-red-600 text-white text-xs opacity-80 hover:opacity-100"

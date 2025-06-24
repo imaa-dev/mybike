@@ -1,25 +1,16 @@
-import axios from 'axios';
+import api from '@/api/AxiosIntance';
 import { FileResponse } from '@/types';
-const appUrl = import.meta.env.VITE_APP_URL;
 
-const deleteImage = async (id: number): Promise<{ code: number; message: string; success: string }> => {
+const deleteImage = async (id: number): Promise<{ code: number; message: string; success: boolean }> => {
     try {
-        const response = await axios.delete(`${appUrl}/delete-image-service/${id}`,{
-            withCredentials: true,
-        })
+        const response = await api.delete(`/delete-image-service/${id}`)
         return response.data
     } catch (error: unknown) {
-        if(axios.isAxiosError(error)){
-            return {
-                code: error?.response?.status || 500,
-                message: error?.response?.data?.message || 'Error inesperado al eliminar la imagen',
-                success: 'true'
-            }
-        }
+        console.log(error, "AXIOS ERROR")
         return {
             code: 500,
             message: 'Error desconocido',
-            success: 'false'
+            success: false
         };
     }
 }
@@ -28,22 +19,14 @@ const deleteImage = async (id: number): Promise<{ code: number; message: string;
     file.forEach(file => formData.append('file[]', file));
     formData.append('service_id', id.toString())
     try {
-        const response = await axios.post(`${appUrl}/upload-image-service`,formData, {
-            withCredentials: true,
+        const response = await api.post(`/upload-image-service`,formData, {
             headers: {
                 'Content-Type': 'multipart/form-data'
             }
         })
         return response.data
     } catch (error) {
-        if(axios.isAxiosError(error)){
-            return {
-                code: error?.response?.status || 500,
-                message: error?.response?.data?.message || 'Error inesperado al subir imagen',
-                success: true,
-                file: []
-            }
-        }
+        console.log(error, "AXIOS ERROR")
         return {
             code: 500,
             message: 'Error',

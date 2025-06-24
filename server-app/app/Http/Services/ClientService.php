@@ -93,14 +93,15 @@ class ClientService {
     public function delete($request)
     {
         try {
-            $client = Client::where('id', $request->id)->with('file')->first();
-            if($client->file){
-                Storage::disk('public')->delete($client->file->path);
+            $client = Client::where('id', $request->id)->first();
+            if ($client->servis()->count() > 0) {
+                return [
+                    'success' => false,
+                    'code' => 400,
+                    'message' => 'Este cliente tiene servicios asociados y no puede ser eliminado.'
+                ];
             }
             $client->delete();
-            if($client->file){
-                $client->file()->delete();
-            }
             $data = [
                 'success' => true,
                 'code' => 200,

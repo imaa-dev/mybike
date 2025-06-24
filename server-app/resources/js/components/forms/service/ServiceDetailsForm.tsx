@@ -2,6 +2,7 @@ import { Button } from '@/components/ui/button';
 import { SidebarGroupLabel } from '@/components/ui/sidebar';
 import { Plus } from 'lucide-react';
 import { Reasons } from '@/types';
+import { useConfirmDialog } from '@/context/ModalContext';
 
 interface Props {
     reason: string;
@@ -18,6 +19,14 @@ export default function ServiceDetailsForm({
     onAddReason,
     onDeleteReason
 }: Props) {
+    const { showConfirm } = useConfirmDialog();
+
+    const handleDelete = (reasonId: number) => {
+        showConfirm({
+            title: "Deseas eliminar el detalle de ingreso",
+            onConfirm: () => onDeleteReason(reasonId)
+        })
+    }
     return (
         <>
             <SidebarGroupLabel>Detalles del ingreso</SidebarGroupLabel>
@@ -55,7 +64,7 @@ export default function ServiceDetailsForm({
                                 <button
                                     type="button"
                                     className="text-red-500 text-xs ml-2"
-                                    onClick={() => onDeleteReason(item.id)}
+                                    onClick={() => handleDelete(item.id)}
                                 >
                                     Eliminar
                                 </button>

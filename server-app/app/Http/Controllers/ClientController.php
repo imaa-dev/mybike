@@ -20,7 +20,7 @@ class ClientController extends Controller
 
     public function list()
     {
-        $clients = Client::where('user_id', auth()->user()->id)->with('file')->get();
+        $clients = Client::where('user_id', auth()->user()->id)->get();
         return Inertia::render('client', ['clients' => $clients]);
     }
     public function create()
@@ -49,7 +49,6 @@ class ClientController extends Controller
     public function delete(Request $request)
     {
         $res = $this->clientService->delete($request);
-        session()->flash('message', $res['message']);
-        return redirect()->route('clients.list.view');
+        return response()->json($res);
     }
 }

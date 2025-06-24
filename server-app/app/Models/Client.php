@@ -7,8 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class Client extends Model
 {
 
-    public function file()
+    public function servis()
     {
-        return $this->morphOne(File::class, 'fileable');
+        return $this->hasMany(Servi::class); 
     }
 }

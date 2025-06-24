@@ -6,9 +6,7 @@ import { FormEventHandler } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 import InputError from '@/components/input-error';
 import { SidebarGroupLabel } from '@/components/ui/sidebar';
-import PhoneInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/style.css'
-import { useAppearance } from '@/hooks/use-appearance';
 import ButtonBack from '@/components/button-back';
 import InputPhone from '@/components/input-phone';
 
@@ -37,7 +35,6 @@ export default function CreateClientForm() {
         phone: '',
         file: null
     })
-    const { appearance } = useAppearance();
     const submit:FormEventHandler = (e) => {
         e.preventDefault();
 
@@ -63,7 +60,6 @@ export default function CreateClientForm() {
                         onSubmit={submit}
                     >
                         <SidebarGroupLabel> Crear Cliente </SidebarGroupLabel>
-
                         <div className="w-full group relative z-0 mb-5">
                             <input
                                 type="text"
@@ -119,7 +115,6 @@ export default function CreateClientForm() {
                             className="mt-4 w-full"
                             tabIndex={4}
                             disabled={processing}
-
                         >
                             Crear Cliente
                         </Button>

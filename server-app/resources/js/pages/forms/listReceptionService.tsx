@@ -128,7 +128,7 @@ export default function ListReceptionService ({servis}: ServiDataProp) {
                                                     router.visit(`/edit/${service.id}/service`)
                                                 }}
                                             >
-                                                <Pencil />
+                                                <Pencil color={'#1d4ed8'} />
                                             </button>
                                             <button
                                                 type="button"
@@ -138,7 +138,7 @@ export default function ListReceptionService ({servis}: ServiDataProp) {
                                                     setServiceDelete(service.id)
                                                 }}
                                             >
-                                                <Trash2 />
+                                                <Trash2 color={'#b91c1c'} />
                                             </button>
                                             <button
                                                 type="button"
@@ -147,7 +147,7 @@ export default function ListReceptionService ({servis}: ServiDataProp) {
                                                     console.log('DIAGNOSTICAR SERVICIO')
                                                 }}
                                             >
-                                                <Eye />
+                                                <Eye color={'#0f766e'} />
                                             </button>
                                     </td>
                                 </tr>

@@ -21,7 +21,7 @@ class ProductController extends Controller
     }
 
     public function list(Request $request){
-        $products = Product::where('user_id', $request->user()->id)->with('file')->get();
+        $products = Product::where('user_id', $request->user()->id)->get();
         return Inertia::render('product', [
             'products' => $products,
         ]);
@@ -38,7 +38,7 @@ class ProductController extends Controller
     }
     public function getUpdate(Product $product)
     {
-        $productFile = Product::where('id', $product->id)->with('file')->first();
+        $productFile = Product::where('id', $product->id)->first();
         return Inertia::render('forms/editProductForm', [
             'product' => $productFile
         ]);

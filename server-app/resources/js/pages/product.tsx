@@ -4,6 +4,7 @@ import { Head, router, useForm } from '@inertiajs/react';
 import toast, { Toaster } from 'react-hot-toast';
 import { useState } from 'react';
 import ButtonAdd from '@/components/button-add';
+import { Pencil, Trash2 } from 'lucide-react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -34,11 +35,9 @@ export default function Product({products}: ProductDataProp){
     return(
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Productos" />
-            <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
                 <ButtonAdd route="/create/product" />
-                <div className="flex h-full flex-1 flex-col items-center  gap-4 rounded-xl">
-                    <div className="w-full overflow-x-auto">
-                        <div className="min-w-[600px] relative shadow-md sm:rounded-lg">
+                    <div className="flex h-full flex-1 flex-col items-center gap-4 rounded-xl">
+                        <div className="relative m-5 overflow-x-auto shadow-md sm:rounded-lg">
                         <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                             <thead
                                 className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -73,23 +72,23 @@ export default function Product({products}: ProductDataProp){
                                     <td className="px-6 py-4">
                                         <button
                                             type="button"
+                                            className="p-2"
                                             onClick={() => {
                                                 router.visit(`/update/${product.id}/product`)
                                             }}
-                                            className="me-2 mb-2 rounded-lg border border-blue-700 px-5 py-2.5 text-center text-sm font-medium text-blue-700 hover:bg-blue-800 hover:text-white focus:ring-4 focus:ring-blue-300 focus:outline-none dark:border-blue-500 dark:text-blue-500 dark:hover:bg-blue-500 dark:hover:text-white dark:focus:ring-blue-800"
                                         >
-                                            Actualizar
+                                            <Pencil color={'#1d4ed8'} />
                                         </button>
 
                                         <button
-                                            className="me-2 mb-2 rounded-lg border border-red-700 px-5 py-2.5 text-center text-sm font-medium text-red-700 hover:bg-red-800 hover:text-white focus:ring-4 focus:ring-red-300 focus:outline-none dark:border-red-500 dark:text-red-500 dark:hover:bg-red-600 dark:hover:text-white dark:focus:ring-red-900"
                                             type="button"
+                                            className="p-2"
                                             onClick={() => {
                                                 setModal(true);
                                                 setProductDelete(product.id)
                                             }}
                                         >
-                                            Eliminar
+                                            <Trash2 color={'#b91c1c'} />
                                         </button>
                                     </td>
                                 </tr>
@@ -98,8 +97,6 @@ export default function Product({products}: ProductDataProp){
                         </table>
                     </div>
                     </div>
-                </div>
-            </div>
             {modal && (
                 <div
                     className="fixed top-0 right-0 left-0 z-50 flex h-screen w-screen items-center justify-center bg-black/50">

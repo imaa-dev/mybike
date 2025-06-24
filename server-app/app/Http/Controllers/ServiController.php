@@ -76,8 +76,8 @@ class ServiController extends Controller
     }
     public function create(Request $request)
     {
-        $product = Product::where('user_id', $request->user()->id)->with('file')->get();
-        $client = Client::where('user_id', $request->user()->id)->with('file')->get();
+        $product = Product::where('user_id', $request->user()->id)->get();
+        $client = Client::where('user_id', $request->user()->id)->get();
         return Inertia::render('forms/createServisForm', [
             'products' => $product,
             'clients' => $client,
@@ -97,8 +97,8 @@ class ServiController extends Controller
             ->with('client')
             ->with('reasons')
             ->first();
-        $products = Product::where('user_id', $request->user()->id)->with('file')->get();
-        $clients = Client::where('user_id', $request->user()->id)->with('file')->get();
+        $products = Product::where('user_id', $request->user()->id)->get();
+        $clients = Client::where('user_id', $request->user()->id)->get();
         return Inertia::render('service/manageService', [
             'servi' => $serviceFile,
             'clients' => $clients,
