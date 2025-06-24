@@ -31,7 +31,7 @@ const appUrl = import.meta.env.VITE_APP_URL;
 interface OrganizationEditFormProps {
     organizationUpdate: OrganizationData;
 }
-export default function EditOrganizationForm({organizationUpdate}: OrganizationEditFormProps) {
+export default function EditOrganization({organizationUpdate}: OrganizationEditFormProps) {
     const { showLoading, hideLoading } = useLoading();
     const { data, setData, post, reset, errors, processing } = useForm<Required<EditOrganizationForm>>({
         id: organizationUpdate.id,
@@ -75,13 +75,13 @@ export default function EditOrganizationForm({organizationUpdate}: OrganizationE
                                 uploadImage ?
                                 (
                                     <div className="group relative flex justify-center items-center">
-                                        <img className="w-50" src={uploadImage} alt="Organization Edit" />
+                                        <img className="w-50 rounded border" src={uploadImage} alt="Organization Edit" />
                                     </div>
                                 ) :
                                     organizationUpdate.file ? (
                                 <div className="group relative flex justify-center items-center">
                                   <img
-                                      className="w-50"
+                                      className="w-50 rounded border"
                                       src={`${appUrl}/storage/${organizationUpdate.file.path}`}
                                       alt={'Organization Edit'}
                                     />
@@ -90,7 +90,7 @@ export default function EditOrganizationForm({organizationUpdate}: OrganizationE
                                 (
                                     <div className="group relative flex justify-center items-center">
                                         <img
-                                            className="w-50"
+                                            className="w-50 rounded border"
                                             src={`${appUrl}/logo-img.png`}
                                             alt={'Organization Edit'}
                                           />

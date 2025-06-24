@@ -75,14 +75,14 @@ export default function ListReceptionService ({servis}: ServiDataProp) {
                                         {service.file?.[0]?.path ? (
                                                 <img
                                                     src={`${appUrl}/storage/${service.file?.[0]?.path}`}
-                                                    className="max-h-full w-16 max-w-full md:w-32"
+                                                    className="max-h-full w-16 max-w-full md:w-32 rounded border"
                                                     alt="Servi File"
                                                 />
                                             ):
                                             (
                                                 <img
                                                     src={`${appUrl}/images/image.png`}
-                                                    className="max-h-full w-16 max-w-full md:w-32"
+                                                    className="max-h-full w-16 max-w-full md:w-32 rounded border"
                                                     alt="Servi File"
                                                 />
                                             )}

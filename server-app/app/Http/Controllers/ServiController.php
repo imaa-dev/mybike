@@ -30,7 +30,7 @@ class ServiController extends Controller
         if($organization !== null){
             $notOrganization = false;
         }
-        return Inertia::render('service', [
+        return Inertia::render('service/service', [
             'notOrganization' => $notOrganization
         ]);
     }
@@ -50,7 +50,7 @@ class ServiController extends Controller
                 ->get();
             $notOrganization = false;
         }
-        return Inertia::render('forms/listRepairService', [
+        return Inertia::render('service/listRepairService', [
             'servis' => $services,
             'notOrganization' => $notOrganization
         ]);
@@ -70,7 +70,7 @@ class ServiController extends Controller
                 ->with('reasons')
                 ->with('status')
                 ->get();
-        return Inertia::render('forms/listReceptionService',[
+        return Inertia::render('service/listReceptionService',[
             'servis' => $services,
         ]);
     }
@@ -78,7 +78,7 @@ class ServiController extends Controller
     {
         $product = Product::where('user_id', $request->user()->id)->get();
         $client = Client::where('user_id', $request->user()->id)->get();
-        return Inertia::render('forms/createServisForm', [
+        return Inertia::render('service/createServis', [
             'products' => $product,
             'clients' => $client,
         ]);

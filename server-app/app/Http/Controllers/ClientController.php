@@ -21,11 +21,11 @@ class ClientController extends Controller
     public function list()
     {
         $clients = Client::where('user_id', auth()->user()->id)->get();
-        return Inertia::render('client', ['clients' => $clients]);
+        return Inertia::render('client/client', ['clients' => $clients]);
     }
     public function create()
     {
-        return Inertia::render('forms/createClientForm');
+        return Inertia::render('client/createClient');
     }
     public function store(StoreClientRequest $request)
     {
@@ -35,8 +35,8 @@ class ClientController extends Controller
     }
     public function getUpdate(Client $client)
     {
-        $clientFile = Client::where('id', $client->id)->with('file')->first();
-        return Inertia::render('forms/editClientForm', [
+        $clientFile = Client::where('id', $client->id)->first();
+        return Inertia::render('client/editClient', [
             'client' => $clientFile
         ]);
     }

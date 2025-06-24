@@ -22,13 +22,13 @@ class ProductController extends Controller
 
     public function list(Request $request){
         $products = Product::where('user_id', $request->user()->id)->get();
-        return Inertia::render('product', [
+        return Inertia::render('product/product', [
             'products' => $products,
         ]);
     }
 
     public function create(){
-        return Inertia::render('forms/createProductForm');
+        return Inertia::render('product/createProduct');
     }
 
     public function store(StoreProductRequest $request){
@@ -39,7 +39,7 @@ class ProductController extends Controller
     public function getUpdate(Product $product)
     {
         $productFile = Product::where('id', $product->id)->first();
-        return Inertia::render('forms/editProductForm', [
+        return Inertia::render('product/editProduct', [
             'product' => $productFile
         ]);
     }
@@ -49,9 +49,8 @@ class ProductController extends Controller
         session()->flash('message', $res['message']);
         return redirect()->route('products.list.view');
     }
-    public function delete(Request $request){
-        $res = $this->productService->delete($request);
-        session()->flash('message', $res['message']);
-        return redirect()->route('products.list.view');
+    public function delete($id){
+        $res = $this->productService->delete($id);
+        return response()->json($res);
     }
 }

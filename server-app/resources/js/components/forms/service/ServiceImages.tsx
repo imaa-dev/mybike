@@ -81,7 +81,7 @@ export default function ServiceImages({ initialFiles, serviceId }: ServiceImages
         </div>
       ) : (
         <div className="group relative flex justify-center items-center">
-          <img className="w-50" src={`${appUrl}/images/max-img.png`} alt="Upload Image" />
+          <img className="w-50 rounded border" src={`${appUrl}/images/max-img.png`} alt="Upload Image" />
         </div>
       )}
       <div className="group relative z-0 mb-5 w-full">

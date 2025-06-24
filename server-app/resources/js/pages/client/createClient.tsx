@@ -1,134 +1,122 @@
-import InputError from '@/components/input-error';
-import { Button } from '@/components/ui/button';
-import { Head, useForm } from '@inertiajs/react';
 import AppLayout from '@/layouts/app-layout';
-import { BreadcrumbItem } from '@/types';
+import { Head, useForm } from '@inertiajs/react';
+import type { BreadcrumbItem } from '@/types';
+import { Button } from '@/components/ui/button';
 import { FormEventHandler } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
+import InputError from '@/components/input-error';
 import { SidebarGroupLabel } from '@/components/ui/sidebar';
+import 'react-phone-input-2/lib/style.css'
 import ButtonBack from '@/components/button-back';
+import InputPhone from '@/components/input-phone';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Producto',
-        href: '/product',
+        title: 'Cliente',
+        href: '/client',
     },
     {
         title: 'Crear',
         href: '/',
-    }
-];
-interface ProductDataProps {
-    type: string;
-    brand: string,
-    model: string,
-    file: File[] | null
-}
+    },
 
-export default function CreateProductForm() {
-    const { data, setData, post, errors, processing } = useForm<Required<ProductDataProps>>({
-        type: '',
-        brand: '',
-        model: '',
+];
+type UserData = {
+    name: string;
+    email: string;
+    phone: string;
+    file: File | null;
+}
+export default function CreateClient() {
+
+    const { data, setData, post, errors, processing } = useForm<Required<UserData>>({
+        name: '',
+        email: '',
+        phone: '',
         file: null
     })
-
     const submit:FormEventHandler = (e) => {
         e.preventDefault();
-        post('/create/product',{
+
+        post('/create/client',{
             onSuccess: (page) => {
                 const message = (page.props as { flash?: { message?: string } }).flash?.message;
                 if (message) {
                     toast.success(message);
                 }
-            },
-            onError: (error) => {
-                toast.error(error.message);
             }
         })
     }
+
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Productos" />
+            <Head title="Clientes" />
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
             <ButtonBack />
             <div className="flex h-full flex-1 flex-col items-center gap-4 rounded-xl">
                 <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-
                     <form
                         className="flex w-full flex-col justify-center gap-6 rounded-lg bg-white p-6 shadow-md md:p-10 dark:bg-gray-800"
                         onSubmit={submit}
                     >
-                        <SidebarGroupLabel> Crear Producto </SidebarGroupLabel>
-
-                        <div className="group relative z-0 mb-5 w-full">
+                        <SidebarGroupLabel> Crear Cliente </SidebarGroupLabel>
+                        <div className="w-full group relative z-0 mb-5">
                             <input
-                                className="peer block w-full appearance-none border-0 border-b-2 border-gray-300 bg-transparent px-0 py-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-0 focus:outline-none dark:border-gray-600 dark:text-white dark:focus:border-blue-500"
                                 type="text"
-                                name="type_product"
-                                id="type_product"
-                                required
+                                name="name_client"
+                                id="name_client"
+                                className="peer block w-full appearance-none border-0 border-b-2 border-gray-300 bg-transparent px-0 py-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-0 focus:outline-none dark:border-gray-600 dark:text-white dark:focus:border-blue-500"
+                                autoFocus
                                 tabIndex={1}
-                                autoComplete="type_product"
-                                value={data.type}
-                                onChange={(e) => setData('type', e.target.value)}
+                                autoComplete="name"
+                                value={data.name}
+                                onChange={(e) => setData('name', e.target.value)}
+                                required
                             />
                             <label
-                                htmlFor="floating_brand"
+                                htmlFor="floating_name"
                                 className="absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:start-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:font-medium peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:text-gray-400 peer-focus:dark:text-blue-500"
                             >
-                                Tipo de producto
+                                Nombre
                             </label>
-                            <InputError message={errors.brand} />
+                            <InputError message={errors.name} />
                         </div>
                         <div className="group relative z-0 mb-5 w-full">
                             <input
                                 className="peer block w-full appearance-none border-0 border-b-2 border-gray-300 bg-transparent px-0 py-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-0 focus:outline-none dark:border-gray-600 dark:text-white dark:focus:border-blue-500"
                                 type="text"
-                                name="brand_product"
-                                id="brand_product"
-                                required
+                                name="client_email"
+                                id="client_email"
                                 tabIndex={3}
-                                autoComplete="marca"
-                                value={data.brand}
-                                onChange={(e) => setData('brand', e.target.value)}
+                                autoComplete="email"
+                                value={data.email}
+                                onChange={(e) => setData('email', e.target.value)}
                             />
                             <label
-                                htmlFor="floating_brand"
+                                htmlFor="floating_email"
                                 className="absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:start-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:font-medium peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:text-gray-400 peer-focus:dark:text-blue-500"
                             >
-                                Marca
+                                Email
                             </label>
-                            <InputError message={errors.brand} />
+                            <InputError message={errors.email} />
                         </div>
                         <div className="group relative z-0 mb-5 w-full">
-                            <input
-                                className="peer block w-full appearance-none border-0 border-b-2 border-gray-300 bg-transparent px-0 py-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-0 focus:outline-none dark:border-gray-600 dark:text-white dark:focus:border-blue-500"
-                                type="text"
-                                name="model_product"
-                                id="model_product"
-                                required
-                                tabIndex={3}
-                                autoComplete="model"
-                                value={data.model}
-                                onChange={(e) => setData('model', e.target.value)}
-                            />
                             <label
-                                htmlFor="floating_model"
-                                className="absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:start-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:font-medium peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:text-gray-400 peer-focus:dark:text-blue-500"
+                                htmlFor="floating_cel"
+                                className="absolute  origin-[0] -translate-y-6 scale-75 transform text-sm text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:start-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:font-medium peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:text-gray-400 peer-focus:dark:text-blue-500"
                             >
-                                Modelo
+                                Celular
                             </label>
-                            <InputError message={errors.model} />
+                            <InputPhone data={data} setData={setData} />
+                            <InputError message={errors.phone} />
                         </div>
-
                         <Button
                             type="submit"
                             className="mt-4 w-full"
                             tabIndex={4}
                             disabled={processing}
                         >
-                            Crear Producto
+                            Crear Cliente
                         </Button>
                     </form>
                 </div>
@@ -136,5 +124,5 @@ export default function CreateProductForm() {
             </div>
             <Toaster />
         </AppLayout>
-    );
+    )
 }

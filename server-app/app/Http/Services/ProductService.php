@@ -85,18 +85,17 @@ class ProductService{
         return $data;
     }
 
-    public function delete($request){
+    public function delete($id){
         try {
-            $productDelete = Product::where('id', $request->id)->with('file')->first();
-            if($productDelete->file){
-                foreach ($productDelete->file as $file){
-                    Storage::disk('public')->delete($file->path);
-                }
+            $productDelete = Product::where('id', $id)->first();
+            if ($productDelete->servis()->count() > 0) {
+                return [
+                    'success' => false,
+                    'code' => 400,
+                    'message' => 'Este producto tiene servicios asociados y no puede ser eliminado.'
+                ];
             }
             $productDelete->delete();
-            if($productDelete->file){
-                $productDelete->file()->delete();
-            }
             $data = [
                 'code' => 200,
                 'status' =>  'success',

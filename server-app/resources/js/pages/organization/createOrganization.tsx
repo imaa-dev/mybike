@@ -31,7 +31,7 @@ type CreateOrganizationForm = {
 }
 const appUrl = import.meta.env.VITE_APP_URL;
 
-const CreateOrganizationForm = () => {
+const CreateOrganization = () => {
     const { showLoading, hideLoading } = useLoading();
     const { data, setData, post, reset, errors, processing } = useForm<Required<CreateOrganizationForm>>({
         file: null,
@@ -199,4 +199,4 @@ const CreateOrganizationForm = () => {
         </AppLayout>
     );
 }
-export default CreateOrganizationForm;
+export default CreateOrganization;

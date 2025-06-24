@@ -5,6 +5,8 @@ import toast, { Toaster } from 'react-hot-toast';
 import { useState } from 'react';
 import ButtonAdd from '@/components/button-add';
 import { Pencil, Trash2 } from 'lucide-react';
+import { deleteProduct } from '@/api/product/productsService';
+import { useConfirmDialog } from '@/context/ModalContext';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -16,21 +18,21 @@ interface ProductDataProp {
     products: ProductData[];
 }
 export default function Product({products}: ProductDataProp){
-    const { post } = useForm({});
-    const [modal, setModal] = useState(false);
-    const [productDelete, setProductDelete] = useState(0);
-    const deleteProduct = (id: number) => {
-        post(`/delete/product/${id}`, {
-            onSuccess: (page) => {
-                const message = (page.props as { flash?: { message?: string } }).flash?.message;
-                if (message) {
-                    toast.success(message);
-                }
-            },
-            onError: (error) => {
-                console.log('ERROR', error)
-            },
+
+    const { showConfirm } = useConfirmDialog();
+    const handleDelete = (productId: number) => {
+        showConfirm({
+            title: "Deseas eliminar el producto",
+            onConfirm: () => handleRemoveProduct(productId)
         })
+    }
+    const handleRemoveProduct = async (id: number) => {
+        const response = await deleteProduct(id);
+        if (response.code === 200) {
+            toast.success(response.message);
+        } else {
+            toast.error(response.message);
+        }
     }
     return(
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -84,8 +86,7 @@ export default function Product({products}: ProductDataProp){
                                             type="button"
                                             className="p-2"
                                             onClick={() => {
-                                                setModal(true);
-                                                setProductDelete(product.id)
+                                                handleDelete(product.id)
                                             }}
                                         >
                                             <Trash2 color={'#b91c1c'} />
@@ -97,32 +98,6 @@ export default function Product({products}: ProductDataProp){
                         </table>
                     </div>
                     </div>
-            {modal && (
-                <div
-                    className="fixed top-0 right-0 left-0 z-50 flex h-screen w-screen items-center justify-center bg-black/50">
-                    <div className="rounded-lg bg-white p-6 shadow-lg dark:bg-gray-700">
-                        <h3 className="mb-4 text-lg text-gray-800 dark:text-gray-200">¿Realmente quieres eliminar el producto?</h3>
-                        <div className="flex justify-end gap-2">
-                            <button
-                                onClick={() => {
-                                    if (productDelete !== null) deleteProduct(productDelete);
-                                    setModal(false);
-                                }}
-                                className="me-2 mb-2 rounded-lg border border-red-700 px-5 py-2.5 text-center text-sm font-medium text-red-700 hover:bg-red-800 hover:text-white focus:ring-4 focus:ring-red-300 focus:outline-none dark:border-red-500 dark:text-red-500 dark:hover:bg-red-600 dark:hover:text-white dark:focus:ring-red-900"
-                            >
-                                Sí, eliminar
-                            </button>
-                            <button
-                                onClick={() => setModal(false)}
-                                type="button"
-                                className="me-2 mb-2 rounded-lg border border-gray-800 px-5 py-2.5 text-center text-sm font-medium text-gray-900 hover:bg-gray-900 hover:text-white focus:ring-4 focus:ring-gray-300 focus:outline-none dark:border-gray-600 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-800"
-                            >
-                                Cancelar
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            )}
             <Toaster />
         </AppLayout>
     )

@@ -5,11 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreOrganizationRequest;
 use App\Http\Services\OrganizationService;
 use App\Models\Organization;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 class OrganizationController extends Controller
@@ -24,7 +20,7 @@ class OrganizationController extends Controller
     public function list(Request $request)
     {
         $organizations = Organization::where('user_id', $request->user()->id)->with('file')->get();
-        return Inertia::render('forms/listOrganization',[
+        return Inertia::render('organization/listOrganization',[
             'organizations' => $organizations,
         ]);
     }
@@ -35,7 +31,7 @@ class OrganizationController extends Controller
     public function show(Request $request)
     {
         $organization = Organization::where('user_id', $request->user()->id)->where('active', true)->with('file')->first();
-        return Inertia::render('organization', [
+        return Inertia::render('organization/organization', [
             'organization' => $organization
         ]);
     }
@@ -49,7 +45,7 @@ class OrganizationController extends Controller
     {
         $organizationFile = Organization::where('id', $organization->id)->with('file')->first();
 
-        return Inertia::render('forms/editOrganizationForm',[
+        return Inertia::render('organization/editOrganization',[
             'organizationUpdate' => $organizationFile,
         ]);
     }
@@ -63,7 +59,6 @@ class OrganizationController extends Controller
     public function delete(Request $request)
     {
         $res = $this->organizationService->delete($request);
-        session()->flash('message', $res['message']);
-        return redirect()->route('organization.list.view');
+        return response()->json($res);
     }
 }

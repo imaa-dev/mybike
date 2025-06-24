@@ -29,7 +29,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 const appUrl = import.meta.env.VITE_APP_URL;
 
-export default function CreateServisForm({clients, products} : ClientDataProp & ProductDataProp) {
+export default function CreateServis({clients, products} : ClientDataProp & ProductDataProp) {
 
     const [reason, setReason] = useState<string>('');
     const [uploadImage, setUploadImage] = useState<string[]>([]);
@@ -47,9 +47,6 @@ export default function CreateServisForm({clients, products} : ClientDataProp & 
             reason_notes: [],
             file: null,
     })
-    const handleRemoveImage = (indexToRemove: number) => {
-        setUploadImage((prev) => prev.filter((_, index) => index !== indexToRemove));
-    };
     const submit:FormEventHandler = (e) => {
         e.preventDefault();
          post('/create/service', {
@@ -151,7 +148,7 @@ export default function CreateServisForm({clients, products} : ClientDataProp & 
                                      }}
                                  />
                                  <label
-                                     htmlFor="floating_email"
+                                     htmlFor="reason"
                                      className="absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:start-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:font-medium peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:text-gray-400 peer-focus:dark:text-blue-500"
                                  >
                                      Agregar detalle ingreso de servicio
@@ -205,14 +202,6 @@ export default function CreateServisForm({clients, products} : ClientDataProp & 
                                                  alt={`preview-${index}`}
                                                  className="w-full h-28 object-cover rounded border"
                                              />
-                                             <button
-                                                 type="button"
-                                                 onClick={() => handleRemoveImage(index)}
-                                                 className="absolute top-1 right-1 rounded-full bg-red-500 text-white p-2 text-xs opacity-80 hover:opacity-100"
-                                                 title="Eliminar imagen"
-                                             >
-                                                 x
-                                             </button>
                                          </div>
                                      ))}
                                  </div>
@@ -234,7 +223,6 @@ export default function CreateServisForm({clients, products} : ClientDataProp & 
                                          setUploadImage([])
                                          showLoading();
                                          const file = e.target.files;
-
                                          if (file) {
                                              handleImageUploadMultiple(file)
                                                  .then((res) => {
@@ -251,7 +239,7 @@ export default function CreateServisForm({clients, products} : ClientDataProp & 
                                      }}
                                  />
                                  <label
-                                     htmlFor="floating_email"
+                                     htmlFor="file"
                                      className="absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:start-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:font-medium peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:text-gray-400 peer-focus:dark:text-blue-500"
                                  >
                                      Fotos
