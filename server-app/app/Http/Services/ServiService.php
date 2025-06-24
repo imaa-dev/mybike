@@ -104,14 +104,16 @@ class ServiService
         return $data;
     }
 
-    public function delete($request)
+    public function delete($id)
     {
         try {
-            $serviceDelete = Servi::where('id', $request->id)->with('file')->first();
+            $serviceDelete = Servi::where('id', $id)->with('file')->first();
+            if($serviceDelete->file){
+                Storage::disk('public')->delete($serviceDelete->file->path);
+            }
             $serviceDelete->delete();
-            $serviceDelete->file()->delete();
-            if($request->hasFile('file')){
-                Storage::disk('public')->delete($request->file->path);
+            if($serviceDelete->file){
+                $serviceDelete->file()->delete();
             }
             $data = [
                 'code' => 200,
@@ -125,7 +127,6 @@ class ServiService
                 'message' => 'ERROR',
                 'status' => 'fail'
             ];
-
         }
         return $data;
     }

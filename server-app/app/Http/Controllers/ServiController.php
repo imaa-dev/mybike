@@ -112,10 +112,9 @@ class ServiController extends Controller
         return redirect()->route('services.view');
     }
 
-    public function delete(Request $request){
-        $res = $this->serviService->delete($request);
-        session()->flash('message', $res['message']);
-        return redirect()->route('services.list.reception.view');
+    public function delete($id){
+        $res = $this->serviService->delete($id);
+        return response()->json($res);
     }
 
 }

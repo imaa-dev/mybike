@@ -1,8 +1,7 @@
 import AppLayout from '@/layouts/app-layout';
 import type { BreadcrumbItem, ProductData } from '@/types';
-import { Head, router, useForm } from '@inertiajs/react';
+import { Head, router } from '@inertiajs/react';
 import toast, { Toaster } from 'react-hot-toast';
-import { useState } from 'react';
 import ButtonAdd from '@/components/button-add';
 import { Pencil, Trash2 } from 'lucide-react';
 import { deleteProduct } from '@/api/product/productsService';
@@ -44,7 +43,6 @@ export default function Product({products}: ProductDataProp){
                             <thead
                                 className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                             <tr>
-
                                 <th scope="col" className="px-6 py-3">
                                     Tipo
                                 </th>

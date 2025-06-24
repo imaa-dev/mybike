@@ -1,6 +1,6 @@
 import api from '@/api/AxiosIntance';
 
-const deleteClient = async (id: number): Promise<{ code: number, message: string, success: boolean }> => {
+const deleteClient = async (id: number): Promise<{ code: number; message: string; success: boolean }> => {
     try {
         const response = await api.delete(`/delete/client/${id}`)
         return response.data
