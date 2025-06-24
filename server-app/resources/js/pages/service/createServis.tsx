@@ -9,12 +9,12 @@ import {
 import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
 import { FormEventHandler, useState } from 'react';
-import toast, { Toaster } from 'react-hot-toast';
 import { handleImageUploadMultiple } from '@/lib/utils';
 import { useLoading } from '@/context/LoadingContext';
 import { Card } from '@/components/ui/card';
 import { Plus, Save } from 'lucide-react';
 import { SidebarGroupLabel } from '@/components/ui/sidebar';
+import { useToast } from '@/context/ToastContext';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -30,7 +30,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 const appUrl = import.meta.env.VITE_APP_URL;
 
 export default function CreateServis({clients, products} : ClientDataProp & ProductDataProp) {
-
+    const { success, error } = useToast()
     const [reason, setReason] = useState<string>('');
     const [uploadImage, setUploadImage] = useState<string[]>([]);
     const { showLoading, hideLoading } = useLoading();
@@ -53,11 +53,12 @@ export default function CreateServis({clients, products} : ClientDataProp & Prod
              onSuccess: (page) => {
                  const message = (page.props as { flash?: { message?: string } }).flash?.message;
                  if (message) {
-                     toast.success(message);
+                     success(message);
                  }
              },
-             onError: (error) => {
-                 console.log(error,'ERROR POST')
+             onError: (e) => {
+                 error(e.message)
+                 console.log(e,'ERROR POST')
              }
          })
     }
@@ -158,7 +159,7 @@ export default function CreateServis({clients, products} : ClientDataProp & Prod
                                  type="button"
                                  onClick={() => {
                                      if(reason.trim() === ''){
-                                         toast.error('El detalle de ingreso no puede ir vacio')
+                                         error('El detalle de ingreso no puede ir vacio')
                                          return
                                      }
                                      setData('reason_notes', [...data.reason_notes, {reason_note: reason}])
@@ -231,7 +232,7 @@ export default function CreateServis({clients, products} : ClientDataProp & Prod
                                                      hideLoading();
                                                  })
                                                  .catch((err) => {
-                                                     toast.error('Error al comprimir la imagen');
+                                                     error('Error al comprimir la imagen');
                                                      console.log('ONCHANGE_INPUT_FILE_ERROR', err);
                                                      hideLoading();
                                                  });
@@ -252,8 +253,6 @@ export default function CreateServis({clients, products} : ClientDataProp & Prod
                                  <Save /> Crear Servicio
                              </Button>
                          </div>
-
-                         <Toaster />
                      </form>
                  </div>
              </div>

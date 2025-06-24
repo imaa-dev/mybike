@@ -1,13 +1,13 @@
 import { Button } from '@/components/ui/button';
 import { FormEventHandler, useState } from 'react';
 import { Head, useForm } from '@inertiajs/react';
-import toast from 'react-hot-toast';
 import AppLayout from '@/layouts/app-layout';
 import { BreadcrumbItem, OrganizationData } from '@/types';
 import InputError from '@/components/input-error';
 import handleImageUploadSingle from '@/lib/utils';
 import { useLoading } from '@/context/LoadingContext';
 import { SidebarGroupLabel } from '@/components/ui/sidebar';
+import { useToast } from '@/context/ToastContext';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -32,6 +32,7 @@ interface OrganizationEditFormProps {
     organizationUpdate: OrganizationData;
 }
 export default function EditOrganization({organizationUpdate}: OrganizationEditFormProps) {
+    const { success, error } = useToast()
     const { showLoading, hideLoading } = useLoading();
     const { data, setData, post, reset, errors, processing } = useForm<Required<EditOrganizationForm>>({
         id: organizationUpdate.id,
@@ -53,10 +54,13 @@ export default function EditOrganization({organizationUpdate}: OrganizationEditF
             onSuccess: (page) => {
                 const message = (page.props as { flash?: { message?: string } }).flash?.message;
                 if(message) {
-                    toast.success(message)
+                    success(message)
                 }
                 reset()
-            }
+            },
+            onError: ((res) => {
+                error(res.message)
+            })
         })
     }
 
@@ -116,7 +120,7 @@ export default function EditOrganization({organizationUpdate}: OrganizationEditF
                                                 setData('file', res);
                                                 hideLoading()
                                             }).catch((err) => {
-                                                toast.error('Error al comprimir la imagen')
+                                                error('Error al comprimir la imagen')
                                                 console.log('ONCHANGE_INPUT_FILE_ERROR', err)
                                                 hideLoading()
                                             });
@@ -194,7 +198,6 @@ export default function EditOrganization({organizationUpdate}: OrganizationEditF
                                     <InputError message={errors.active} />
                                 </div>
                             </div>
-
                             <Button
                                 type="submit"
                                 className="mt-4 w-full"

@@ -3,12 +3,12 @@ import { Head, useForm } from '@inertiajs/react';
 import type { BreadcrumbItem } from '@/types';
 import { Button } from '@/components/ui/button';
 import { FormEventHandler } from 'react';
-import toast, { Toaster } from 'react-hot-toast';
 import InputError from '@/components/input-error';
 import { SidebarGroupLabel } from '@/components/ui/sidebar';
 import 'react-phone-input-2/lib/style.css'
 import ButtonBack from '@/components/button-back';
 import InputPhone from '@/components/input-phone';
+import { useToast } from '@/context/ToastContext';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -28,7 +28,7 @@ type UserData = {
     file: File | null;
 }
 export default function CreateClient() {
-
+    const { success, error } = useToast()
     const { data, setData, post, errors, processing } = useForm<Required<UserData>>({
         name: '',
         email: '',
@@ -42,9 +42,12 @@ export default function CreateClient() {
             onSuccess: (page) => {
                 const message = (page.props as { flash?: { message?: string } }).flash?.message;
                 if (message) {
-                    toast.success(message);
+                    success(message);
                 }
-            }
+            },
+            onError:((e) => {
+                error(e.message)
+            })
         })
     }
 
@@ -122,7 +125,6 @@ export default function CreateClient() {
                 </div>
             </div>
             </div>
-            <Toaster />
         </AppLayout>
     )
 }

@@ -1,11 +1,11 @@
 import AppLayout from '@/layouts/app-layout';
 import { Head, router } from '@inertiajs/react';
 import type { BreadcrumbItem, ServiData } from '@/types';
-import toast, { Toaster } from 'react-hot-toast';
 import { Eye, Pencil, Trash2 } from 'lucide-react';
 import { deleteService } from '@/api/services/serviService';
 import { useConfirmDialog } from '@/context/ModalContext';
 import { useState } from 'react';
+import { useToast } from '@/context/ToastContext';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -23,6 +23,7 @@ interface ServiDataProp {
 }
 
 export default function ListReceptionService ({servis}: ServiDataProp) {
+    const { success, error } = useToast()
     const [serviceShow, setServiceShow] = useState(servis)
     const { showConfirm } = useConfirmDialog()
     const handleDelete = (serviceId: number) => {
@@ -35,10 +36,10 @@ export default function ListReceptionService ({servis}: ServiDataProp) {
     const removeService = async (id: number) => {
         const response = await deleteService(id)
         if (response.code === 200) {
-            toast.success(response.message);
+            success(response.message);
             setServiceShow(prev => prev.filter(ser => ser.id !== id))
         } else {
-            toast.error(response.message);
+            error(response.message);
         }
     }
     return (
@@ -149,6 +150,7 @@ export default function ListReceptionService ({servis}: ServiDataProp) {
                                         type="button"
                                         className="p-2"
                                         onClick={() => {
+                                            success('DIAGNOSTICAR SERVICIO')
                                             console.log('DIAGNOSTICAR SERVICIO')
                                         }}
                                     >
@@ -161,7 +163,6 @@ export default function ListReceptionService ({servis}: ServiDataProp) {
                     </table>
                 </div>
             </div>
-            <Toaster />
         </AppLayout>
     );
 }

@@ -1,12 +1,12 @@
 import AppLayout from '@/layouts/app-layout';
 import type { BreadcrumbItem, ProductData } from '@/types';
 import { Head, router } from '@inertiajs/react';
-import toast, { Toaster } from 'react-hot-toast';
 import ButtonAdd from '@/components/button-add';
 import { Pencil, Trash2 } from 'lucide-react';
 import { deleteProduct } from '@/api/product/productsService';
 import { useConfirmDialog } from '@/context/ModalContext';
 import { useState } from 'react';
+import { useToast } from '@/context/ToastContext';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -20,6 +20,8 @@ interface ProductDataProp {
 export default function Product({products}: ProductDataProp){
     const [productsShow, setProductsShow] = useState(products)
     const { showConfirm } = useConfirmDialog();
+    const { success, error } = useToast()
+
     const handleDelete = (productId: number) => {
         showConfirm({
             title: "Deseas eliminar el producto",
@@ -29,10 +31,10 @@ export default function Product({products}: ProductDataProp){
     const handleRemoveProduct = async (id: number) => {
         const response = await deleteProduct(id);
         if (response.code === 200) {
-            toast.success(response.message);
+            success(response.message);
             setProductsShow(prev => prev.filter(pro => pro.id !== id))
         } else {
-            toast.error(response.message);
+            error(response.message);
         }
     }
     return(
@@ -97,8 +99,7 @@ export default function Product({products}: ProductDataProp){
                             </tbody>
                         </table>
                     </div>
-                    </div>
-            <Toaster />
+                </div>
         </AppLayout>
     )
 }

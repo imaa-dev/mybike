@@ -1,12 +1,12 @@
 import AppLayout from '@/layouts/app-layout';
 import { Head, router } from '@inertiajs/react';
 import { BreadcrumbItem, OrganizationData } from '@/types';
-import toast, { Toaster } from 'react-hot-toast';
 import { useEffect, useState } from 'react';
 import ButtonBack from '@/components/button-back';
 import { deleteOrganization } from '@/api/organization/organizationService';
 import { useConfirmDialog } from '@/context/ModalContext';
 import { Pencil, Trash2 } from 'lucide-react';
+import { useToast } from '@/context/ToastContext';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -23,6 +23,7 @@ interface OrganizationDataProp {
 }
 const appUrl = import.meta.env.VITE_APP_URL;
 export default function ListOrganization({ organizations }: OrganizationDataProp) {
+    const { success, error } = useToast()
     const [orgList, setOrgList] = useState(organizations);
     const { showConfirm } = useConfirmDialog();
     useEffect(() => {
@@ -37,10 +38,10 @@ export default function ListOrganization({ organizations }: OrganizationDataProp
     const handleRemoveOrganization = async (id: number) => {
         const response = await deleteOrganization(id)
         if (response.code === 200) {
-            toast.success(response.message);
+            success(response.message);
             setOrgList(prev => prev.filter(org => org.id !== id));
         } else {
-            toast.error(response.message);
+            error(response.message);
         }
     }
     return (
@@ -133,7 +134,6 @@ export default function ListOrganization({ organizations }: OrganizationDataProp
                     </table>
                 </div>
             </div>
-            <Toaster />
         </AppLayout>
     );
 }

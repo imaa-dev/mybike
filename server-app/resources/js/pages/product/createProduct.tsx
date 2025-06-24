@@ -4,9 +4,9 @@ import { Head, useForm } from '@inertiajs/react';
 import AppLayout from '@/layouts/app-layout';
 import { BreadcrumbItem } from '@/types';
 import { FormEventHandler } from 'react';
-import toast, { Toaster } from 'react-hot-toast';
 import { SidebarGroupLabel } from '@/components/ui/sidebar';
 import ButtonBack from '@/components/button-back';
+import { useToast } from '@/context/ToastContext';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -26,6 +26,7 @@ interface ProductDataProps {
 }
 
 export default function CreateProduct() {
+    const { success, error } = useToast()
     const { data, setData, post, errors, processing } = useForm<Required<ProductDataProps>>({
         type: '',
         brand: '',
@@ -39,11 +40,11 @@ export default function CreateProduct() {
             onSuccess: (page) => {
                 const message = (page.props as { flash?: { message?: string } }).flash?.message;
                 if (message) {
-                    toast.success(message);
+                    success(message);
                 }
             },
-            onError: (error) => {
-                toast.error(error.message);
+            onError: (e) => {
+                error(e.message);
             }
         })
     }
@@ -134,7 +135,6 @@ export default function CreateProduct() {
                 </div>
             </div>
             </div>
-            <Toaster />
         </AppLayout>
     );
 }

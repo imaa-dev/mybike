@@ -1,7 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { Head, useForm } from '@inertiajs/react';
 import { FormEventHandler } from 'react';
-import toast, { Toaster } from 'react-hot-toast';
 import AppLayout from '@/layouts/app-layout';
 import { BreadcrumbItem } from '@/types';
 import {useState} from "react";
@@ -10,6 +9,7 @@ import InputError from '@/components/input-error';
 import { useLoading } from '@/context/LoadingContext';
 import { SidebarGroupLabel } from '@/components/ui/sidebar';
 import ButtonBack from '@/components/button-back';
+import { useToast } from '@/context/ToastContext';
 
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -32,6 +32,7 @@ type CreateOrganizationForm = {
 const appUrl = import.meta.env.VITE_APP_URL;
 
 const CreateOrganization = () => {
+    const { success, error } = useToast()
     const { showLoading, hideLoading } = useLoading();
     const { data, setData, post, reset, errors, processing } = useForm<Required<CreateOrganizationForm>>({
         file: null,
@@ -53,22 +54,22 @@ const CreateOrganization = () => {
             onSuccess: (page) => {
                 const message = (page.props as { flash?: { message?: string } }).flash?.message;
                 if(message) {
-                    toast.success(message);
+                    success(message);
                 }
                 reset()
             },
             onError: (res) => {
                 if(res.file){
-                    toast.error(res.file);
+                    error(res.file);
                 }
                 if(res.description){
-                    toast.error(res.description);
+                    error(res.description);
                 }
                 if(res.active){
-                    toast.error(res.active);
+                    error(res.active);
                 }
                 if(res.name){
-                    toast.error(res.name);
+                    error(res.name);
                 }
             }
         })
@@ -112,7 +113,7 @@ const CreateOrganization = () => {
                                                 handleImageChange(res);
                                                 hideLoading()
                                             }).catch((err) => {
-                                                toast.error('Error al comprimir la imagen')
+                                                error('Error al comprimir la imagen')
                                                 console.log('ONCHANGE_INPUT_FILE_ERROR', err)
                                                 hideLoading()
                                             });
@@ -192,7 +193,6 @@ const CreateOrganization = () => {
                             </Button>
                         </form>
                     </div>
-                    <Toaster />
                 </div>
             </div>
             </div>

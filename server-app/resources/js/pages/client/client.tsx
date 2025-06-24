@@ -1,7 +1,6 @@
 import AppLayout from '@/layouts/app-layout';
 import { BreadcrumbItem, User } from '@/types';
 import { Head, router } from '@inertiajs/react';
-import toast, { Toaster } from 'react-hot-toast';
 import { useInitials } from '@/hooks/use-initials';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import ButtonAdd from '@/components/button-add';
@@ -9,6 +8,7 @@ import { useConfirmDialog } from '@/context/ModalContext';
 import { deleteClient } from '@/api/clients/clientsService';
 import { Pencil, Trash2 } from 'lucide-react';
 import { useState } from 'react';
+import { useToast } from '@/context/ToastContext';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -20,6 +20,7 @@ interface ClientDataProp {
     clients: User[]
 }
 export default function Client({clients}: ClientDataProp){
+    const { success, error } = useToast()
     const [clientsShow, setClientsShow] = useState(clients)
     const getInitials = useInitials();
     const { showConfirm } = useConfirmDialog();
@@ -32,10 +33,10 @@ export default function Client({clients}: ClientDataProp){
     const removeClient = async (id: number) => {
         const response = await deleteClient(id);
         if (response.code === 200) {
-            toast.success(response.message);
+            success(response.message);
             setClientsShow(prev => prev.filter(cli => cli.id !== id))
         } else {
-            toast.error(response.message);
+            error(response.message);
         }
     }
     return (
@@ -108,9 +109,7 @@ export default function Client({clients}: ClientDataProp){
                             </tbody>
                         </table>
                     </div>
-                    </div>
-
-            <Toaster />
+                </div>
         </AppLayout>
     )
 }

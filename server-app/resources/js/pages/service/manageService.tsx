@@ -7,13 +7,13 @@ import {
     ServiData,
     ServiForm
 } from '@/types';
-import toast, { Toaster } from 'react-hot-toast';
 import { FormEventHandler, useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { deleteReason, uploadReasons } from '@/api/services/reasonsService';
 import ServiceDetailsForm from '@/components/forms/service/ServiceDetailsForm';
 import ServiceImages from '@/components/forms/service/ServiceImages';
 import ServiceUpdateForm from '@/components/forms/service/ServiceUpdateForm';
+import { useToast } from '@/context/ToastContext';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -33,6 +33,7 @@ interface ServiProp {
 export default function ManageService({ servi, clients, products }: ServiProp & ProductDataProp & ClientDataProp) {
     const [reason, setReason] = useState<string>('');
     const [reasons, setReasons] = useState<Reasons[]>(servi.reasons)
+    const { success, error } = useToast()
     const { data, setData, post, errors, processing } = useForm<Required<ServiForm>>({
         organization_id: servi.organization_id,
         product_id: servi.product_id,
@@ -42,19 +43,21 @@ export default function ManageService({ servi, clients, products }: ServiProp & 
     const uploadReason = async (reason: string, id: number) => {
         const response = await uploadReasons(reason, id)
         if(response.code === 200){
-            toast.success(response.message)
+            success(response.message)
             setReasons(response.reasons)
             setReason('')
         } else {
-            toast.error(response.message)
+            error(response.message)
         }
     }
 
     const removeReason = async (id: number) => {
         const response = await deleteReason(id)
         if(response.code === 200){
-            toast.success(response.message)
+            success(response.message)
             setReasons((prevReason) => prevReason.filter((reason) => reason.id !== id))
+        } else {
+            error(response.message)
         }
     }
     const submit: FormEventHandler = (e) => {
@@ -63,9 +66,12 @@ export default function ManageService({ servi, clients, products }: ServiProp & 
             onSuccess: (page) => {
                 const message = (page.props as { flash?: { message?: string } }).flash?.message;
                 if (message) {
-                    toast.success(message);
+                    success(message);
                 }
             },
+            onError: ((e) => {
+                error(e.message)
+            })
         });
     };
     return (
@@ -100,7 +106,6 @@ export default function ManageService({ servi, clients, products }: ServiProp & 
                  <ServiceImages initialFiles={servi.file} serviceId={servi.id} />
                 </div>
             </div>
-            <Toaster />
         </AppLayout>
     );
 }

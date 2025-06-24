@@ -11,20 +11,13 @@ class ClientService {
     public function create($request)
     {
         try {
-            if($request->hasFile('file')){
-                $path = $request->file('file')->store('client/'.$request->user()->id, 'public');
-            }
+
             $client = new Client;
             $client->user_id = $request->user()->id;
             $client->name = $request->name;
             $client->email = $request->email;
             $client->phone = $request->phone;
             $client->save();
-            if($request->hasFile('file')){
-                $client->file()->create([
-                    'path' => $path
-                ]);
-            }
             $data = [
                 'status' => 'success',
                 'code' => 200,
@@ -49,31 +42,11 @@ class ClientService {
     public function update($request)
     {
         try {
-            $path = '';
-            $client = Client::where('id', $request->id)->with('file')->first();
-            if($request->hasFile('file') && $client->file){
-                $path = $request->file('file')->store('client/'.$request->user()->id, 'public');
-                Storage::disk('public')->delete($client->file->path);
-            }
-            if($request->hasFile('file') && !$client->file){
-                $path = $request->file('file')->store('client/'.$request->user()->id, 'public');
-            }
-
+            $client = Client::where('id', $request->id)->first();
             $client->name = $request->name;
             $client->email = $request->email;
             $client->phone = $request->phone;
             $client->save();
-            if($request->hasFile('file') && $client->file){
-                $client->file()->delete();
-                $client->file()->create([
-                    'path' => $path
-                ]);
-            }
-            if($request->hasFile('file') && !$client->file){
-                $client->file()->create([
-                    'path' => $path
-                ]);
-            }
             $data = [
                 'success' => true,
                 'code' => 200,

@@ -9,6 +9,7 @@ import 'react-phone-input-2/lib/style.css'
 import { SidebarGroupLabel } from '@/components/ui/sidebar';
 import ButtonBack from '@/components/button-back';
 import InputPhone from '@/components/input-phone';
+import { useToast } from '@/context/ToastContext';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -33,7 +34,7 @@ type ClientData = {
     file: File | null
 }
 export default function EditClient({client}: ClientProp) {
-
+    const { success, error } = useToast()
     const { post, setData, data, reset, errors, processing } = useForm<Required<ClientData>>({
         id: client.id,
         name: client.name,
@@ -48,10 +49,13 @@ export default function EditClient({client}: ClientProp) {
             onSuccess: (page) => {
                 const message = (page.props as { flash?: { message?: string } }).flash?.message;
                 if(message) {
-                    toast.success(message);
+                    success(message);
                 }
                 reset()
-            }
+            },
+            onError: ((e) => {
+                error(e.message)
+            })
         })
     }
 

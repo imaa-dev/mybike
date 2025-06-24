@@ -1,4 +1,3 @@
-// context/ConfirmDialogContext.tsx
 import { createContext, useContext, useState, ReactNode } from "react";
 
 interface ConfirmDialogOptions {
@@ -15,7 +14,7 @@ interface ConfirmDialogContextType {
 
 const ConfirmDialogContext = createContext<ConfirmDialogContextType | null>(null);
 
-export const useConfirmDialog = () => {
+  export const useConfirmDialog = () => {
     const ctx = useContext(ConfirmDialogContext);
     if (!ctx) throw new Error("useConfirmDialog must be used inside ConfirmDialogProvider");
     return ctx;

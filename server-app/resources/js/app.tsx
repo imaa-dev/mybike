@@ -7,6 +7,7 @@ import { initializeTheme } from './hooks/use-appearance';
 import { LoadingProvider } from '@/context/LoadingContext';
 import LoadingModal from '@/components/LoadingModal';
 import { ConfirmDialogProvider } from '@/context/ModalContext';
+import { ToastProvider } from '@/context/ToastContext';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -17,12 +18,14 @@ createInertiaApp({
         const root = createRoot(el);
 
         root.render(
-            <ConfirmDialogProvider>
-                <LoadingProvider>
-                    <LoadingModal />
-                    <App {...props} />
-                </LoadingProvider>
-            </ConfirmDialogProvider>
+            <ToastProvider>
+                <ConfirmDialogProvider>
+                    <LoadingProvider>
+                        <LoadingModal />
+                        <App {...props} />
+                    </LoadingProvider>
+                </ConfirmDialogProvider>
+            </ToastProvider>
         );
     },
     progress: {

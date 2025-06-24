@@ -43,31 +43,11 @@ class ProductService{
 
     public function update($request){
         try {
-            if($request->hasFile('file')){
-                foreach($request->file('file') as $file){
-                    $path =  $file->store('product/'.$request->user()->id, 'public');
-                    $product_paths[] = $path;
-                }
-            }
-
-            $productUpdate = Product::where('id', $request->id)->with('file')->first();
+            $productUpdate = Product::where('id', $request->id)->first();
             $productUpdate->type =  $request->type;
             $productUpdate->brand =  $request->brand;
             $productUpdate->model =  $request->model;
-            if($request->hasFile('file')){
-                foreach ($productUpdate->file as $file){
-                    Storage::disk('public')->delete($file->path);
-                }
-            }
             $productUpdate->save();
-            if($request->hasFile('file')){
-                $productUpdate->file()->delete();
-                foreach ($product_paths as $path){
-                    $productUpdate->file()->create([
-                        'path' => $path
-                    ]);
-                }
-            }
             $data = [
                 'code' => 200,
                 'status' =>  'success',

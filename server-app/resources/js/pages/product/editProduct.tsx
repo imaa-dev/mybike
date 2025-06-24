@@ -7,6 +7,7 @@ import toast, { Toaster } from 'react-hot-toast';
 import { FormEventHandler } from 'react';
 import { SidebarGroupLabel } from '@/components/ui/sidebar';
 import ButtonBack from '@/components/button-back';
+import { useToast } from '@/context/ToastContext';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -32,7 +33,7 @@ interface Product {
     product: ProductData
 }
 export default function EditProduc({product}: Product) {
-
+    const { success, error } = useToast()
     const { data, setData, post, errors, processing } = useForm<Required<ProductDataProps>>({
         id: product.id,
         type: product.type,
@@ -47,8 +48,11 @@ export default function EditProduc({product}: Product) {
             onSuccess: ((page) => {
                 const message = (page.props as { flash?: { message?: string } }).flash?.message;
                 if(message){
-                    toast.success(message);
+                    success(message);
                 }
+            }),
+            onError: ((e) => {
+                error(e.message)
             })
         })
     }
