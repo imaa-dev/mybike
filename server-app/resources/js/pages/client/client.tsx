@@ -8,6 +8,7 @@ import ButtonAdd from '@/components/button-add';
 import { useConfirmDialog } from '@/context/ModalContext';
 import { deleteClient } from '@/api/clients/clientsService';
 import { Pencil, Trash2 } from 'lucide-react';
+import { useState } from 'react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -19,6 +20,7 @@ interface ClientDataProp {
     clients: User[]
 }
 export default function Client({clients}: ClientDataProp){
+    const [clientsShow, setClientsShow] = useState(clients)
     const getInitials = useInitials();
     const { showConfirm } = useConfirmDialog();
     const handleDelete = (clientId: number) => {
@@ -31,6 +33,7 @@ export default function Client({clients}: ClientDataProp){
         const response = await deleteClient(id);
         if (response.code === 200) {
             toast.success(response.message);
+            setClientsShow(prev => prev.filter(cli => cli.id !== id))
         } else {
             toast.error(response.message);
         }
@@ -39,8 +42,8 @@ export default function Client({clients}: ClientDataProp){
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Cliente" />
             <ButtonAdd route="/create/client" />
-                    <div className="flex h-full flex-1 flex-col items-center gap-4 rounded-xl">
-                        <div className="relative m-5 overflow-x-auto shadow-md sm:rounded-lg">
+            <div className="flex h-full flex-1 flex-col items-center gap-4 px-1 sm:px-5">
+                <div className="w-full max-w-full overflow-x-auto rounded-lg border shadow-md">
                         <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                             <thead
                                 className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -60,7 +63,7 @@ export default function Client({clients}: ClientDataProp){
                             </tr>
                             </thead>
                             <tbody>
-                            {clients.map((client: User, index: number)=> (
+                            {clientsShow.map((client: User, index: number)=> (
                                 <tr key={index} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
 
                                     <th scope="row"

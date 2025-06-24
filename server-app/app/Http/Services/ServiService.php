@@ -109,11 +109,15 @@ class ServiService
         try {
             $serviceDelete = Servi::where('id', $id)->with('file')->first();
             if($serviceDelete->file){
-                Storage::disk('public')->delete($serviceDelete->file->path);
+                foreach ($serviceDelete->file as $file){
+                    Storage::disk('public')->delete($file->path);
+                }
             }
             $serviceDelete->delete();
             if($serviceDelete->file){
-                $serviceDelete->file()->delete();
+                foreach ($serviceDelete->file as $file){
+                    $file->delete();
+                }
             }
             $data = [
                 'code' => 200,

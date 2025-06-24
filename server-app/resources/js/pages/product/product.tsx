@@ -6,6 +6,7 @@ import ButtonAdd from '@/components/button-add';
 import { Pencil, Trash2 } from 'lucide-react';
 import { deleteProduct } from '@/api/product/productsService';
 import { useConfirmDialog } from '@/context/ModalContext';
+import { useState } from 'react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -17,7 +18,7 @@ interface ProductDataProp {
     products: ProductData[];
 }
 export default function Product({products}: ProductDataProp){
-
+    const [productsShow, setProductsShow] = useState(products)
     const { showConfirm } = useConfirmDialog();
     const handleDelete = (productId: number) => {
         showConfirm({
@@ -29,6 +30,7 @@ export default function Product({products}: ProductDataProp){
         const response = await deleteProduct(id);
         if (response.code === 200) {
             toast.success(response.message);
+            setProductsShow(prev => prev.filter(pro => pro.id !== id))
         } else {
             toast.error(response.message);
         }
@@ -37,8 +39,8 @@ export default function Product({products}: ProductDataProp){
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Productos" />
                 <ButtonAdd route="/create/product" />
-                    <div className="flex h-full flex-1 flex-col items-center gap-4 rounded-xl">
-                        <div className="relative m-5 overflow-x-auto shadow-md sm:rounded-lg">
+                <div className="flex h-full flex-1 flex-col items-center gap-4 px-4 sm:px-5">
+                    <div className="w-full max-w-full overflow-x-auto rounded-lg border shadow-md">
                         <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                             <thead
                                 className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -58,7 +60,7 @@ export default function Product({products}: ProductDataProp){
                             </tr>
                             </thead>
                             <tbody>
-                            {products.map((product: ProductData, index) => (
+                            {productsShow.map((product: ProductData, index) => (
                                 <tr key={index} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
                                     <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
                                         {product.type}

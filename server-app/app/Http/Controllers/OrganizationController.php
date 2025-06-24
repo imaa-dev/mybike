@@ -26,7 +26,7 @@ class OrganizationController extends Controller
     }
     public function create()
     {
-        return Inertia::render('forms/createOrganizationForm');
+        return Inertia::render('organization/createOrganization');
     }
     public function show(Request $request)
     {
