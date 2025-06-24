@@ -130,6 +130,12 @@ export interface ServiData {
     created_at: Date;
     updated_at: Date;
 }
+export interface ServiForm {
+    organization_id: number;
+    product_id: number;
+    client_id: number;
+    date_entry: string;
+}
 
 export interface FileResponse {
     code: number;

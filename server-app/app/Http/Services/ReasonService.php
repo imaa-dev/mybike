@@ -33,7 +33,7 @@ class ReasonService{
             $data = [
                 'code' => 200,
                 'message' => 'Detalle de ingreso agregado satisfactoriamente',
-                'status' => true,
+                'success' => true,
                 'reasons' => $reasonServi
             ];
         } catch (\Throwable $th){
@@ -41,7 +41,28 @@ class ReasonService{
             $data = [
                 'code' => 500,
                 'mesaage' => 'ERROR',
-                'status' => false
+                'success' => false,
+                'reasons' => []
+            ];
+        }
+        return $data;
+    }
+    public function removeReason($id)
+    {
+        try {
+            $reasonRemove = Reason::where('id', $id)->first();
+            $reasonRemove->delete();
+            $data = [
+                'code' => 200,
+                'message' => 'Detalle de ingreso eliminado',
+                'success' => false,
+            ];
+        }catch (\Throwable $th){
+            Log::error($th);
+            $data = [
+                'code' => 500,
+                'message' => 'ERROR',
+                'success' => false,
             ];
         }
         return $data;

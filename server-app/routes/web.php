@@ -64,7 +64,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // Reason routes
     Route::post('store-reason-service', [ReasonController::class, 'store'])->name('reason.store');
-    
+    Route::delete('delete-reason-service/{id}', [ReasonController::class, 'delete'])->name('reason.delete');
 });
 
 require __DIR__.'/settings.php';

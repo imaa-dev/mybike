@@ -99,7 +99,7 @@ class ServiController extends Controller
             ->first();
         $products = Product::where('user_id', $request->user()->id)->with('file')->get();
         $clients = Client::where('user_id', $request->user()->id)->with('file')->get();
-        return Inertia::render('forms/manageServiceForm', [
+        return Inertia::render('service/manageService', [
             'servi' => $serviceFile,
             'clients' => $clients,
             'products' => $products

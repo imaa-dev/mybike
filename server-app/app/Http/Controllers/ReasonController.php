@@ -17,7 +17,12 @@ class ReasonController extends Controller
 
     public function store(Request $request)
     {
-        $res = $this->reasonService->store($request->reason, $request->id);
+        $res = $this->reasonService->store($request->reason, $request->service_id);
         return response()->json($res);
+    }
+    public function delete($id)
+    {
+        $res = $this->reasonService->removeReason($id);
+        return response()->json($res); 
     }
 }

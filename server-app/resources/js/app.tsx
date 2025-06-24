@@ -6,6 +6,7 @@ import { createRoot } from 'react-dom/client';
 import { initializeTheme } from './hooks/use-appearance';
 import { LoadingProvider } from '@/context/LoadingContext';
 import LoadingModal from '@/components/LoadingModal';
+import { ConfirmDialogProvider } from '@/context/ModalContext';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -16,10 +17,12 @@ createInertiaApp({
         const root = createRoot(el);
 
         root.render(
-            <LoadingProvider>
-                <LoadingModal />
-                <App {...props} />
-            </LoadingProvider>
+            <ConfirmDialogProvider>
+                <LoadingProvider>
+                    <LoadingModal />
+                    <App {...props} />
+                </LoadingProvider>
+            </ConfirmDialogProvider>
         );
     },
     progress: {
