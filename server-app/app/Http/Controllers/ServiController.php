@@ -29,6 +29,9 @@ class ServiController extends Controller
         if($organization !== null){
             $notOrganization = false;
         }
+        // need get count service RECEPCIONADO
+        // create a function in service
+
         return Inertia::render('service/service', [
             'notOrganization' => $notOrganization
         ]);

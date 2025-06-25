@@ -21,7 +21,15 @@ export interface NavItem {
     href: string;
     icon?: LucideIcon | null;
     isActive?: boolean;
+    handleDelete?: () => void;
 }
+export interface NavItemDrop {
+    title: string;
+    icon?: LucideIcon | null;
+    isActive?: boolean;
+
+}
+
 export interface SharedData {
     name: string;
     quote: { message: string; author: string };

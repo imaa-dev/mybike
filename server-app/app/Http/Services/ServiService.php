@@ -58,7 +58,7 @@ class ServiService
     public function update($request)
     {
         try {
-            
+
             $serviceUpdate = Servi::where('id', $request->id)->first();
             $serviceUpdate->client_id  = $request->client_id;
             $serviceUpdate->organization_id = $request->organization_id;
@@ -143,6 +143,8 @@ class ServiService
     {
 
     }
+    public function getCountTypeService()
+    {
 
-
+    }
 }

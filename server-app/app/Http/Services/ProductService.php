@@ -3,7 +3,6 @@ namespace App\Http\Services;
 
 use App\Models\Product;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
 
 class ProductService{
 
@@ -30,11 +29,14 @@ class ProductService{
                 }
             }
 
-            $data = ['status'=>'success','message'=>'Producto Creado Correctamente'];
+            $data = [
+                'status'=>'success',
+                'message'=>'Producto Creado Correctamente'
+            ];
         } catch (\Throwable $th) {
             Log::error($th);
             $data = [
-                'error' => $th,
+                'error' => "ERROR",
                 'code' => 500,
             ];
         }
@@ -61,7 +63,6 @@ class ProductService{
                 'message' => $th->getMessage()
             ];
         }
-
         return $data;
     }
 

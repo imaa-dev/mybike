@@ -70,7 +70,6 @@ export default function Client({clients}: ClientDataProp){
                                     <th scope="row"
                                         className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
                                         <Avatar className="h-8 w-8 overflow-hidden rounded-full">
-
                                             <AvatarFallback className="rounded-lg bg-neutral-200 text-black dark:bg-neutral-700 dark:text-white">
                                                 {getInitials(client.name)}
                                             </AvatarFallback>
