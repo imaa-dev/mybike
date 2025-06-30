@@ -33,8 +33,7 @@ class ProductController extends Controller
 
     public function store(StoreProductRequest $request){
         $res = $this->productService->create($request);
-        session()->flash('message', $res['message']);
-        return redirect()->route('products.list.view');
+        return response()->json($res);
     }
     public function getUpdate(Product $product)
     {

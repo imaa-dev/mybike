@@ -8,6 +8,7 @@ import { LoadingProvider } from '@/context/LoadingContext';
 import LoadingModal from '@/components/LoadingModal';
 import { ConfirmDialogProvider } from '@/context/ModalContext';
 import { ToastProvider } from '@/context/ToastContext';
+import { ModalFormProvider } from '@/context/ModalContextForm';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -21,11 +22,14 @@ createInertiaApp({
             <ToastProvider>
                 <ConfirmDialogProvider>
                     <LoadingProvider>
-                        <LoadingModal />
-                        <App {...props} />
+                        <ModalFormProvider>
+                            <LoadingModal />
+                            <App {...props} />
+                        </ModalFormProvider>
                     </LoadingProvider>
                 </ConfirmDialogProvider>
             </ToastProvider>
+
         );
     },
     progress: {

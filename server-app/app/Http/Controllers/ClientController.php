@@ -30,8 +30,7 @@ class ClientController extends Controller
     public function store(StoreClientRequest $request)
     {
         $res = $this->clientService->create($request);
-        session()->flash('message', $res['message']);
-        return redirect()->route('clients.list.view');
+        return response()->json($res);
     }
     public function getUpdate(Client $client)
     {

@@ -1,46 +1,49 @@
-import React, { FormEventHandler } from 'react';
+import React from 'react';
 import { SidebarGroupLabel } from '@/components/ui/sidebar';
 import InputError from '@/components/input-error';
 import InputPhone from '@/components/input-phone';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/context/ToastContext';
-import { useForm } from '@inertiajs/react';
+import { router, useForm } from '@inertiajs/react';
+import 'react-phone-input-2/lib/style.css'
+import { Client } from '@/types';
+import { createClient } from '@/api/clients/clientsService';
+import { useModal } from '@/context/ModalContextForm';
 
-type UserData = {
-    name: string;
-    email: string;
-    phone: string;
-    file: File | null;
-}
-
-const CreateClientForm = () => {
+type Props = {
+    setClientsData?: React.Dispatch<React.SetStateAction<Client[]>>;
+};
+const CreateClientForm: React.FC<Props> = ({setClientsData}) => {
     const { success, error } = useToast()
-    const { data, setData, post, errors, processing } = useForm<Required<UserData>>({
+    const { closeModal } = useModal();
+    const { data, setData,  errors, processing, setError } = useForm<Required<Client>>({
+        id: 0,
         name: '',
         email: '',
-        phone: '',
-        file: null
+        phone: ''
     })
-    const submit:FormEventHandler = (e) => {
-        e.preventDefault();
+    const addClient = async () => {
+        const response = await createClient(data)
+        console.log(response)
+        if(response.code === 200 && setClientsData){
+            closeModal();
+            setClientsData(prevState => [...prevState, response.client])
+            success(response.message)
+        }
+        if(response.code === 200 && setClientsData === undefined){
+            success(response.message)
+            router.visit('/client');
+        }
+        if(!response.code){
+            error('Error al crear cliente');
+            setError(response)
+        }
 
-        post('/create/client',{
-            onSuccess: (page) => {
-                const message = (page.props as { flash?: { message?: string } }).flash?.message;
-                if (message) {
-                    success(message);
-                }
-            },
-            onError:((e) => {
-                error(e.message)
-            })
-        })
     }
     return (
         <React.Fragment>
             <form
                 className="flex w-full flex-col justify-center gap-6 rounded-lg bg-white p-6 shadow-md md:p-10 dark:bg-gray-800"
-                onSubmit={submit}
             >
                 <SidebarGroupLabel> Crear Cliente </SidebarGroupLabel>
                 <div className="w-full group relative z-0 mb-5">
@@ -94,10 +97,11 @@ const CreateClientForm = () => {
                     <InputError message={errors.phone} />
                 </div>
                 <Button
-                    type="submit"
+                    type="button"
                     className="mt-4 w-full"
                     tabIndex={4}
                     disabled={processing}
+                    onClick={() => addClient()}
                 >
                     Crear Cliente
                 </Button>

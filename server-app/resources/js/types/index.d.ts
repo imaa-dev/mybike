@@ -78,16 +78,13 @@ export interface ProductData {
     id: number;
     brand: string,
     model: string,
-    type: string,
-    file: FileMeta[]
+    type: string
 }
 export interface Client{
     id: number;
     name: string;
     email: string;
     phone: string;
-    file: FileMeta | null;
-    [key: string]: unknown;
 }
 export interface Page {
     props: {
@@ -97,7 +94,7 @@ export interface Page {
     };
 }
 export interface ClientDataProp {
-    clients: User[];
+    clients: Client[];
 }
 export interface ProductDataProp {
     products: ProductData[];

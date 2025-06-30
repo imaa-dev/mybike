@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Log;
 class ProductService{
 
     public function create($request){
-        $product_paths = [];
         try {
             if($request->file('file')){
                 foreach($request->file('file') as $file){
@@ -21,23 +20,18 @@ class ProductService{
             $product->brand  = $request->brand;
             $product->model  = $request->model;
             $product->save();
-            if($request->file('file')){
-                foreach ($product_paths as $path){
-                    $product->file()->create([
-                        'path' => $path
-                    ]);
-                }
-            }
-
             $data = [
-                'status'=>'success',
-                'message'=>'Producto Creado Correctamente'
+                'code' => 200,
+                'message'=>'Producto Creado Correctamente',
+                'success' => true,
+                'product' => $product
             ];
         } catch (\Throwable $th) {
             Log::error($th);
             $data = [
-                'error' => "ERROR",
                 'code' => 500,
+                'message' => "ERROR",
+                'success' => false
             ];
         }
         return $data;

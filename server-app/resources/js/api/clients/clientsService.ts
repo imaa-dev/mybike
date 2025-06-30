@@ -1,4 +1,5 @@
 import api from '@/api/AxiosIntance';
+import { Client, ClientDataProp } from '@/types';
 
 const deleteClient = async (id: number): Promise<{ code: number; message: string; success: boolean }> => {
     try {
@@ -14,4 +15,16 @@ const deleteClient = async (id: number): Promise<{ code: number; message: string
     }
 }
 
-export { deleteClient }
+const createClient = async (data: Client): Promise<{ code: number; message: string, success: boolean, client: Client }> => {
+    try {
+        const response = await api.post(`/create/client`, data ,{
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        })
+        return response.data;
+    } catch (error) {
+        return error.response?.data?.errors;
+    }
+}
+export { deleteClient, createClient };

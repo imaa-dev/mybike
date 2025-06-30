@@ -1,46 +1,47 @@
-import React, { FormEventHandler } from 'react';
+import React from 'react';
 import { SidebarGroupLabel } from '@/components/ui/sidebar';
 import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/context/ToastContext';
-import { useForm } from '@inertiajs/react';
+import { router, useForm } from '@inertiajs/react';
+import { createProduct } from '@/api/product/productsService';
+import { ProductData } from '@/types';
+import { useModal } from '@/context/ModalContextForm';
 
-
-interface ProductDataProps {
-    type: string;
-    brand: string,
-    model: string,
-    file: File[] | null
-}
-
-const CreateProductForm: React.FC = () => {
+type Props = {
+    setProductsData?: React.Dispatch<React.SetStateAction<ProductData[]>>;
+};
+const CreateProductForm: React.FC<Props> = ({setProductsData}) => {
     const { success, error } = useToast()
-    const { data, setData, post, errors, processing } = useForm<Required<ProductDataProps>>({
+    const { closeModal } = useModal();
+    const { data, setData, errors, processing, setError } = useForm<Required<ProductData>>({
+        id: 0,
         type: '',
         brand: '',
-        model: '',
-        file: null
+        model: ''
     })
 
-    const submit:FormEventHandler = (e) => {
-        e.preventDefault();
-        post('/create/product',{
-            onSuccess: (page) => {
-                const message = (page.props as { flash?: { message?: string } }).flash?.message;
-                if (message) {
-                    success(message);
-                }
-            },
-            onError: (e) => {
-                error(e.message);
-            }
-        })
+    const addProduct = async () => {
+        const response = await createProduct(data)
+        if(response.code === 200 && setProductsData) {
+            closeModal()
+            setProductsData(prevState => [...prevState, response.product])
+            success(response.message);
+        }
+        if(response.code === 200 && setProductsData === undefined) {
+            success(response.message);
+            router.visit('/product');
+        }
+        if(!response.code){
+            error('Error al crear producto')
+            setError(response)
+        }
     }
+
     return (
         <React.Fragment>
             <form
                 className="flex w-full flex-col justify-center gap-6 rounded-lg bg-white p-6 shadow-md md:p-10 dark:bg-gray-800"
-                onSubmit={submit}
             >
                 <SidebarGroupLabel> Crear Producto </SidebarGroupLabel>
 
@@ -106,10 +107,11 @@ const CreateProductForm: React.FC = () => {
                 </div>
 
                 <Button
-                    type="submit"
+                    type="button"
                     className="mt-4 w-full"
                     tabIndex={4}
                     disabled={processing}
+                    onClick={() => addProduct()}
                 >
                     Crear Producto
                 </Button>

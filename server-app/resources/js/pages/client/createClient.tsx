@@ -1,14 +1,7 @@
 import AppLayout from '@/layouts/app-layout';
-import { Head, useForm } from '@inertiajs/react';
+import { Head } from '@inertiajs/react';
 import type { BreadcrumbItem } from '@/types';
-import { Button } from '@/components/ui/button';
-import { FormEventHandler } from 'react';
-import InputError from '@/components/input-error';
-import { SidebarGroupLabel } from '@/components/ui/sidebar';
-import 'react-phone-input-2/lib/style.css'
 import ButtonBack from '@/components/button-back';
-import InputPhone from '@/components/input-phone';
-import { useToast } from '@/context/ToastContext';
 import CreateClientForm from '@/components/forms/client/CreateClientForm';
 
 const breadcrumbs: BreadcrumbItem[] = [

@@ -10,13 +10,19 @@ import { useToast } from '@/context/ToastContext';
 import { useLoading } from '@/context/LoadingContext';
 import { ClientDataProp, Page, ProductDataProp, ServiDataForm } from '@/types';
 import { useForm, usePage } from '@inertiajs/react';
+import { useModal } from '@/context/ModalContextForm';
+import CreateClientForm from '@/components/forms/client/CreateClientForm';
+import CreateProductForm from '@/components/forms/product/CreateProductForm';
 const appUrl = import.meta.env.VITE_APP_URL;
 
 const CreateServiceForm = ({clients, products}: ClientDataProp & ProductDataProp) => {
     const { success, error } = useToast()
     const [reason, setReason] = useState<string>('');
+    const [clientsData, setClientsData] = useState(clients);
+    const [productsData, setProductsData] = useState(products);
     const [uploadImage, setUploadImage] = useState<string[]>([]);
     const { showLoading, hideLoading } = useLoading();
+    const { openModal } = useModal();
     const handleImageChange = (files: File[]) => {
         const urls = Array.from(files).map((file) => URL.createObjectURL(file));
         setUploadImage((prev) => [...prev, ...urls]);
@@ -30,6 +36,7 @@ const CreateServiceForm = ({clients, products}: ClientDataProp & ProductDataProp
         reason_notes: [],
         file: null,
     })
+
     const submit:FormEventHandler = (e) => {
         e.preventDefault();
         post('/create/service', {
@@ -45,6 +52,7 @@ const CreateServiceForm = ({clients, products}: ClientDataProp & ProductDataProp
             }
         })
     }
+
     return (
         <React.Fragment>
             <form onSubmit={submit}>
@@ -77,25 +85,28 @@ const CreateServiceForm = ({clients, products}: ClientDataProp & ProductDataProp
                         <label htmlFor="products" className="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
                             Producto
                         </label>
-                        <select
-                            id="product"
-                            className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
-                            onChange={(e) => setData('product_id', Number(e.target.value))}
-                            value={data.product_id}
-                        >
-                            <option value="">Selecciona un producto</option>
-                            {products.map((product, index) => (
-                                <option key={index} value={product.id}>
-                                    {product.type} {product.brand} {product.model}
-                                </option>
-                            ))}
-                        </select>
-                        <Button
-                            type="button"
-                            onClick={() => console.log("SHOW MODAL CREATE CLIENTS")}
-                        >
-                            <Plus />
-                        </Button>
+                        <div className="flex" >
+                            <select
+                                id="product"
+                                className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                                onChange={(e) => setData('product_id', Number(e.target.value))}
+                                value={data.product_id}
+                            >
+                                <option value="">Selecciona un producto</option>
+                                {productsData.map((product, index) => (
+                                    <option key={index} value={product.id}>
+                                        {product.type} {product.brand} {product.model}
+                                    </option>
+                                ))}
+                            </select>
+                            <Button
+                                type="button"
+                                className="ml-3"
+                                onClick={() => openModal( <CreateProductForm setProductsData={setProductsData} /> )}
+                            >
+                                <Plus />
+                            </Button>
+                        </div>
                         <InputError message={errors.product_id} />
                     </div>
 
@@ -103,19 +114,29 @@ const CreateServiceForm = ({clients, products}: ClientDataProp & ProductDataProp
                         <label htmlFor="clients" className="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
                             Cliente
                         </label>
-                        <select
-                            id="client"
-                            className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
-                            onChange={(e) => setData('client_id', Number(e.target.value))}
-                            value={data.client_id}
-                        >
-                            <option value="">Selecciona un cliente</option>
-                            {clients.map((client, index) => (
-                                <option key={index} value={client.id}>
-                                    {client.name}
-                                </option>
-                            ))}
-                        </select>
+                        <div className="flex" >
+                            <select
+                                id="client"
+                                className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                                onChange={(e) => setData('client_id', Number(e.target.value))}
+                                value={data.client_id}
+                            >
+                                <option value="">Selecciona un cliente</option>
+                                {clientsData.map((client, index) => (
+                                    <option key={index} value={client.id}>
+                                        {client.name}
+                                    </option>
+                                ))}
+                            </select>
+                            <Button
+                                type="button"
+                                className="ml-3"
+                                onClick={() => openModal(<CreateClientForm setClientsData={setClientsData} />)}
+                            >
+                                <Plus />
+                            </Button>
+                        </div>
+
                     </div>
                 </Card>
                 <Card className="m-5 mt-10 max-w-xl p-6">

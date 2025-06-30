@@ -22,6 +22,7 @@ class ClientService {
                 'status' => 'success',
                 'code' => 200,
                 'message' => 'Cliente Creado Satisfactoriamente',
+                'client' => $client
             ];
         } catch (\Throwable $th) {
             Log::error("Service User Catch Error : ". $th);
