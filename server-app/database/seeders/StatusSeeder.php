@@ -32,6 +32,9 @@ class StatusSeeder extends Seeder
                             [
                                  'name' => 'ENTREGADO',
                             ],
+                            [
+                                'name' => 'INCIDENCIA',
+                            ],
                 ];
                 DB::table('status')->insert($DATA);
     }

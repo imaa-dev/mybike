@@ -145,6 +145,21 @@ class ServiService
     }
     public function getCountTypeService()
     {
-
+        $serviceRecepcionado = Servi::where('status_id', 1)->count();
+        $serviceDiagnosticado = Servi::where('status_id', 2)->count();
+        $serviceAR = Servi::where('status_id', 3)->count();
+        $serviceER = Servi::where('status_id', 4)->count();
+        $serviceReparado = Servi::where('status_id', 5)->count();
+        $serviceEntregado = Servi::where('status_id', 6)->count();
+        $serviceIncidencia = Servi::where('status_id', 7)->count();
+        return [
+            'serviceRecepcionado' => $serviceRecepcionado,
+            'serviceDiagnosticado' => $serviceDiagnosticado,
+            'serviceAR' => $serviceAR,
+            'serviceER' => $serviceER,
+            'serviceReparado' => $serviceReparado,
+            'serviceEntregado' => $serviceEntregado,
+            'serviceIncidencia' => $serviceIncidencia
+       ];
     }
 }

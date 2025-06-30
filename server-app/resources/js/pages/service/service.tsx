@@ -13,9 +13,20 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 interface ServiDataProp {
     notOrganization: boolean;
+    countTypeService: CountTypeService;
 }
-export default function Service({ notOrganization}: ServiDataProp){
+interface CountTypeService {
+    serviceRecepcionado: number,
+    serviceDiagnosticado: number,
+    serviceAR: number,
+    serviceER: number,
+    serviceReparad: number,
+    serviceEntregado: number,
+    serviceIncidencia: number
+}
+export default function Service({ notOrganization, countTypeService }: ServiDataProp){
     const [modal, setModal] = useState<boolean>(notOrganization);
+
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Servicios" />
@@ -35,7 +46,9 @@ export default function Service({ notOrganization}: ServiDataProp){
                             }}
                         >
                             <FilePlus2 />
+
                         </button>
+
                     </div>
                     <div className="relative ml-7">
                         <button
@@ -50,6 +63,11 @@ export default function Service({ notOrganization}: ServiDataProp){
                             }}
                         >
                             <ConciergeBell />
+                            {countTypeService.serviceRecepcionado > 0 && (
+                            <span className="absolute -top-2 -right-2 inline-flex items-center justify-center rounded-full bg-blue-500 px-1.5 py-0.5 text-xs font-bold text-white">
+                                {countTypeService.serviceRecepcionado}
+                            </span>
+                            )}
                         </button>
                     </div>
                     <div className="relative ml-7">
@@ -65,6 +83,11 @@ export default function Service({ notOrganization}: ServiDataProp){
                             }}
                         >
                             <Wrench />
+                            {countTypeService.serviceDiagnosticado > 0 && (
+                                <span className="absolute -top-2 -right-2 inline-flex items-center justify-center rounded-full bg-red-600 px-1.5 py-0.5 text-xs font-bold text-white">
+                              {countTypeService.serviceDiagnosticado}
+                            </span>
+                            )}
                         </button>
                     </div>
                     <div className="relative ml-7">
@@ -80,7 +103,13 @@ export default function Service({ notOrganization}: ServiDataProp){
                             }}
                         >
                             <Truck />
+                            {countTypeService.serviceAR > 0 && (
+                                <span className="absolute -top-2 -right-2 inline-flex items-center justify-center rounded-full bg-red-600 px-1.5 py-0.5 text-xs font-bold text-white">
+                              {countTypeService.serviceAR}
+                            </span>
+                            )}
                         </button>
+
                     </div>
 
                     <div className="relative ml-7">
@@ -96,6 +125,11 @@ export default function Service({ notOrganization}: ServiDataProp){
                             }}
                         >
                             <List />
+                            {countTypeService.serviceER > 0 && (
+                                <span className="absolute -top-2 -right-2 inline-flex items-center justify-center rounded-full bg-red-600 px-1.5 py-0.5 text-xs font-bold text-white">
+                              {countTypeService.serviceER}
+                            </span>
+                            )}
                         </button>
                     </div>
                     <div className="relative ml-7">
@@ -111,10 +145,14 @@ export default function Service({ notOrganization}: ServiDataProp){
                             }}
                         >
                             <FileBox />
+                            {countTypeService.serviceReparad > 0 && (
+                                <span className="absolute -top-2 -right-2 inline-flex items-center justify-center rounded-full bg-red-600 px-1.5 py-0.5 text-xs font-bold text-white">
+                              {countTypeService.serviceReparad}
+                            </span>
+                            )}
                         </button>
                     </div>
                 </div>
-                    <Toaster />
                     {modal && (
                         <div className="fixed top-0 right-0 left-0 z-50 flex h-screen w-screen items-center justify-center bg-black/50">
                             <div className="rounded-lg bg-white p-6 shadow-lg dark:bg-gray-700">

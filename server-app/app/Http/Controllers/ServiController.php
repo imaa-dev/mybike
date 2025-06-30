@@ -29,11 +29,11 @@ class ServiController extends Controller
         if($organization !== null){
             $notOrganization = false;
         }
-        // need get count service RECEPCIONADO
-        // create a function in service
+        $countTypeService = $this->serviService->getCountTypeService();
 
         return Inertia::render('service/service', [
-            'notOrganization' => $notOrganization
+            'notOrganization' => $notOrganization,
+            'countTypeService' => $countTypeService,
         ]);
     }
 
@@ -109,7 +109,6 @@ class ServiController extends Controller
     }
 
     public function update(StoreServiceRequest $request){
-
         $res = $this->serviService->update($request);
         session()->flash('message', $res['message']);
         return redirect()->route('services.list.reception.view');

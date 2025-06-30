@@ -1,3 +1,4 @@
+import React from 'react';
 import { NavItemDrop, ServiData } from '@/types';
 import { SidebarGroupLabel } from '@/components/ui/sidebar';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
@@ -94,13 +95,10 @@ const ServiceRecepcionCard = ({ service, handleDelete }: ServiceDataPropCard ) =
                         </div>
                     </div>
                     {service.reasons.map((reason) => (
-                        <>
                             <div className="flex" key={reason.id}>
-                                <SidebarGroupLabel> DETALLES DE INGRESO: </SidebarGroupLabel>
-                                <div className="p-1" key={reason.id}>{reason.reason_note}</div>
+                                <SidebarGroupLabel key={reason.id} > DETALLES DE INGRESO: </SidebarGroupLabel>
+                                <div className="p-1">{reason.reason_note}</div>
                             </div>
-                        </>
-
                     ))}
                     <div className="flex pt-3" >
                         <SidebarGroupLabel> FECHA: </SidebarGroupLabel>
