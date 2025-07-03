@@ -11,8 +11,8 @@ import { useLoading } from '@/context/LoadingContext';
 import { ClientDataProp, Page, ProductDataProp, ServiDataForm } from '@/types';
 import { useForm, usePage } from '@inertiajs/react';
 import { useModal } from '@/context/ModalContextForm';
-import CreateClientForm from '@/components/forms/client/CreateClientForm';
 import CreateProductForm from '@/components/forms/product/CreateProductForm';
+import { CreateClientForm } from '@/components/forms/client/CreateClientForm';
 const appUrl = import.meta.env.VITE_APP_URL;
 
 const CreateServiceForm = ({clients, products}: ClientDataProp & ProductDataProp) => {
@@ -77,13 +77,15 @@ const CreateServiceForm = ({clients, products}: ClientDataProp & ProductDataProp
                             htmlFor="floating_email"
                             className="absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:start-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:font-medium peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:text-gray-400 peer-focus:dark:text-blue-500"
                         >
-                            Fecha Ingreso Servicio
+                            Fecha Ingreso Servicio <span className="text-red-500">*</span>
                         </label>
                         <InputError message={errors.date_entry} />
                     </div>
                     <div className="group relative z-0 mb-5 w-full">
-                        <label htmlFor="products" className="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
-                            Producto
+                        <label htmlFor="products"
+                               className="absolute -z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:start-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:font-medium peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:text-gray-400 peer-focus:dark:text-blue-500"
+                        >
+                            Producto <span className="text-red-500">*</span>
                         </label>
                         <div className="flex" >
                             <select
@@ -111,8 +113,10 @@ const CreateServiceForm = ({clients, products}: ClientDataProp & ProductDataProp
                     </div>
 
                     <div className="group relative z-0 mb-5 w-full">
-                        <label htmlFor="clients" className="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
-                            Cliente
+                        <label htmlFor="clients"
+                               className="absolute -z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:start-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:font-medium peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:text-gray-400 peer-focus:dark:text-blue-500"
+                        >
+                            Cliente <span className="text-red-500">*</span>
                         </label>
                         <div className="flex" >
                             <select
@@ -157,7 +161,7 @@ const CreateServiceForm = ({clients, products}: ClientDataProp & ProductDataProp
                             htmlFor="reason"
                             className="absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:start-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:font-medium peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:text-gray-400 peer-focus:dark:text-blue-500"
                         >
-                            Agregar detalle ingreso de servicio
+                            Agregar detalle ingreso de servicio <span className="text-red-500">*</span>
                         </label>
                     </div>
                     <Button

@@ -5,7 +5,7 @@ export interface Auth {
     user: User;
 }
 export interface BreadcrumbItem {
-    title: string;
+    title: string | JSX.Element;
     href: string;
 }
 export interface ButtonItem {

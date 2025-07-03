@@ -61,7 +61,7 @@ const CreateProductForm: React.FC<Props> = ({setProductsData}) => {
                         htmlFor="floating_brand"
                         className="absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:start-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:font-medium peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:text-gray-400 peer-focus:dark:text-blue-500"
                     >
-                        Tipo de producto
+                        Tipo de producto  <span className="text-red-500">*</span>
                     </label>
                     <InputError message={errors.brand} />
                 </div>
@@ -81,7 +81,7 @@ const CreateProductForm: React.FC<Props> = ({setProductsData}) => {
                         htmlFor="floating_brand"
                         className="absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:start-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:font-medium peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:text-gray-400 peer-focus:dark:text-blue-500"
                     >
-                        Marca
+                        Marca  <span className="text-red-500">*</span>
                     </label>
                     <InputError message={errors.brand} />
                 </div>
@@ -101,7 +101,7 @@ const CreateProductForm: React.FC<Props> = ({setProductsData}) => {
                         htmlFor="floating_model"
                         className="absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:start-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:font-medium peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:text-gray-400 peer-focus:dark:text-blue-500"
                     >
-                        Modelo
+                        Modelo  <span className="text-red-500">*</span>
                     </label>
                     <InputError message={errors.model} />
                 </div>

@@ -13,7 +13,7 @@ import { useModal } from '@/context/ModalContextForm';
 type Props = {
     setClientsData?: React.Dispatch<React.SetStateAction<Client[]>>;
 };
-const CreateClientForm: React.FC<Props> = ({setClientsData}) => {
+export const CreateClientForm: React.FC<Props> = ({setClientsData}) => {
     const { success, error } = useToast()
     const { closeModal } = useModal();
     const { data, setData,  errors, processing, setError } = useForm<Required<Client>>({
@@ -25,20 +25,30 @@ const CreateClientForm: React.FC<Props> = ({setClientsData}) => {
     const addClient = async () => {
         const response = await createClient(data)
         console.log(response)
-        if(response.code === 200 && setClientsData){
+        if(typeof response.message === 'string' && typeof setClientsData !== 'undefined' && response.code === 200){
             closeModal();
-            setClientsData(prevState => [...prevState, response.client])
+            setClientsData?.(prevState =>
+                response.client !== undefined ? [...prevState, response.client] : prevState
+            );
             success(response.message)
         }
-        if(response.code === 200 && setClientsData === undefined){
+        if(response.code === 200 && setClientsData === undefined && typeof response.message === 'string'){
             success(response.message)
             router.visit('/client');
         }
-        if(!response.code){
-            error('Error al crear cliente');
-            setError(response)
+        if(response.code === 422 && typeof response.message === 'object'){
+            setError(response.message)
+            error('Error de validación de datos')
         }
-
+        if(response.code === 'ERR_NETWORK'){
+            error('Error de conexión')
+        }
+        if(response.code === 'ERR_BAD_RESPONSE' && typeof response.message === 'string'){
+            error('Error en el servidor')
+        }
+        if(response.code === 500 && typeof response.message === 'string'){
+            error(response.message)
+        }
     }
     return (
         <React.Fragment>
@@ -63,7 +73,7 @@ const CreateClientForm: React.FC<Props> = ({setClientsData}) => {
                         htmlFor="floating_name"
                         className="absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:start-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:font-medium peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:text-gray-400 peer-focus:dark:text-blue-500"
                     >
-                        Nombre
+                        Nombre <span className="text-red-500">*</span>
                     </label>
                     <InputError message={errors.name} />
                 </div>
@@ -91,7 +101,7 @@ const CreateClientForm: React.FC<Props> = ({setClientsData}) => {
                         htmlFor="floating_cel"
                         className="absolute  origin-[0] -translate-y-6 scale-75 transform text-sm text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:start-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:font-medium peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:text-gray-400 peer-focus:dark:text-blue-500"
                     >
-                        Celular
+                        Celular <span className="text-red-500">*</span>
                     </label>
                     <InputPhone data={data} setData={setData} />
                     <InputError message={errors.phone} />
@@ -109,4 +119,3 @@ const CreateClientForm: React.FC<Props> = ({setClientsData}) => {
         </React.Fragment>
     )
 }
-export default CreateClientForm;

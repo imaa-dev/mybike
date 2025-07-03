@@ -4,7 +4,7 @@ import { SidebarGroupLabel } from '@/components/ui/sidebar';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { useInitials } from '@/hooks/use-initials';
 import { appUrl } from '@/config/env';
-import { BriefcaseMedical, Eye, Pencil, Trash2 } from 'lucide-react';
+import { BriefcaseMedical,  Pencil, Trash2 } from 'lucide-react';
 
 import { NavDropDown } from '@/components/cards/service/NavDropDown';
 interface ServiceDataPropCard {
@@ -19,10 +19,6 @@ const mainNavItems: NavItemDrop[] = [
     {
         title: 'Diagnosticar',
         icon: BriefcaseMedical,
-    },
-    {
-        title: 'Ver',
-        icon: Eye,
     },
     {
         title: 'Eliminar',
@@ -112,13 +108,6 @@ const ServiceRecepcionCard = ({ service, handleDelete }: ServiceDataPropCard ) =
                             })}
                         </div>
 
-                    </div>
-                    <div className="flex pt-3">
-                        <SidebarGroupLabel> ESTADO: </SidebarGroupLabel>
-                        <div className="ps-3 mt-1 flex">
-                            <div className="mt-2 me-2 h-2.5 w-2.5 rounded-full bg-blue-500"></div>
-                            {service.status.name}
-                        </div>
                     </div>
                 </div>
             </a>

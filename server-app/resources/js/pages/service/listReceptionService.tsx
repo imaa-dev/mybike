@@ -3,7 +3,7 @@ import { Head } from '@inertiajs/react';
 import type { BreadcrumbItem, ServiData } from '@/types';
 import { deleteService } from '@/api/services/serviService';
 import { useConfirmDialog } from '@/context/ModalContext';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useToast } from '@/context/ToastContext';
 import { ServiceRecepcionCard } from '@/components/cards/service/ServiceRecepcionCard';
 import { initFlowbite } from 'flowbite';
@@ -14,7 +14,7 @@ const breadcrumbs: BreadcrumbItem[] = [
         href: '/service',
     },
     {
-        title: 'Recepcionados',
+        title:  <div className="flex">Recepcionados<div className="ml-3 mt-1 h-2.5 w-2.5 rounded-full bg-blue-500"> </div></div>,
         href: '/service',
     },
 ];
