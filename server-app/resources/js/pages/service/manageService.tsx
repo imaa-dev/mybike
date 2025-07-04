@@ -14,6 +14,7 @@ import ServiceDetailsForm from '@/components/forms/service/ServiceDetailsForm';
 import ServiceImages from '@/components/forms/service/ServiceImages';
 import ServiceUpdateForm from '@/components/forms/service/ServiceUpdateForm';
 import { useToast } from '@/context/ToastContext';
+import { useLoading } from '@/context/LoadingContext';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -34,6 +35,7 @@ export default function ManageService({ servi, clients, products }: ServiProp & 
     const [reason, setReason] = useState<string>('');
     const [reasons, setReasons] = useState<Reasons[]>(servi.reasons)
     const { success, error } = useToast()
+    const { showLoading, hideLoading } = useLoading()
     const { data, setData, post, errors, processing } = useForm<Required<ServiForm>>({
         id: servi.id,
         organization_id: servi.organization_id,
@@ -53,6 +55,7 @@ export default function ManageService({ servi, clients, products }: ServiProp & 
     }
 
     const removeReason = async (id: number) => {
+        showLoading();
         const response = await deleteReason(id)
         if(response.code === 200){
             success(response.message)
@@ -60,8 +63,10 @@ export default function ManageService({ servi, clients, products }: ServiProp & 
         } else {
             error(response.message)
         }
+        hideLoading()
     }
     const submit: FormEventHandler = (e) => {
+        showLoading()
         e.preventDefault();
         post('/manage/service', {
             onSuccess: (page) => {
@@ -75,6 +80,7 @@ export default function ManageService({ servi, clients, products }: ServiProp & 
                 error(e.message)
             })
         });
+        hideLoading()
     };
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
