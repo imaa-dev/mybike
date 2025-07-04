@@ -48,6 +48,7 @@ const CreateOrganization = () => {
         setUploadImage(imageUrl)
     }
     const submit: FormEventHandler = (e) => {
+        showLoading();
         e.preventDefault();
         post('/create/organization',{
             preserveScroll: true,
@@ -73,6 +74,7 @@ const CreateOrganization = () => {
                 }
             }
         })
+        hideLoading();
     }
     return (
         <AppLayout breadcrumbs={breadcrumbs}>

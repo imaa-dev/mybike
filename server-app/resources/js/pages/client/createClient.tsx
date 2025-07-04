@@ -2,7 +2,7 @@ import AppLayout from '@/layouts/app-layout';
 import { Head } from '@inertiajs/react';
 import type { BreadcrumbItem } from '@/types';
 import ButtonBack from '@/components/button-back';
-import CreateClientForm from '@/components/forms/client/CreateClientForm';
+import { CreateClientForm } from '@/components/forms/client/CreateClientForm';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {

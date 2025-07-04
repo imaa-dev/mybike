@@ -25,9 +25,8 @@ export interface NavItem {
 }
 export interface NavItemDrop {
     title: string;
-    icon?: LucideIcon | null;
+    icon: LucideIcon;
     isActive?: boolean;
-
 }
 
 export interface SharedData {

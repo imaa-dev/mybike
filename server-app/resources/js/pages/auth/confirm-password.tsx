@@ -1,4 +1,3 @@
-// Components
 import { Head, useForm } from '@inertiajs/react';
 import { LoaderCircle } from 'lucide-react';
 import { FormEventHandler } from 'react';
@@ -16,7 +15,6 @@ export default function ConfirmPassword() {
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
-
         post(route('password.confirm'), {
             onFinish: () => reset('password'),
         });
@@ -28,7 +26,6 @@ export default function ConfirmPassword() {
             description="This is a secure area of the application. Please confirm your password before continuing."
         >
             <Head title="Confirm password" />
-
             <form onSubmit={submit}>
                 <div className="space-y-6">
                     <div className="grid gap-2">
@@ -43,10 +40,8 @@ export default function ConfirmPassword() {
                             autoFocus
                             onChange={(e) => setData('password', e.target.value)}
                         />
-
                         <InputError message={errors.password} />
                     </div>
-
                     <div className="flex items-center">
                         <Button className="w-full" disabled={processing}>
                             {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}

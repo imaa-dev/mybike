@@ -7,6 +7,7 @@ import React, { useEffect, useState } from 'react';
 import { useToast } from '@/context/ToastContext';
 import { ServiceRecepcionCard } from '@/components/cards/service/ServiceRecepcionCard';
 import { initFlowbite } from 'flowbite';
+import { useLoading } from '@/context/LoadingContext';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -26,6 +27,7 @@ export default function ListReceptionService ({servis}: ServiDataProp) {
     const { success, error } = useToast()
     const [serviceShow, setServiceShow] = useState(servis)
     const { showConfirm } = useConfirmDialog()
+    const { showLoading, hideLoading } = useLoading()
     const handleDelete = (serviceId: number) => {
         showConfirm({
             title: "Deseas eliminar el servicio",
@@ -36,6 +38,7 @@ export default function ListReceptionService ({servis}: ServiDataProp) {
         initFlowbite()
     }, []);
     const removeService = async (id: number) => {
+        showLoading()
         const response = await deleteService(id)
         if (response.code === 200) {
             success(response.message);
@@ -43,6 +46,7 @@ export default function ListReceptionService ({servis}: ServiDataProp) {
         } else {
             error(response.message);
         }
+        hideLoading()
     }
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -50,7 +54,7 @@ export default function ListReceptionService ({servis}: ServiDataProp) {
             <div className="flex h-full flex-1 flex-col items-center gap-4 px-4 sm:px-5">
                 <div className="w-full max-w-full rounded-lg border shadow-md">
                     { serviceShow.map((service: ServiData) => (
-                        <ServiceRecepcionCard key={service.id} service={service} handleDelete={handleDelete} />
+                        <ServiceRecepcionCard key={service.id} service={service} handleDelete={() => handleDelete(service.id)} />
                     )) }
                 </div>
             </div>

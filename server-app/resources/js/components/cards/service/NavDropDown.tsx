@@ -1,7 +1,7 @@
 import { type NavItemDrop } from '@/types';
 import { router } from '@inertiajs/react';
 
-export function NavDropDown({ items = [], serviceId, handleDelete }: { items: NavItemDrop[] } & { serviceId: number } & {handleDelete: () => void}) {
+export function NavDropDown({ items = [], serviceId, handleDelete }: { items: NavItemDrop[] } & { serviceId: number } & {handleDelete: (id: number) => void}) {
 
     return (
         <>

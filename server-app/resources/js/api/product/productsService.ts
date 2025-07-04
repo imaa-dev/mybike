@@ -1,5 +1,7 @@
 import api from '@/api/AxiosIntance';
+import { AxiosError } from 'axios';
 import { ProductData } from '@/types';
+import { errorHandler } from '@/utils/errorHandler';
 
 const deleteProduct = async (id: number): Promise <{ code: number; message: string; success: boolean }> => {
     try {
@@ -14,7 +16,15 @@ const deleteProduct = async (id: number): Promise <{ code: number; message: stri
         }
     }
 }
-const createProduct = async (data: ProductData): Promise <{ code: number; message: string, success: boolean, product: ProductData }> => {
+
+type CreateProductSuccess = {
+    code: number | string;
+    message: string | Record<keyof ProductData, string>;
+    success: boolean;
+    product?: ProductData;
+};
+
+const createProduct = async (data: ProductData): Promise <CreateProductSuccess> => {
     try {
         const response = await api.post("create/product", data, {
             headers: {
@@ -22,14 +32,8 @@ const createProduct = async (data: ProductData): Promise <{ code: number; messag
             }
         })
         return response.data
-    } catch (error) {
-        console.log(error, 'AXIOS ERROR')
-        return {
-            code: 500,
-            message: 'Error desconocido',
-            success: false,
-            product: {} as ProductData
-        }
+    } catch (error : AxiosError | unknown) {
+        return errorHandler(error);
     }
 }
 export { deleteProduct, createProduct }

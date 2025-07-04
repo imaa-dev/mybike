@@ -28,9 +28,9 @@ export default function Organization({ organization }: OrganizationDataProp) {
                 </div>
                 <div className="flex h-full flex-1 flex-col items-center gap-4 rounded-xl">
                 <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-                    {organization ? (
+                    {organization && organization.file ? (
                         <div className="max-w-sm overflow-hidden rounded shadow-lg">
-                            <img className="w-110" src={`${appUrl}/storage/${organization.file.path}`} alt="Sunset in the mountains" />
+                            <img className="w-110" src={`${appUrl}/storage/${organization.file.path}`} alt="Image organization" />
                             <div className="px-6 py-4">
                                 <div className="mb-2 text-xl font-bold">{organization.name}</div>
                                 <p className="text-base text-gray-700">
@@ -40,7 +40,7 @@ export default function Organization({ organization }: OrganizationDataProp) {
                         </div>
                     ) : (
                         <div className="max-w-sm overflow-hidden rounded shadow-lg">
-                            <img className="w-110 p-20" src={`${appUrl}/images/organization.png`} alt="Sunset in the mountains" />
+                            <img className="w-110 p-20" src={`${appUrl}/images/organization.png`} alt="Image default" />
                             <div className="px-6 py-4">
                                 <div className="mb-2 text-xl font-bold">Tu Organizacion</div>
                                 <p className="text-base text-gray-700">

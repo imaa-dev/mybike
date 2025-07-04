@@ -1,7 +1,7 @@
 import api from '@/api/AxiosIntance';
 import { Client } from '@/types';
-import { AxiosError } from 'axios';
 import { errorHandler } from '@/utils/errorHandler';
+import { AxiosError } from 'axios';
 
 const deleteClient = async (id: number): Promise<{ code: number; message: string; success: boolean }> => {
     try {

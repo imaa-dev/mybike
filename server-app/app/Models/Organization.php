@@ -10,4 +10,8 @@ class Organization extends Model
     {
         return $this->morphOne(File::class, 'fileable');
     }
+    public function servis()
+    {
+        return $this->hasMany(Servi::class);
+    }
 }

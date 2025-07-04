@@ -7,6 +7,7 @@ import { router, useForm } from '@inertiajs/react';
 import { createProduct } from '@/api/product/productsService';
 import { ProductData } from '@/types';
 import { useModal } from '@/context/ModalContextForm';
+import { useLoading } from '@/context/LoadingContext';
 
 type Props = {
     setProductsData?: React.Dispatch<React.SetStateAction<ProductData[]>>;
@@ -14,6 +15,7 @@ type Props = {
 const CreateProductForm: React.FC<Props> = ({setProductsData}) => {
     const { success, error } = useToast()
     const { closeModal } = useModal();
+    const { showLoading, hideLoading } = useLoading();
     const { data, setData, errors, processing, setError } = useForm<Required<ProductData>>({
         id: 0,
         type: '',
@@ -22,19 +24,32 @@ const CreateProductForm: React.FC<Props> = ({setProductsData}) => {
     })
 
     const addProduct = async () => {
+        showLoading()
         const response = await createProduct(data)
-        if(response.code === 200 && setProductsData) {
+        hideLoading()
+        if(typeof  response.message === 'string' && typeof setProductsData !== 'undefined' && response.code === 200 ){
             closeModal()
-            setProductsData(prevState => [...prevState, response.product])
-            success(response.message);
+            setProductsData(prevState =>
+                response.product !== undefined ? [...prevState, response.product] : prevState
+            );
+            success(response.message)
         }
-        if(response.code === 200 && setProductsData === undefined) {
-            success(response.message);
+        if(response.code === 200 && setProductsData === undefined && typeof response.message === 'string'){
+            success(response.message)
             router.visit('/product');
         }
-        if(!response.code){
-            error('Error al crear producto')
-            setError(response)
+        if(response.code === 422 && typeof response.message === 'object'){
+            setError(response.message)
+            error('Error de validación de datos')
+        }
+        if(response.code === 'ERR_NETWORK'){
+            error('Error de conexion')
+        }
+        if(response.code === 'ERR_BAD_RESPONSE' && typeof response.message === 'string'){
+            error('Error de servidor')
+        }
+        if(response.code === 500 && typeof response.message === 'string'){
+            error(response.message)
         }
     }
 

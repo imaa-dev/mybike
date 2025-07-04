@@ -9,6 +9,7 @@ import 'react-phone-input-2/lib/style.css'
 import { Client } from '@/types';
 import { createClient } from '@/api/clients/clientsService';
 import { useModal } from '@/context/ModalContextForm';
+import { useLoading } from '@/context/LoadingContext';
 
 type Props = {
     setClientsData?: React.Dispatch<React.SetStateAction<Client[]>>;
@@ -16,6 +17,7 @@ type Props = {
 export const CreateClientForm: React.FC<Props> = ({setClientsData}) => {
     const { success, error } = useToast()
     const { closeModal } = useModal();
+    const { showLoading, hideLoading } = useLoading();
     const { data, setData,  errors, processing, setError } = useForm<Required<Client>>({
         id: 0,
         name: '',
@@ -23,8 +25,9 @@ export const CreateClientForm: React.FC<Props> = ({setClientsData}) => {
         phone: ''
     })
     const addClient = async () => {
+        showLoading()
         const response = await createClient(data)
-        console.log(response)
+        hideLoading()
         if(typeof response.message === 'string' && typeof setClientsData !== 'undefined' && response.code === 200){
             closeModal();
             setClientsData?.(prevState =>

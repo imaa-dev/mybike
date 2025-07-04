@@ -85,12 +85,19 @@ class OrganizationService
     {
         try {
             $organizationDelete = Organization::where('id', $request->id)->with('file')->first();
-            if($organizationDelete->file){
-                Storage::disk('public')->delete($organizationDelete->file->path);
+            if($organizationDelete->servis()->exists() ){
+                return [
+                    'success' => false,
+                    'code' => 400,
+                    'message' => 'La organizacion tiene servicios asociados, no se puede eliminar'
+                ];
             }
             $organizationDelete->delete();
             if($organizationDelete->file){
                 $organizationDelete->file()->delete();
+            }
+            if($organizationDelete->file){
+                Storage::disk('public')->delete($organizationDelete->file->path);
             }
             $data = [
                 'code' => 200,

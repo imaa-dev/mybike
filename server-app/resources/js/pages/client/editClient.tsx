@@ -10,6 +10,7 @@ import { SidebarGroupLabel } from '@/components/ui/sidebar';
 import ButtonBack from '@/components/button-back';
 import InputPhone from '@/components/input-phone';
 import { useToast } from '@/context/ToastContext';
+import { useLoading } from '@/context/LoadingContext';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -35,6 +36,7 @@ type ClientData = {
 }
 export default function EditClient({client}: ClientProp) {
     const { success, error } = useToast()
+    const { showLoading, hideLoading } = useLoading()
     const { post, setData, data, reset, errors, processing } = useForm<Required<ClientData>>({
         id: client.id,
         name: client.name,
@@ -43,6 +45,7 @@ export default function EditClient({client}: ClientProp) {
         file: null
     })
     const submit: FormEventHandler = (e) => {
+        showLoading()
         e.preventDefault()
         post(`/update/client`, {
             forceFormData: true,
@@ -57,8 +60,8 @@ export default function EditClient({client}: ClientProp) {
                 error(e.message)
             })
         })
+        hideLoading()
     }
-
     return(
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Editar cliente" />

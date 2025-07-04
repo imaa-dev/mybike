@@ -1,5 +1,4 @@
 import { AxiosError } from 'axios';
-import { Client } from '@/types';
 
 export function errorHandler (error: AxiosError | unknown) {
     if(error instanceof AxiosError) {

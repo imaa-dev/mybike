@@ -7,6 +7,7 @@ import { deleteOrganization } from '@/api/organization/organizationService';
 import { useConfirmDialog } from '@/context/ModalContext';
 import { Pencil, Trash2 } from 'lucide-react';
 import { useToast } from '@/context/ToastContext';
+import { useLoading } from '@/context/LoadingContext';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -26,6 +27,7 @@ export default function ListOrganization({ organizations }: OrganizationDataProp
     const { success, error } = useToast()
     const [orgList, setOrgList] = useState(organizations);
     const { showConfirm } = useConfirmDialog();
+    const { showLoading, hideLoading } = useLoading();
     useEffect(() => {
         setOrgList(organizations)
     },[organizations])
@@ -36,6 +38,7 @@ export default function ListOrganization({ organizations }: OrganizationDataProp
         })
     }
     const handleRemoveOrganization = async (id: number) => {
+        showLoading()
         const response = await deleteOrganization(id)
         if (response.code === 200) {
             success(response.message);
@@ -43,6 +46,7 @@ export default function ListOrganization({ organizations }: OrganizationDataProp
         } else {
             error(response.message);
         }
+        hideLoading()
     }
     return (
         <AppLayout breadcrumbs={breadcrumbs}>

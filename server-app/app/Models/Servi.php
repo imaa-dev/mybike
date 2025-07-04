@@ -14,6 +14,10 @@ class Servi extends Model
     {
         return $this->belongsTo(Client::class);
     }
+    public function organization()
+    {
+        return $this->belongsTo(Organization::class);
+    }
     public function file()
     {
         return $this->morphMany(File::class, 'fileable');

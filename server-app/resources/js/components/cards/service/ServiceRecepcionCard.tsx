@@ -90,12 +90,12 @@ const ServiceRecepcionCard = ({ service, handleDelete }: ServiceDataPropCard ) =
                             <div className="font-normal text-gray-500">{service.product.model}</div>
                         </div>
                     </div>
-                    {service.reasons.map((reason) => (
-                            <div className="flex" key={reason.id}>
-                                <SidebarGroupLabel key={reason.id} > DETALLES DE INGRESO: </SidebarGroupLabel>
-                                <div className="p-1">{reason.reason_note}</div>
-                            </div>
-                    ))}
+                    <div className="flex" >
+                        <SidebarGroupLabel > DETALLES DE INGRESO: </SidebarGroupLabel>
+                        {service.reasons.map((reason) => (
+                            <div className="p-1">{reason.reason_note} <br /></div>
+                        ))}
+                    </div>
                     <div className="flex pt-3" >
                         <SidebarGroupLabel> FECHA: </SidebarGroupLabel>
                         <div className="ps-3 mt-1 flex-col" >
@@ -107,7 +107,6 @@ const ServiceRecepcionCard = ({ service, handleDelete }: ServiceDataPropCard ) =
                                 minute: '2-digit',
                             })}
                         </div>
-
                     </div>
                 </div>
             </a>

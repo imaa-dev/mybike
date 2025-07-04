@@ -32,6 +32,7 @@ interface OrganizationEditFormProps {
     organizationUpdate: OrganizationData;
 }
 export default function EditOrganization({organizationUpdate}: OrganizationEditFormProps) {
+
     const { success, error } = useToast()
     const { showLoading, hideLoading } = useLoading();
     const { data, setData, post, reset, errors, processing } = useForm<Required<EditOrganizationForm>>({
@@ -39,9 +40,9 @@ export default function EditOrganization({organizationUpdate}: OrganizationEditF
         file: null,
         name: organizationUpdate.name,
         description: organizationUpdate.description,
-        active: organizationUpdate.active,
+        active: organizationUpdate.active === 1 ? true : false,
     })
-
+    console.log(data)
     const active = organizationUpdate.active;
     const [uploadImage, setUploadImage] = useState<string | null>(null)
     const handleUploadImage = (file: File) => {
@@ -49,6 +50,7 @@ export default function EditOrganization({organizationUpdate}: OrganizationEditF
         setUploadImage(temporalURL)
     }
     const submit: FormEventHandler = (e) => {
+        showLoading()
         e.preventDefault();
         post('/organization/edit', {
             onSuccess: (page) => {
@@ -62,6 +64,7 @@ export default function EditOrganization({organizationUpdate}: OrganizationEditF
                 error(res.message)
             })
         })
+        hideLoading()
     }
 
     return (
