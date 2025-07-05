@@ -37,7 +37,6 @@ const CreateServiceForm = ({clients, products}: ClientDataProp & ProductDataProp
         file: null,
     })
     const submit:FormEventHandler = (e) => {
-        showLoading()
         e.preventDefault();
         post('/create/service', {
             onSuccess: (page) => {
@@ -45,14 +44,12 @@ const CreateServiceForm = ({clients, products}: ClientDataProp & ProductDataProp
                 if (message) {
                     success(message);
                 }
-
             },
             onError: (e) => {
                 error(e.message)
                 console.log(e,'ERROR POST')
             }
         })
-        hideLoading()
     }
     return (
         <React.Fragment>

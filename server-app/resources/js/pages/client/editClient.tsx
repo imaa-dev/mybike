@@ -4,13 +4,11 @@ import { BreadcrumbItem, User } from '@/types';
 import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
 import { FormEventHandler } from 'react';
-import toast, { Toaster } from 'react-hot-toast';
 import 'react-phone-input-2/lib/style.css'
 import { SidebarGroupLabel } from '@/components/ui/sidebar';
 import ButtonBack from '@/components/button-back';
 import InputPhone from '@/components/input-phone';
 import { useToast } from '@/context/ToastContext';
-import { useLoading } from '@/context/LoadingContext';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -36,7 +34,6 @@ type ClientData = {
 }
 export default function EditClient({client}: ClientProp) {
     const { success, error } = useToast()
-    const { showLoading, hideLoading } = useLoading()
     const { post, setData, data, reset, errors, processing } = useForm<Required<ClientData>>({
         id: client.id,
         name: client.name,
@@ -45,7 +42,6 @@ export default function EditClient({client}: ClientProp) {
         file: null
     })
     const submit: FormEventHandler = (e) => {
-        showLoading()
         e.preventDefault()
         post(`/update/client`, {
             forceFormData: true,
@@ -60,7 +56,6 @@ export default function EditClient({client}: ClientProp) {
                 error(e.message)
             })
         })
-        hideLoading()
     }
     return(
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -136,7 +131,6 @@ export default function EditClient({client}: ClientProp) {
                         </Button>
                     </form>
                 </div>
-                <Toaster />
             </div>
             </div>
         </AppLayout>

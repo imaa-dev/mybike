@@ -3,12 +3,10 @@ import AppLayout from '@/layouts/app-layout';
 import { Head, useForm } from '@inertiajs/react';
 import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
-import toast, { Toaster } from 'react-hot-toast';
 import { FormEventHandler } from 'react';
 import { SidebarGroupLabel } from '@/components/ui/sidebar';
 import ButtonBack from '@/components/button-back';
 import { useToast } from '@/context/ToastContext';
-import { useLoading } from '@/context/LoadingContext';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -35,7 +33,6 @@ interface Product {
 }
 export default function EditProduc({product}: Product) {
     const { success, error } = useToast()
-    const { showLoading, hideLoading } = useLoading()
     const { data, setData, post, errors, processing } = useForm<Required<ProductDataProps>>({
         id: product.id,
         type: product.type,
@@ -45,7 +42,6 @@ export default function EditProduc({product}: Product) {
     })
 
     const submit: FormEventHandler = (e) => {
-        showLoading()
         e.preventDefault();
         post('/update/product', {
             onSuccess: ((page) => {
@@ -58,7 +54,6 @@ export default function EditProduc({product}: Product) {
                 error(e.message)
             })
         })
-        hideLoading()
     }
 
 
@@ -147,7 +142,6 @@ export default function EditProduc({product}: Product) {
                 </div>
             </div>
             </div>
-            <Toaster />
         </AppLayout>
     )
 }

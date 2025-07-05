@@ -50,7 +50,6 @@ export default function EditOrganization({organizationUpdate}: OrganizationEditF
         setUploadImage(temporalURL)
     }
     const submit: FormEventHandler = (e) => {
-        showLoading()
         e.preventDefault();
         post('/organization/edit', {
             onSuccess: (page) => {
@@ -64,7 +63,6 @@ export default function EditOrganization({organizationUpdate}: OrganizationEditF
                 error(res.message)
             })
         })
-        hideLoading()
     }
 
     return (
