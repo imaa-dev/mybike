@@ -21,6 +21,7 @@ export default function ServiceImages({ initialFiles, serviceId }: ServiceImages
   const [files, setFiles] = useState<FileMeta[]>(initialFiles);
   const { showConfirm } = useConfirmDialog();
   const removeImage = async (id: number) => {
+      showLoading()
     const response = await deleteImage(id);
     if (response.code === 200) {
       toast.success(response.message);
@@ -28,6 +29,7 @@ export default function ServiceImages({ initialFiles, serviceId }: ServiceImages
     } else {
       toast.error('Error en el servidor');
     }
+    hideLoading();
   };
     const handleDelete = (fileId: number) => {
         showConfirm({

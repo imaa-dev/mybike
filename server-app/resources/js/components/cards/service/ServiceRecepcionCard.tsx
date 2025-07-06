@@ -76,11 +76,15 @@ const ServiceRecepcionCard = ({ service, handleDelete }: ServiceDataPropCard ) =
                             </AvatarFallback>
                         </Avatar>
                         <div className="ps-3 flex-col">
-
                             <div className="text-base font-semibold">{service.client.name}</div>
-                            <div className="font-normal text-gray-500">{service.client.email}</div>
+                            <div className="text-base text-gray-500">{service.client.phone}</div>
+                            <div className="text-base text-gray-500">
+                                <div className="[overflow-wrap:anywhere]">
+                                    {service.client.email}
+                                </div>
+                            </div>
+                            </div>
                         </div>
-                    </div>
 
                     <div className="flex pt-3">
                         <SidebarGroupLabel> PRODUCTO: </SidebarGroupLabel>
@@ -90,10 +94,10 @@ const ServiceRecepcionCard = ({ service, handleDelete }: ServiceDataPropCard ) =
                             <div className="font-normal text-gray-500">{service.product.model}</div>
                         </div>
                     </div>
-                    <div className="flex" >
+                    <div className="flex-col pt-3 ">
                         <SidebarGroupLabel > DETALLES DE INGRESO: </SidebarGroupLabel>
                         {service.reasons.map((reason) => (
-                            <div className="p-1">{reason.reason_note} <br /></div>
+                            <div className="text-base font-semibold">{reason.reason_note} </div>
                         ))}
                     </div>
                     <div className="flex pt-3" >
