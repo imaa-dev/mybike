@@ -40,12 +40,11 @@ export default function ListOrganization({ organizations }: OrganizationDataProp
     const handleRemoveOrganization = async (id: number) => {
         showLoading()
         const response = await deleteOrganization(id)
-        if (response.code === 200) {
+        if (response.code === 200 && typeof response.message === "string") {
             success(response.message);
             setOrgList(prev => prev.filter(org => org.id !== id));
-        } else {
-            error(response.message);
         }
+        
         hideLoading()
     }
     return (

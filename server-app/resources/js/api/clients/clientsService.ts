@@ -1,29 +1,24 @@
 import api from '@/api/AxiosIntance';
 import { Client } from '@/types';
 import { errorHandler } from '@/utils/errorHandler';
-import { AxiosError } from 'axios';
 
-const deleteClient = async (id: number): Promise<{ code: number; message: string; success: boolean }> => {
-    try {
-        const response = await api.delete(`/delete/client/${id}`)
-        return response.data
-    } catch (error){
-        console.log(error, "ERROR")
-        return {
-            code: 500,
-            message: 'Error',
-            success: false
-        };
-    }
-}
-type CreateClientSuccess = {
+type ClientResponse = {
     code: number | string;
     message: string | Record<keyof Client, string>;
     success: boolean;
     client?: Client;
 };
 
-const createClient = async (data: Client): Promise<CreateClientSuccess> => {
+const deleteClient = async (id: number): Promise<ClientResponse> => {
+    try {
+        const response = await api.delete(`/delete/client/${id}`)
+        return response.data
+    } catch (error: unknown){
+        return errorHandler(error);
+    }
+}
+
+const createClient = async (data: Client): Promise<ClientResponse> => {
     try {
         const response = await api.post(`/create/client`, data ,{
             headers: {
@@ -31,7 +26,7 @@ const createClient = async (data: Client): Promise<CreateClientSuccess> => {
             }
         })
         return response.data;
-    } catch (error: AxiosError | unknown) {
+    } catch (error: unknown) {
         return errorHandler(error)
     }
 }

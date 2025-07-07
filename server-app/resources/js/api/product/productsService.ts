@@ -1,5 +1,4 @@
 import api from '@/api/AxiosIntance';
-import { AxiosError } from 'axios';
 import { ProductData } from '@/types';
 import { errorHandler } from '@/utils/errorHandler';
 
@@ -32,7 +31,7 @@ const createProduct = async (data: ProductData): Promise <CreateProductSuccess> 
             }
         })
         return response.data
-    } catch (error : AxiosError | unknown) {
+    } catch (error : unknown) {
         return errorHandler(error);
     }
 }
