@@ -76,6 +76,26 @@ class ServiController extends Controller
             'servis' => $services,
         ]);
     }
+
+    public function listInRepair(Request $request){
+        $organization = Organization::where('user_id', $request->user()->id)
+            ->where('active', true)
+            ->with('file')
+            ->first();
+        if($organization->id)
+            $servicesInRepair = Servi::where('organization_id', $organization->id)
+                ->where('status_id', 4)
+                ->with('file')
+                ->with('product')
+                ->with('client')
+                ->with('reasons')
+                ->with('status')
+                ->get();
+        return Inertia::render('service/inRepairService', [
+            'service' => $servicesInRepair
+        ]);
+    }
+
     public function create(Request $request)
     {
         $product = Product::where('user_id', $request->user()->id)->get();
@@ -119,4 +139,36 @@ class ServiController extends Controller
         return response()->json($res);
     }
 
+    public function toRepaired(Request $request){
+        $data = [];
+        try {
+            $serviceToRepaired = Servi::where('id', $request->servi_id);
+            $serviceToRepaired->status_id = 5;
+            $data = [
+                'code' => 200,
+                'status' => 'success',
+                'message' => 'Servicios cambiado de estado satisfactoriamente',
+            ];
+        } catch (\Throwable $th){
+            $data = [
+                'code' => 500,
+                'status' => 'fail',
+                'message' => 'ERROR',
+            ];
+        }
+
+        return response()->json($data);
+    }
+    public function toDiagnosis(Request $request){
+
+    }
+    public function toInRepair(Request $request){
+
+    }
+    public function toDelivered(Request $request){
+
+    }
+    public function toAproveSpareParts(Request $request){
+
+    }
 }

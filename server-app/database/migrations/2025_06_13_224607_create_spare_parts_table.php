@@ -20,8 +20,7 @@ return new class extends Migration
             $table->string('model');
             $table->string('brand');
             $table->double('price');
-            $table->integer('quantity');
-            $table->double('total_price');
+            $table->string('note');
             $table->timestamps();
         });
     }

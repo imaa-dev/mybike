@@ -17,7 +17,7 @@ const mainNavItems: NavItemDrop[] = [
         icon: Pencil,
     },
     {
-        title: 'Diagnosticar',
+        title: 'A Reparar',
         icon: BriefcaseMedical,
     },
     {

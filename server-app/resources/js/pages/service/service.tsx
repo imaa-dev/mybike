@@ -78,7 +78,7 @@ export default function Service({ notOrganization, countTypeService }: ServiData
                                 if(notOrganization){
                                     toast.error('No tienes organización No puedes crear servicios')
                                 } else {
-                                    router.visit('/create/service');
+                                    router.visit('/list-in-repair/service');
                                 }
                             }}
                         >

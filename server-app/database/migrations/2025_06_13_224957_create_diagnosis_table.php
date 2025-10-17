@@ -17,6 +17,9 @@ return new class extends Migration
             $table->unsignedBigInteger('reason_id');
             $table->foreign('servi_id')->references('id')->on('servis');
             $table->foreign('reason_id')->references('id')->on('reasons');
+            $table->string('diagnosis');
+            $table->string('repair_time');
+            $table->double('cost');
             $table->timestamps();
         });
     }

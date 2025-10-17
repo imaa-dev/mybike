@@ -29,7 +29,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('manage/service', [ServiController::class, 'update'])->name('services.update');
     Route::delete('delete/service/{id}', [ServiController::class, 'delete'])->name('services.destroy');
     Route::get('list-repair/service', [ServiController::class, 'listRepair'])->name('services.list.repair.view');
-
+    Route::get('list-in-repair/service', [ServiController::class, 'listInRepair'])->name('service.list.in.repair.view');
+    
     // Client routes
     Route::get('client', [ClientController::class, 'list'])->name('clients.list.view');
     Route::get('create/client', [ClientController::class, 'create'])->name('client.create.view');

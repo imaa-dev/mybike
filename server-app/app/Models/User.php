@@ -44,6 +44,16 @@ class User extends Authenticatable
         return $this->morphOne(File::class,  'fileable');
     }
 
+    public function subscription()
+    {
+        return $this->hasOne(Subscription::class);
+    }
+
+    public function plan()
+    {
+        return $this->hasOneThrough(Plan::class, Subscription::class);
+    }
+
     /**
      * Get the attributes that should be cast.
      *

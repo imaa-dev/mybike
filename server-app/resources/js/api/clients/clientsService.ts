@@ -2,7 +2,7 @@ import api from '@/api/AxiosIntance';
 import { Client } from '@/types';
 import { errorHandler } from '@/utils/errorHandler';
 
-type ClientResponse = {
+	type ClientResponse = {
     code: number | string;
     message: string | Record<keyof Client, string>;
     success: boolean;

@@ -1,7 +1,11 @@
 import { type NavItemDrop } from '@/types';
 import { router } from '@inertiajs/react';
+import { useModal } from '@/context/ModalContextForm';
+import { CreateDiagnosisForm } from '@/components/forms/service/CreateDiagnosisForm';
 
 export function NavDropDown({ items = [], serviceId, handleDelete }: { items: NavItemDrop[] } & { serviceId: number } & {handleDelete: (id: number) => void}) {
+
+    const { openModal } = useModal();
 
     return (
         <>
@@ -15,6 +19,9 @@ export function NavDropDown({ items = [], serviceId, handleDelete }: { items: Na
                             }
                             if(item.title === 'Editar') {
                                 router.visit(`/edit/${serviceId}/service`)
+                            }
+                            if(item.title === 'Diagnosticar'){
+                                openModal( <CreateDiagnosisForm /> )
                             }
                         }}
                         className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-600"
