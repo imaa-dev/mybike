@@ -5,8 +5,10 @@ import ButtonAdd from '@/components/button-add';
 import { Pencil, Trash2 } from 'lucide-react';
 import { deleteProduct } from '@/api/product/productsService';
 import { useConfirmDialog } from '@/context/ModalContext';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useToast } from '@/context/ToastContext';
+import { useModal } from '@/context/ModalContextForm';
+import { AskContent } from '@/components/ask-content';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -15,13 +17,15 @@ const breadcrumbs: BreadcrumbItem[] = [
     }
 ];
 interface ProductDataProp {
+    notOrganization: boolean;
     products: ProductData[];
 }
-export default function Product({products}: ProductDataProp){
-    const [productsShow, setProductsShow] = useState(products)
+export default function Product({products, notOrganization}: ProductDataProp){
+    const [ modalShow ] = useState<boolean>(notOrganization)
+    const [ productsShow, setProductsShow ] = useState(products)
     const { showConfirm } = useConfirmDialog();
-    const { success, error } = useToast()
-
+    const { success, error } = useToast();
+    const { openModal } = useModal();
     const handleDelete = (productId: number) => {
         showConfirm({
             title: "Deseas eliminar el producto",
@@ -37,6 +41,12 @@ export default function Product({products}: ProductDataProp){
             error(response.message);
         }
     }
+
+    useEffect(() => {
+        if(modalShow){
+            openModal( <AskContent></AskContent> );
+        }
+    }, [])
     return(
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Productos" />

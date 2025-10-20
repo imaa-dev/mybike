@@ -16,7 +16,6 @@ class UserSeeder extends Seeder
     {
         $DATA = [
             [
-                'role_id'  => 1,
                 'name' => 'Mauricio',
                 'email' => 'imaa.desarrollo@gmail.com',
                 'email_verified_at' => now(),
@@ -24,7 +23,6 @@ class UserSeeder extends Seeder
                 'password' => Hash::make('qwerty123'),
             ],
             [
-                'role_id'  => 2,
                 'name' => 'Alejandro',
                 'email' => 'alejandro@gmail.com',
                 'email_verified_at' => now(),
@@ -32,7 +30,6 @@ class UserSeeder extends Seeder
                 'password' => Hash::make('qwerty123'),
             ],
             [
-                'role_id'  => 3,
                 'name' => 'Mauri',
                 'email' => 'mauri@gmail.com',
                 'email_verified_at' => now(),

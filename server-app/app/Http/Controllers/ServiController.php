@@ -21,6 +21,7 @@ class ServiController extends Controller
     }
     public function show(Request $request)
     {
+        $countTypeService = [];
         $organization = Organization::where('user_id', $request->user()->id)
             ->where('active', true)
             ->with('file')
@@ -28,8 +29,8 @@ class ServiController extends Controller
         $notOrganization = true;
         if($organization !== null){
             $notOrganization = false;
+            $countTypeService = $this->serviService->getCountTypeService();
         }
-        $countTypeService = $this->serviService->getCountTypeService();
 
         return Inertia::render('service/service', [
             'notOrganization' => $notOrganization,

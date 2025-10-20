@@ -36,6 +36,6 @@ class StatusSeeder extends Seeder
                                 'name' => 'INCIDENCIA',
                             ],
                 ];
-                DB::table('status')->insert($DATA);
+                DB::table('status_services')->insert($DATA);
     }
 }

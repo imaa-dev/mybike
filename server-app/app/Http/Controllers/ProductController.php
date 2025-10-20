@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Services\ProductService;
+use App\Models\Organization;
 use App\Models\Product;
 use App\Models\ProductType;
 use Illuminate\Http\Request;
@@ -21,8 +22,16 @@ class ProductController extends Controller
     }
 
     public function list(Request $request){
-        $products = Product::where('user_id', $request->user()->id)->get();
+        $products = [];
+        $organization = Organization::where('user_id', $request->user()->id)->first();
+        $notOrganization = true;
+        if($organization !== null){
+            $notOrganization = false;
+            $products = Product::where('user_id', $request->user()->id)->get();
+        }
+
         return Inertia::render('product/product', [
+            'notOrganization' => $notOrganization,
             'products' => $products,
         ]);
     }
