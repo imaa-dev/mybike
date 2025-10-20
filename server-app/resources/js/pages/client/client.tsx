@@ -13,7 +13,7 @@ import { useToast } from '@/context/ToastContext';
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Clientes',
-        href: '/client'
+        href: '/user-client'
     },
 ];
 interface ClientDataProp {
@@ -42,7 +42,7 @@ export default function Client({clients}: ClientDataProp){
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Cliente" />
-            <ButtonAdd route="/create/client" />
+            <ButtonAdd route="/create/user-client" />
             <div className="flex h-full flex-1 flex-col items-center gap-4 px-1 sm:px-5">
                 <div className="w-full max-w-full overflow-x-auto rounded-lg border shadow-md">
                         <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -89,7 +89,7 @@ export default function Client({clients}: ClientDataProp){
                                         <button
                                             type="button"
                                             className="p-2"
-                                            onClick={() => router.visit(`/update/${client.id}/client`)}
+                                            onClick={() => router.visit(`/update/${client.id}/user-client`)}
                                         >
                                             <Pencil color={'#1d4ed8'} />
                                         </button>

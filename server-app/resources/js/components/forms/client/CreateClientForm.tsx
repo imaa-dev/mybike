@@ -36,8 +36,8 @@ export const CreateClientForm: React.FC<Props> = ({setClientsData}) => {
             success(response.message)
         }
         if(response.code === 200 && setClientsData === undefined && typeof response.message === 'string'){
-            success(response.message)
-            router.visit('/client');
+            success(response.message);
+            router.visit('/user-client');
         }
         if(response.code === 422 && typeof response.message === 'object'){
             setError(response.message)

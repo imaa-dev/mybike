@@ -34,11 +34,6 @@ class User extends Authenticatable
         'remember_token',
     ];
 
-    public function role()
-    {
-        return $this->belongsTo(Role::class);
-    }
-
     public function file()
     {
         return $this->morphOne(File::class,  'fileable');

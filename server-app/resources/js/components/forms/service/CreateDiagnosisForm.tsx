@@ -43,7 +43,7 @@ export function CreateDiagnosisForm() {
         showLoading();
         hideLoading();
         closeModal();
-        success("MESSAGE");
+        success('MESSAGE');
         error("ERROR_MESSAGE");
         setError('diagnosis', 'ERROR');
 

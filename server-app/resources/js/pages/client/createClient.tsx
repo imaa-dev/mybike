@@ -7,11 +7,11 @@ import { CreateClientForm } from '@/components/forms/client/CreateClientForm';
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Cliente',
-        href: '/client',
+        href: '/user-client',
     },
     {
         title: 'Crear',
-        href: '/',
+        href: '/user-client',
     },
 
 ];

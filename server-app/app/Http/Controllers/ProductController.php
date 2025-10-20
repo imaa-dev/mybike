@@ -27,7 +27,7 @@ class ProductController extends Controller
         $notOrganization = true;
         if($organization !== null){
             $notOrganization = false;
-            $products = Product::where('user_id', $request->user()->id)->get();
+            $products = Product::where('organization_id', $request->user()->id)->get();
         }
 
         return Inertia::render('product/product', [

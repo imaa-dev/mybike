@@ -46,7 +46,8 @@ export default function Product({products, notOrganization}: ProductDataProp){
         if(modalShow){
             openModal( <AskContent></AskContent> );
         }
-    }, [])
+    }, [modalShow])
+
     return(
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Productos" />

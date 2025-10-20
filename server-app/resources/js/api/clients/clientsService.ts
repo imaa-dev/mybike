@@ -4,14 +4,14 @@ import { errorHandler } from '@/utils/errorHandler';
 
 	type ClientResponse = {
     code: number | string;
-    message: string | Record<keyof Client, string>;
+    message: string;
     success: boolean;
     client?: Client;
 };
 
 const deleteClient = async (id: number): Promise<ClientResponse> => {
     try {
-        const response = await api.delete(`/delete/client/${id}`)
+        const response = await api.delete(`/delete-client/${id}`)
         return response.data
     } catch (error: unknown){
         return errorHandler(error);
@@ -20,7 +20,7 @@ const deleteClient = async (id: number): Promise<ClientResponse> => {
 
 const createClient = async (data: Client): Promise<ClientResponse> => {
     try {
-        const response = await api.post(`/create/client`, data ,{
+        const response = await api.post(`/create/user-client`, data ,{
             headers: {
                 'Content-Type': 'multipart/form-data'
             }

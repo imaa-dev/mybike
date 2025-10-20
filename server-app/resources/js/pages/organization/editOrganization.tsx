@@ -55,7 +55,7 @@ export default function EditOrganization({organizationUpdate}: OrganizationEditF
             onSuccess: (page) => {
                 const message = (page.props as { flash?: { message?: string } }).flash?.message;
                 if(message) {
-                    success(message)
+                    success(message);
                 }
                 reset()
             },

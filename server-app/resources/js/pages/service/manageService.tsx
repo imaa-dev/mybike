@@ -58,8 +58,8 @@ export default function ManageService({ servi, clients, products }: ServiProp & 
         showLoading();
         const response = await deleteReason(id)
         if(response.code === 200){
-            success(response.message)
-            setReasons((prevReason) => prevReason.filter((reason) => reason.id !== id))
+            success(response.message);
+            setReasons((prevReason) => prevReason.filter((reason) => reason.id !== id));
         } else {
             error(response.message)
         }

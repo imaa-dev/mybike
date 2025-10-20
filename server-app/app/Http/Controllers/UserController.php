@@ -18,13 +18,13 @@ class UserController extends Controller
     }
     public function create()
     {
-        return Inertia::render('user');
+        return Inertia::render('client/createClient');
     }
+
     public function listClient()
     {
-
-        $clients = User::where('role_id', 2)->with('file')->get();
-        return Inertia::render('client', [
+        $clients = User::where('rol', "CLIENT")->with('file')->get();
+        return Inertia::render('client/client', [
             'clients' => $clients,
         ]);
     }
@@ -32,31 +32,25 @@ class UserController extends Controller
     {
         $res = $this->userService->update($request);
         session()->flash('message', $res['message']);
-        return redirect()->route('clients.list.view');
+        return redirect()->route('users.client.list.view');
     }
-    public function getClientUpdate(User $user)
+    public function getUpdateClient(User $user)
     {
         $client = User::where('id', $user->id)->with('file')->first();
-        return Inertia::render('forms/editClientForm', [
+        return Inertia::render('client/editClient', [
             'client' => $client
         ]);
-    }
-    public function createClient()
-    {
-        return Inertia::render('forms/createClientForm');
     }
 
     public function storeClient(StoreClientRequest $request)
     {
         $res = $this->userService->createClient($request);
-        session()->flash('message', $res['message']);
-        return redirect()->route('clients.list.view');
+        return response()->json($res);
     }
 
     public function deleteClient(Request $request)
     {
         $res = $this->userService->deleteClient($request);
-        session()->flash('message', $res['message']);
-        return redirect()->route('clients.list.view');
+        return response()->json($res);
     }
 }

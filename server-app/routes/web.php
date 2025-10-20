@@ -30,14 +30,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('delete/service/{id}', [ServiController::class, 'delete'])->name('services.destroy');
     Route::get('list-repair/service', [ServiController::class, 'listRepair'])->name('services.list.repair.view');
     Route::get('list-in-repair/service', [ServiController::class, 'listInRepair'])->name('service.list.in.repair.view');
-    
-    // Client routes
-    Route::get('client', [ClientController::class, 'list'])->name('clients.list.view');
-    Route::get('create/client', [ClientController::class, 'create'])->name('client.create.view');
-    Route::post('create/client', [ClientController::class, 'store'])->name('client.store');
-    Route::get('update/{client}/client', [ClientController::class, 'getUpdate'])->name('client.update.view');
-    Route::post('update/client', [ClientController::class, 'update'])->name('client.update');
-    Route::delete('delete/client/{id}', [ClientController::class, 'delete'])->name('clients.destroy');
 
     // Product routes
     Route::get('product', [ProductController::class, 'list'])->name('products.list.view');
@@ -56,8 +48,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('organization/edit', [OrganizationController::class, 'update'])->name('organizations.update');
     Route::delete('organization/delete/{id}', [OrganizationController::class, 'delete'])->name('organizations.destroy');
 
-    // User routes
-    Route::get('user', [UserController::class, 'create'])->name('users.create');
+    // User Clients routes
+    Route::get('create/user-client', [UserController::class, 'create'])->name('users.create.view');
+    Route::get('user-client', [UserController::class, 'listClient'])->name('users.client.list.view');
+    Route::get('update/{user}/user-client', [UserController::class, 'getUpdateClient'])->name('users.update.client.view');
+    Route::post('create/user-client', [UserController::class, 'storeClient'])->name('users.store.client');
+    Route::delete('delete-client/{id}', [UserController::class, 'deleteClient'])->name('users.client.destroy');
+    Route::post('update-client', [UserController::class, 'updateClient'])->name('users.client.update');
 
     // File routes
     Route::delete('delete-image-service/{id}', [FileController::class, 'removeImage'])->name('service.file.delete');

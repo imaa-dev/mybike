@@ -13,11 +13,11 @@ import { useToast } from '@/context/ToastContext';
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Cliente',
-        href: '/client'
+        href: '/user-client'
     },
     {
         title: 'Actualizar',
-        href: '/client'
+        href: '/user-client'
     },
 ];
 
@@ -43,7 +43,7 @@ export default function EditClient({client}: ClientProp) {
     })
     const submit: FormEventHandler = (e) => {
         e.preventDefault()
-        post(`/update/client`, {
+        post(`/update-client`, {
             forceFormData: true,
             onSuccess: (page) => {
                 const message = (page.props as { flash?: { message?: string } }).flash?.message;

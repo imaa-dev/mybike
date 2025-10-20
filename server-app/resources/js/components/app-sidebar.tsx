@@ -37,7 +37,7 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: 'Clientes',
-        href: '/client',
+        href: '/user-client',
         icon: SquareUser,
     },
 ];

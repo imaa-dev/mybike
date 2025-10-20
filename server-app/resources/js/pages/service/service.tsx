@@ -35,9 +35,7 @@ export default function Service({ notOrganization, countTypeService }: ServiData
             openModal( <AskContent></AskContent> )
         }
     }, [modal])
-    console.log("IN SERVICES");
-    console.log(notOrganization);
-    console.log(countTypeService);
+
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Servicios" />
