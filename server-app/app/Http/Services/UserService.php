@@ -21,7 +21,8 @@ class UserService
             $data = [
                 'status' => 'success',
                 'code' => 200,
-                'message' => 'Client Created Successfully',
+                'message' => 'Cliente Creado Exitosamente',
+                'client' => $client
             ];
         } catch (\Throwable $th) {
             Log::error("Service User Catch Error : ". $th);

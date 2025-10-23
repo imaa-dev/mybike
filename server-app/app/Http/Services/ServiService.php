@@ -25,7 +25,7 @@ class ServiService
                 }
             }
             $servi = new Servi();
-            $servi->client_id  = $request->client_id;
+            $servi->client_id = $request->client_id;
             $servi->organization_id = $request->organization_id;
             $servi->product_id = $request->product_id;
             $servi->status_id = 1;
@@ -65,7 +65,6 @@ class ServiService
             $serviceUpdate->product_id = $request->product_id;
             $serviceUpdate->date_entry = $request->date_entry;
             $serviceUpdate->save();
-            //ProcessReceipt::dispatch($serviceUpdate)->onQueue('high')->afterResponse();
             $data = [
                 'code' => 200,
                 'status' => 'success',
@@ -143,15 +142,15 @@ class ServiService
     {
 
     }
-    public function getCountTypeService()
+    public function getCountTypeService($id)
     {
-        $serviceRecepcionado = Servi::where('status_id', 1)->count();
-        $serviceDiagnosticado = Servi::where('status_id', 2)->count();
-        $serviceAR = Servi::where('status_id', 3)->count();
-        $serviceER = Servi::where('status_id', 4)->count();
-        $serviceReparado = Servi::where('status_id', 5)->count();
-        $serviceEntregado = Servi::where('status_id', 6)->count();
-        $serviceIncidencia = Servi::where('status_id', 7)->count();
+        $serviceRecepcionado = Servi::where('organization_id', $id)->where('status_id', 1)->count();
+        $serviceDiagnosticado = Servi::where('organization_id', $id)->where('status_id', 2)->count();
+        $serviceAR = Servi::where('organization_id', $id)->where('status_id', 3)->count();
+        $serviceER = Servi::where('organization_id', $id)->where('status_id', 4)->count();
+        $serviceReparado = Servi::where('organization_id', $id)->where('status_id', 5)->count();
+        $serviceEntregado = Servi::where('organization_id', $id)->where('status_id', 6)->count();
+        $serviceIncidencia = Servi::where('organization_id', $id)->where('status_id', 7)->count();
         return [
             'serviceRecepcionado' => $serviceRecepcionado,
             'serviceDiagnosticado' => $serviceDiagnosticado,

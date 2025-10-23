@@ -97,7 +97,7 @@ const ServiceRecepcionCard = ({ service, handleDelete }: ServiceDataPropCard ) =
                     <div className="flex-col pt-3 ">
                         <SidebarGroupLabel > DETALLES DE INGRESO: </SidebarGroupLabel>
                         {service.reasons.map((reason) => (
-                            <div className="text-base font-semibold">{reason.reason_note} </div>
+                            <div className="text-base font-semibold" key={reason.id} >{reason.reason_note} </div>
                         ))}
                     </div>
                     <div className="flex pt-3" >

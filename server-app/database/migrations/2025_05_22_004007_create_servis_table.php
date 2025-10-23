@@ -13,12 +13,14 @@ return new class extends Migration
     {
         Schema::create('servis', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('client_id');
             $table->unsignedBigInteger('organization_id');
             $table->unsignedBigInteger('product_id');
             $table->unsignedBigInteger('status_id');
             $table->foreign('organization_id')->references('id')->on('organizations');
             $table->foreign('product_id')->references('id')->on('products');
             $table->foreign('status_id')->references('id')->on('status_services');
+            $table->foreign('client_id')->references('id')->on('users');
             $table->dateTime('date_entry');
             $table->dateTime('date_exit')->nullable();
             $table->integer('satisfied')->nullable();

@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Services;
 
+use App\Models\Organization;
 use App\Models\Product;
 use Illuminate\Support\Facades\Log;
 
@@ -14,9 +15,11 @@ class ProductService{
                     $product_paths[] = $path;
                 }
             }
+            $organization = Organization::where('user_id', $request->user()->id)->first();
+
             $product = new Product();
-            $product->user_id  = $request->user()->id;
-            $product->type =  $request->type;
+            $product->organization_id = $organization->id;
+            $product->name = $request->type;
             $product->brand  = $request->brand;
             $product->model  = $request->model;
             $product->save();

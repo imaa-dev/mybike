@@ -28,7 +28,8 @@ export const CreateClientForm: React.FC<Props> = ({setClientsData}) => {
         showLoading()
         const response = await createClient(data)
         hideLoading()
-        if(typeof response.message === 'string' && typeof setClientsData !== 'undefined' && response.code === 200){
+        console.log(response);
+        if(response.message === 'Cliente Creado Exitosamente' && typeof setClientsData !== 'undefined' && response.code === 200){
             closeModal();
             setClientsData?.(prevState =>
                 response.client !== undefined ? [...prevState, response.client] : prevState

@@ -12,7 +12,7 @@ class Servi extends Model
     }
     public function client()
     {
-        return $this->belongsTo(Client::class);
+        return $this->belongsTo(User::class);
     }
     public function organization()
     {
@@ -28,6 +28,6 @@ class Servi extends Model
     }
     public function status()
     {
-        return $this->belongsTo(Statu::class);
+        return $this->belongsTo(StatusService::class);
     }
 }

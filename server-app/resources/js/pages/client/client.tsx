@@ -21,7 +21,7 @@ interface ClientDataProp {
 }
 export default function Client({clients}: ClientDataProp){
     const { success, error } = useToast()
-    const [clientsShow, setClientsShow] = useState(clients)
+    const [ clientsShow, setClientsShow ] = useState(clients)
     const getInitials = useInitials();
     const { showConfirm } = useConfirmDialog();
     const handleDelete = (clientId: number) => {

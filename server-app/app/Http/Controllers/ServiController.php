@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreServiceRequest;
-use App\Models\Client;
 use App\Models\Organization;
 use App\Models\Product;
 use App\Models\Servi;
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Services\ServiService;
 use Inertia\Inertia;
@@ -29,7 +29,7 @@ class ServiController extends Controller
         $notOrganization = true;
         if($organization !== null){
             $notOrganization = false;
-            $countTypeService = $this->serviService->getCountTypeService();
+            $countTypeService = $this->serviService->getCountTypeService($organization->id);
         }
 
         return Inertia::render('service/service', [
@@ -99,8 +99,11 @@ class ServiController extends Controller
 
     public function create(Request $request)
     {
-        $product = Product::where('user_id', $request->user()->id)->get();
-        $client = Client::where('user_id', $request->user()->id)->get();
+        $organization = Organization::where('user_id', $request->user()->id)->first();
+
+        $product = Product::where('organization_id', $organization->id)->get();
+        $client = User::where('rol', "CLIENT")->get();
+
         return Inertia::render('service/createServis', [
             'products' => $product,
             'clients' => $client,
@@ -112,7 +115,7 @@ class ServiController extends Controller
         return redirect()->route('services.list.reception.view');
     }
 
-    public function getUpdate(Request $request,Servi $servi)
+    public function getUpdate(Request $request, Servi $servi)
     {
         $serviceFile = Servi::where('id', $servi->id)
             ->with('file')
@@ -120,8 +123,9 @@ class ServiController extends Controller
             ->with('client')
             ->with('reasons')
             ->first();
-        $products = Product::where('user_id', $request->user()->id)->get();
-        $clients = Client::where('user_id', $request->user()->id)->get();
+        $organization = Organization::where('user_id', $request->user()->id)->first();
+        $products = Product::where('organization_id', $organization->id)->get();
+        $clients = User::where('rol', "CLIENT")->get();
         return Inertia::render('service/manageService', [
             'servi' => $serviceFile,
             'clients' => $clients,
