@@ -1,4 +1,4 @@
-import React, { FormEventHandler, useState } from 'react';
+import React, { ChangeEvent, FormEventHandler, useContext, useState } from 'react';
 import { Plus, Save } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { SidebarGroupLabel } from '@/components/ui/sidebar';
@@ -12,6 +12,7 @@ import { useForm, usePage } from '@inertiajs/react';
 import { useModal } from '@/context/ModalContextForm';
 import CreateProductForm from '@/components/forms/product/CreateProductForm';
 import { CreateClientForm } from '@/components/forms/client/CreateClientForm';
+import { FormContext } from '@/context/FormContext';
 const appUrl = import.meta.env.VITE_APP_URL;
 
 const CreateServiceForm = ({clients, products}: ClientDataProp & ProductDataProp) => {
@@ -22,6 +23,8 @@ const CreateServiceForm = ({clients, products}: ClientDataProp & ProductDataProp
     const [uploadImage, setUploadImage] = useState<string[]>([]);
     const { showLoading, hideLoading } = useLoading();
     const { openModal } = useModal();
+    const { state, dispatch } = useContext(FormContext);
+
     const handleImageChange = (files: File[]) => {
         const urls = Array.from(files).map((file) => URL.createObjectURL(file));
         setUploadImage((prev) => [...prev, ...urls]);
@@ -29,12 +32,31 @@ const CreateServiceForm = ({clients, products}: ClientDataProp & ProductDataProp
     const page: Page = usePage();
     const { post, data, setData, errors, processing } = useForm<Required<ServiDataForm>>({
         organization_id: page.props.organization.id,
-        product_id: 0,
-        client_id: 0,
-        date_entry: '',
-        reason_notes: [],
-        file: null,
+        product_id: state.product_id,
+        client_id: state.client_id,
+        date_entry: state.date_entry,
+        reason_notes: state.reason_notes,
+        file: state.file,
     })
+
+    const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+        dispatch({
+            type: 'SET_FIELD',
+            field: e.target.name as keyof typeof state,
+            value: e.target.value,
+        });
+    };
+
+    const handleChangeReasonNote = (reason: string) => {
+        dispatch({
+            type: 'SET_FIELD',
+            field: "reason_notes" as keyof typeof state,
+            value: [...data.reason_notes, { reason_note: reason }]
+        })
+    }
+    const removeReasonNotes = (index: number) => {
+        dispatch({ type: 'REMOVE_REASON_NOTE', index });
+    }
     const submit:FormEventHandler = (e) => {
         e.preventDefault();
         post('/create/service', {
@@ -43,7 +65,6 @@ const CreateServiceForm = ({clients, products}: ClientDataProp & ProductDataProp
                 if (message) {
                     success(message);
                 }
-
             },
             onError: (e) => {
                 error(e.message)
@@ -68,7 +89,10 @@ const CreateServiceForm = ({clients, products}: ClientDataProp & ProductDataProp
                             className="peer block w-full appearance-none border-0 border-b-2 border-gray-300 bg-transparent px-0 py-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-0 focus:outline-none dark:border-gray-600 dark:text-white dark:focus:border-blue-500"
                             autoComplete="off"
                             value={data.date_entry}
-                            onChange={(e) => setData('date_entry', e.target.value)}
+                            onChange={(e) => {
+                                handleChange(e);
+                                setData('date_entry', e.target.value);
+                            }}
                             required
                         />
                         <label
@@ -80,16 +104,21 @@ const CreateServiceForm = ({clients, products}: ClientDataProp & ProductDataProp
                         <InputError message={errors.date_entry} />
                     </div>
                     <div className="group relative z-0 mb-5 w-full">
-                        <label htmlFor="products"
-                               className="absolute -z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:start-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:font-medium peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:text-gray-400 peer-focus:dark:text-blue-500"
+                        <label
+                            htmlFor="products"
+                            className="absolute -z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:start-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:font-medium peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:text-gray-400 peer-focus:dark:text-blue-500"
                         >
                             Producto <span className="text-red-500">*</span>
                         </label>
-                        <div className="flex" >
+                        <div className="flex">
                             <select
                                 id="product"
+                                name="product_id"
                                 className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
-                                onChange={(e) => setData('product_id', Number(e.target.value))}
+                                onChange={(e) => {
+                                    handleChange(e);
+                                    setData('product_id', Number(e.target.value));
+                                }}
                                 value={data.product_id}
                             >
                                 <option value="">Selecciona un producto</option>
@@ -99,11 +128,7 @@ const CreateServiceForm = ({clients, products}: ClientDataProp & ProductDataProp
                                     </option>
                                 ))}
                             </select>
-                            <Button
-                                type="button"
-                                className="ml-3"
-                                onClick={() => openModal( <CreateProductForm setProductsData={setProductsData} /> )}
-                            >
+                            <Button type="button" className="ml-3" onClick={() => openModal(<CreateProductForm setProductsData={setProductsData} />)}>
                                 <Plus />
                             </Button>
                         </div>
@@ -111,16 +136,21 @@ const CreateServiceForm = ({clients, products}: ClientDataProp & ProductDataProp
                     </div>
 
                     <div className="group relative z-0 mb-5 w-full">
-                        <label htmlFor="clients"
-                               className="absolute -z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:start-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:font-medium peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:text-gray-400 peer-focus:dark:text-blue-500"
+                        <label
+                            htmlFor="clients"
+                            className="absolute -z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:start-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:font-medium peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:text-gray-400 peer-focus:dark:text-blue-500"
                         >
                             Cliente <span className="text-red-500">*</span>
                         </label>
-                        <div className="flex" >
+                        <div className="flex">
                             <select
                                 id="client"
+                                name="client_id"
                                 className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
-                                onChange={(e) => setData('client_id', Number(e.target.value))}
+                                onChange={(e) => {
+                                    handleChange(e)
+                                    setData('client_id', Number(e.target.value));
+                                }}
                                 value={data.client_id}
                             >
                                 <option value="">Selecciona un cliente</option>
@@ -130,15 +160,10 @@ const CreateServiceForm = ({clients, products}: ClientDataProp & ProductDataProp
                                     </option>
                                 ))}
                             </select>
-                            <Button
-                                type="button"
-                                className="ml-3"
-                                onClick={() => openModal(<CreateClientForm setClientsData={setClientsData} />)}
-                            >
+                            <Button type="button" className="ml-3" onClick={() => openModal(<CreateClientForm setClientsData={setClientsData} />)}>
                                 <Plus />
                             </Button>
                         </div>
-
                     </div>
                 </Card>
                 <Card className="m-5 mt-10 max-w-xl p-6">
@@ -146,7 +171,7 @@ const CreateServiceForm = ({clients, products}: ClientDataProp & ProductDataProp
                     <div className="group relative z-0 mb-5 w-full">
                         <input
                             type="text"
-                            name="reason"
+                            name="reason_notes"
                             id="reason"
                             className="peer block w-full appearance-none border-0 border-b-2 border-gray-300 bg-transparent px-0 py-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-0 focus:outline-none dark:border-gray-600 dark:text-white dark:focus:border-blue-500"
                             tabIndex={3}
@@ -164,12 +189,13 @@ const CreateServiceForm = ({clients, products}: ClientDataProp & ProductDataProp
                     </div>
                     <Button
                         type="button"
-                        onClick={() => {
+                        onClick={async () => {
                             if (reason.trim() === '') {
                                 error('El detalle de ingreso no puede ir vacio');
                                 return;
                             }
                             setData('reason_notes', [...data.reason_notes, { reason_note: reason }]);
+                            handleChangeReasonNote(reason)
                             setReason('');
                         }}
                         className="mt-4 w-full"
@@ -189,6 +215,7 @@ const CreateServiceForm = ({clients, products}: ClientDataProp & ProductDataProp
                                             onClick={() => {
                                                 const updated = data.reason_notes.filter((_, i) => i !== index);
                                                 setData('reason_notes', updated);
+                                                removeReasonNotes(index)
                                             }}
                                         >
                                             Eliminar
@@ -258,6 +285,6 @@ const CreateServiceForm = ({clients, products}: ClientDataProp & ProductDataProp
                 </div>
             </form>
         </React.Fragment>
-    )
+    );
 }
 export default CreateServiceForm;
