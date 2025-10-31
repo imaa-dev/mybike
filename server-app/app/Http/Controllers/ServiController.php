@@ -9,6 +9,7 @@ use App\Models\Servi;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Services\ServiService;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
 class ServiController extends Controller
@@ -46,7 +47,7 @@ class ServiController extends Controller
             ->first();
         if($organization !== null){
             $services = Servi::where('organization_id', $organization->id)
-                ->where('status', 'REPARADO')
+                ->where('status_id', 5)
                 ->with('file')
                 ->with('product')
                 ->with('client')
@@ -71,7 +72,6 @@ class ServiController extends Controller
                 ->with('product')
                 ->with('client')
                 ->with('reasons')
-                ->with('status')
                 ->get();
         return Inertia::render('service/listReceptionService',[
             'servis' => $services,
@@ -90,10 +90,9 @@ class ServiController extends Controller
                 ->with('product')
                 ->with('client')
                 ->with('reasons')
-                ->with('status')
                 ->get();
         return Inertia::render('service/inRepairService', [
-            'service' => $servicesInRepair
+            'services' => $servicesInRepair
         ]);
     }
 
@@ -145,29 +144,27 @@ class ServiController extends Controller
     }
 
     public function toRepaired(Request $request){
-        $data = [];
+
         try {
-            $serviceToRepaired = Servi::where('id', $request->servi_id);
-            $serviceToRepaired->status_id = 5;
+            // ToDo
+            // Si viene a true la variable se pasa a generar un mensaje de notificacion al cliente
+            // Usar Jobs con dispatch
+            $serviceToRepaired = Servi::where('id', $request->service_id)->first();
+            $serviceToRepaired->status_id = 4;
+            $serviceToRepaired->save();
             $data = [
-                'code' => 200,
-                'status' => 'success',
-                'message' => 'Servicios cambiado de estado satisfactoriamente',
+                'message' => 'El servicio cambio a Reparación',
             ];
         } catch (\Throwable $th){
             $data = [
-                'code' => 500,
-                'status' => 'fail',
                 'message' => 'ERROR',
             ];
+            Log::error($th);
         }
-
-        return response()->json($data);
+        session()->flash('message', $data['message'] );
+        return redirect()->route('services.list.repair.view');
     }
     public function toDiagnosis(Request $request){
-
-    }
-    public function toInRepair(Request $request){
 
     }
     public function toDelivered(Request $request){

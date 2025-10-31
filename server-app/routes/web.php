@@ -30,6 +30,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('delete/service/{id}', [ServiController::class, 'delete'])->name('services.destroy');
     Route::get('list-repair/service', [ServiController::class, 'listRepair'])->name('services.list.repair.view');
     Route::get('list-in-repair/service', [ServiController::class, 'listInRepair'])->name('service.list.in.repair.view');
+    Route::post('to-repair/service', [ServiController::class, 'toRepaired'])->name('service.list.to.repaired');
+
 
     // Product routes
     Route::get('product', [ProductController::class, 'list'])->name('products.list.view');

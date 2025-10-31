@@ -35,11 +35,6 @@ export function CreateDiagnosisForm() {
         // TODO
         // Create logic
         // Agregarle
-        console.log("#######TENEMOS TODO TOMADO ············@@@@@@");
-        console.log("#######TENEMOS TODO TOMADO ············@@@@@@");
-        console.log("#######TENEMOS TODO TOMADO ············@@@@@@");
-        console.log("#######TENEMOS TODO TOMADO ············@@@@@@");
-
         showLoading();
         hideLoading();
         closeModal();

@@ -22,7 +22,7 @@ interface CountTypeService {
     serviceDiagnosticado: number,
     serviceAR: number,
     serviceER: number,
-    serviceReparad: number,
+    serviceReparado: number,
     serviceEntregado: number,
     serviceIncidencia: number
 }
@@ -92,9 +92,9 @@ export default function Service({ notOrganization, countTypeService }: ServiData
                             }}
                         >
                             <Wrench />
-                            {countTypeService.serviceDiagnosticado > 0 && (
-                                <span className="absolute -top-2 -right-2 inline-flex items-center justify-center rounded-full bg-red-600 px-1.5 py-0.5 text-xs font-bold text-white">
-                              {countTypeService.serviceDiagnosticado}
+                            {countTypeService.serviceER > 0 && (
+                                <span className="absolute -top-2 -right-2 inline-flex items-center justify-center rounded-full bg-orange-500 px-1.5 py-0.5 text-xs font-bold text-white">
+                              {countTypeService.serviceER}
                             </span>
                             )}
                         </button>
@@ -112,9 +112,9 @@ export default function Service({ notOrganization, countTypeService }: ServiData
                             }}
                         >
                             <Truck />
-                            {countTypeService.serviceAR > 0 && (
+                            {countTypeService.serviceEntregado > 0 && (
                                 <span className="absolute -top-2 -right-2 inline-flex items-center justify-center rounded-full bg-red-600 px-1.5 py-0.5 text-xs font-bold text-white">
-                              {countTypeService.serviceAR}
+                              {countTypeService.serviceEntregado}
                             </span>
                             )}
                         </button>
@@ -134,9 +134,9 @@ export default function Service({ notOrganization, countTypeService }: ServiData
                             }}
                         >
                             <List />
-                            {countTypeService.serviceER > 0 && (
+                            {countTypeService.serviceReparado > 0 && (
                                 <span className="absolute -top-2 -right-2 inline-flex items-center justify-center rounded-full bg-red-600 px-1.5 py-0.5 text-xs font-bold text-white">
-                              {countTypeService.serviceER}
+                              {countTypeService.serviceReparado}
                             </span>
                             )}
                         </button>
@@ -154,9 +154,9 @@ export default function Service({ notOrganization, countTypeService }: ServiData
                             }}
                         >
                             <FileBox />
-                            {countTypeService.serviceReparad > 0 && (
-                                <span className="absolute -top-2 -right-2 inline-flex items-center justify-center rounded-full bg-red-600 px-1.5 py-0.5 text-xs font-bold text-white">
-                              {countTypeService.serviceReparad}
+                            {countTypeService.serviceEntregado > 0 && (
+                                <span className="absolute -top-2 -right-2 inline-flex items-center justify-center rounded-full bg-green-600 px-1.5 py-0.5 text-xs font-bold text-white">
+                              {countTypeService.serviceEntregado}
                             </span>
                             )}
                         </button>

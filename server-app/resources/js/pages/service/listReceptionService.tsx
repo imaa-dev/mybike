@@ -1,11 +1,11 @@
 import AppLayout from '@/layouts/app-layout';
 import { Head } from '@inertiajs/react';
-import type { BreadcrumbItem, ServiData } from '@/types';
+import  { BreadcrumbItem, ServiData } from '@/types';
 import { deleteService } from '@/api/services/serviService';
 import { useConfirmDialog } from '@/context/ModalContext';
 import React, { useEffect, useState } from 'react';
 import { useToast } from '@/context/ToastContext';
-import { ServiceRecepcionCard } from '@/components/cards/service/ServiceRecepcionCard';
+import { ServiceCard } from '@/components/cards/service/ServiceCard';
 import { initFlowbite } from 'flowbite';
 import { useLoading } from '@/context/LoadingContext';
 
@@ -34,9 +34,11 @@ export default function ListReceptionService ({servis}: ServiDataProp) {
             onConfirm: () => removeService(serviceId)
         })
     }
+
     useEffect(() => {
         initFlowbite()
     }, []);
+
     const removeService = async (id: number) => {
         showLoading()
         const response = await deleteService(id)
@@ -48,13 +50,14 @@ export default function ListReceptionService ({servis}: ServiDataProp) {
         }
         hideLoading()
     }
+
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Servicios" />
             <div className="flex h-full flex-1 flex-col items-center gap-4 px-4 sm:px-5">
                 <div className="w-full max-w-full rounded-lg border shadow-md">
                     { serviceShow.map((service: ServiData) => (
-                        <ServiceRecepcionCard key={service.id} service={service} handleDelete={() => handleDelete(service.id)} />
+                        <ServiceCard key={service.id} service={service} handleDelete={() => handleDelete(service.id)} />
                     )) }
                 </div>
             </div>

@@ -2,7 +2,7 @@ version: '3.9'
 
 services:
   laravel-api:
-    build: ./laravel-api
+    build: ./server-app
     ports:
       - "8000:80"
     env_file: .env
@@ -10,7 +10,7 @@ services:
       - api-flask
 
   api-flask:
-    build: ./microservices/api-flask
+    build: ./microservice/api-flask
     ports:
       - "5000:5000"
     env_file: .env
@@ -18,7 +18,7 @@ services:
       - scraping
 
   scraping:
-    build: ./microservices/scraping
+    build: ./microservice/scraping
     expose:
       - "6800"
 

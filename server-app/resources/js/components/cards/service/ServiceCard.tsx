@@ -1,31 +1,18 @@
 import React from 'react';
-import { NavItemDrop, ServiData } from '@/types';
+import { ServiData } from '@/types';
 import { SidebarGroupLabel } from '@/components/ui/sidebar';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { useInitials } from '@/hooks/use-initials';
 import { appUrl } from '@/config/env';
-import { BriefcaseMedical,  Pencil, Trash2 } from 'lucide-react';
-
 import { NavDropDown } from '@/components/cards/service/NavDropDown';
+import { mainNavItems } from '@/constants/items';
+
 interface ServiceDataPropCard {
     service: ServiData,
-    handleDelete: () => void
+    handleDelete: () => void,
 }
-const mainNavItems: NavItemDrop[] = [
-    {
-        title: 'Editar',
-        icon: Pencil,
-    },
-    {
-        title: 'A Reparar',
-        icon: BriefcaseMedical,
-    },
-    {
-        title: 'Eliminar',
-        icon: Trash2,
-    },
-];
-const ServiceRecepcionCard = ({ service, handleDelete }: ServiceDataPropCard ) => {
+
+const ServiceCard = ({ service, handleDelete }: ServiceDataPropCard ) => {
     const dropdownId = `dropdown-${service.id}`;
     const buttonId = `dropdownButton-${service.id}`;
     const getInitials = useInitials()
@@ -46,7 +33,7 @@ const ServiceRecepcionCard = ({ service, handleDelete }: ServiceDataPropCard ) =
                 <div id={`${dropdownId}`}
                      className="z-10 hidden text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-44 dark:bg-gray-700">
                     <ul className="py-2" aria-labelledby="dropdownButton">
-                        <NavDropDown items={mainNavItems} serviceId={service.id} handleDelete={handleDelete}/>
+                        <NavDropDown items={mainNavItems} service={service} handleDelete={handleDelete}/>
                     </ul>
                 </div>
             </div>
@@ -118,4 +105,4 @@ const ServiceRecepcionCard = ({ service, handleDelete }: ServiceDataPropCard ) =
     )
 }
 
-export { ServiceRecepcionCard }
+export { ServiceCard }

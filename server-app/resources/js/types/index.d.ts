@@ -12,10 +12,6 @@ export interface ButtonItem {
     title: string;
     href: string;
 }
-export interface NavGroup {
-    title: string;
-    items: NavItem[];
-}
 export interface NavItem {
     title: string;
     href: string;
@@ -130,7 +126,6 @@ export interface ServiData {
     file: FileMeta[];
     product: ProductData;
     client: Client;
-    status: Status;
     created_at: Date;
     updated_at: Date;
 }
@@ -154,3 +149,4 @@ export interface ReasonResponse {
     success: boolean;
     reasons: Reasons[];
 }
+
