@@ -5,7 +5,6 @@ use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ServiController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\ClientController;
 use App\Http\Controllers\ReasonController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -25,13 +24,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('create/service', [ServiController::class, 'create'])->name('services.create.view');
     Route::get('edit/{servi}/service', [ServiController::class, 'getUpdate'])->name('services.update.view');
     Route::get('list-reception/service', [ServiController::class, 'listReception'])->name('services.list.reception.view');
+    Route::get('list-repair/service', [ServiController::class, 'listRepair'])->name('services.list.repair.view');
+    Route::get('list-in-repair/service', [ServiController::class, 'listInRepair'])->name('service.list.in.repair.view');
+    Route::get('list-diagnosis/service', [ServiController::class, 'listDiagnosis'])->name('service.list.diagnosis.view');
     Route::post('create/service', [ServiController::class, 'store'])->name('services.store');
     Route::post('manage/service', [ServiController::class, 'update'])->name('services.update');
     Route::delete('delete/service/{id}', [ServiController::class, 'delete'])->name('services.destroy');
-    Route::get('list-repair/service', [ServiController::class, 'listRepair'])->name('services.list.repair.view');
-    Route::get('list-in-repair/service', [ServiController::class, 'listInRepair'])->name('service.list.in.repair.view');
     Route::post('to-repair/service', [ServiController::class, 'toRepaired'])->name('service.list.to.repaired');
-
 
     // Product routes
     Route::get('product', [ProductController::class, 'list'])->name('products.list.view');

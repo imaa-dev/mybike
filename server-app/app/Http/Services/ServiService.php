@@ -2,8 +2,7 @@
 
 namespace App\Http\Services;
 
-use App\Jobs\ProcessReceipt;
-use App\Models\File;
+use App\Models\Organization;
 use App\Models\Servi;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -113,6 +112,27 @@ class ServiService
     }
 
 
+    public function getTypeService($user, $status_id){
+        $organization = Organization::where('user_id', $user->id)
+            ->where('active', true)
+            ->with('file')
+            ->first();
+        $notOrganization = true;
+        if($organization !== null){
+            $services = Servi::where('organization_id', $organization->id)
+                ->where('status_id', $status_id)
+                ->with('file')
+                ->with('product')
+                ->with('client')
+                ->with('reasons')
+                ->get();
+            $notOrganization = false;
+        }
+        return  [
+            'servis' => $services,
+            'notOrganization' => $notOrganization
+        ];
+    }
     public function getById($id)
     {
 

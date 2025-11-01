@@ -21,9 +21,9 @@ class UserController extends Controller
         return Inertia::render('client/createClient');
     }
 
-    public function listClient()
+    public function listClient(Request $request)
     {
-        $clients = User::where('rol', "CLIENT")->with('file')->get();
+        $clients = User::where('rol', "CLIENT")->where('created_by_user_id', $request->user()->id)->with('file')->get();
         return Inertia::render('client/client', [
             'clients' => $clients,
         ]);

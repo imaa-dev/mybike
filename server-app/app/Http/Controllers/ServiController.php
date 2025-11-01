@@ -39,6 +39,14 @@ class ServiController extends Controller
         ]);
     }
 
+
+    public function listDiagnosis(Request $request){
+        $result = $this->serviService->getTypeService($request->user(), 2);
+        return Inertia::render('service/listDiagnosis', [
+            'servis' => $result['servis'],
+            'notOrganization' => $result['notOrganization'],
+        ]);
+    }
     public function listRepair(Request $request)
     {
         $organization = Organization::where('user_id', $request->user()->id)
@@ -61,20 +69,10 @@ class ServiController extends Controller
     }
     public function listReception(Request $request)
     {
-        $organization = Organization::where('user_id', $request->user()->id)
-            ->where('active', true)
-            ->with('file')
-            ->first();
-        if($organization->id)
-            $services = Servi::where('organization_id', $organization->id)
-                ->where('status_id', 1)
-                ->with('file')
-                ->with('product')
-                ->with('client')
-                ->with('reasons')
-                ->get();
-        return Inertia::render('service/listReceptionService',[
-            'servis' => $services,
+        $result = $this->serviService->getTypeService($request->user(), 1);
+        return Inertia::render('service/listReceptionService', [
+            'servis' => $result['servis'],
+            'notOrganization' => $result['notOrganization'],
         ]);
     }
 
@@ -86,6 +84,24 @@ class ServiController extends Controller
         if($organization->id)
             $servicesInRepair = Servi::where('organization_id', $organization->id)
                 ->where('status_id', 4)
+                ->with('file')
+                ->with('product')
+                ->with('client')
+                ->with('reasons')
+                ->get();
+        return Inertia::render('service/inRepairService', [
+            'services' => $servicesInRepair
+        ]);
+    }
+
+    public function listIncident(Request $request){
+        $organization = Organization::where('user_id', $request->user()->id)
+            ->where('active', true)
+            ->with('file')
+            ->first();
+        if($organization->id)
+            $servicesInRepair = Servi::where('organization_id', $organization->id)
+                ->where('status_id', 7)
                 ->with('file')
                 ->with('product')
                 ->with('client')
@@ -162,7 +178,7 @@ class ServiController extends Controller
             Log::error($th);
         }
         session()->flash('message', $data['message'] );
-        return redirect()->route('services.list.repair.view');
+        return redirect()->route('service.list.in.repair.view');
     }
     public function toDiagnosis(Request $request){
 

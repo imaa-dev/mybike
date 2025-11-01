@@ -14,6 +14,7 @@ class UserService
         try {
             $client = new User;
             $client->rol = "CLIENT";
+            $client->created_by_user_id = $request->user()->id;
             $client->name = $request->name;
             $client->email = $request->email;
             $client->phone = $request->phone;

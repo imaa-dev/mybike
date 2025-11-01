@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import AppLayout from '@/layouts/app-layout';
-import  { BreadcrumbItem, NavItemDrop, ServiData } from '@/types';
+import  { BreadcrumbItem, ServiData } from '@/types';
 import { Head } from '@inertiajs/react';
 import { ServiceCard } from '@/components/cards/service/ServiceCard';
 import { useConfirmDialog } from '@/context/ModalContext';
@@ -8,7 +8,6 @@ import { useLoading } from '@/context/LoadingContext';
 import { deleteService } from '@/api/services/serviService';
 import { useToast } from '@/context/ToastContext';
 import { initFlowbite } from 'flowbite';
-import { BriefcaseMedical, Pencil, Trash2 } from 'lucide-react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -16,7 +15,7 @@ const breadcrumbs: BreadcrumbItem[] = [
         href: '/service',
     },
     {
-        title:  <div className="flex">En Reparación<div className="ml-3 mt-1 h-2.5 w-2.5 rounded-full bg-red-500"> </div></div>,
+        title:  <div className="flex">En Reparación<div className="ml-3 mt-1 h-2.5 w-2.5 rounded-full bg-orange-500"> </div></div>,
         href: '/service',
     },
 ];

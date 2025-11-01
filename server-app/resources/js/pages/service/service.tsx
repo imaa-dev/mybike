@@ -1,8 +1,7 @@
 import AppLayout from '@/layouts/app-layout';
 import { Head, router } from '@inertiajs/react';
 import type { BreadcrumbItem } from '@/types';
-import toast from 'react-hot-toast';
-import { FileBox, FilePlus2, List, Truck, Wrench, ConciergeBell } from 'lucide-react';
+import { FilePlus2, Wrench, ConciergeBell, BriefcaseMedical, Handshake, Boxes, ClipboardCheck, CircleX } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useModal } from '@/context/ModalContextForm';
 import { AskContent } from '@/components/ask-content';
@@ -13,6 +12,7 @@ const breadcrumbs: BreadcrumbItem[] = [
         href: '/service',
     },
 ];
+
 interface ServiDataProp {
     notOrganization: boolean;
     countTypeService: CountTypeService;
@@ -47,35 +47,41 @@ export default function Service({ notOrganization, countTypeService }: ServiData
                             type="button"
                             className="flex"
                             onClick={() => {
-                                if(notOrganization){
-                                    toast.error('No tienes organización No puedes crear servicios')
-                                } else {
-                                    router.visit('/create/service');
-                                }
+                                router.visit('/create/service');
                             }}
                         >
                             <FilePlus2 />
-
                         </button>
-
                     </div>
                     <div className="relative ml-7">
                         <button
                             type="button"
                             className="flex"
                             onClick={() => {
-                                if(notOrganization){
-                                    toast.error('No tienes organización No puedes crear servicios')
-                                } else {
-                                    router.visit('/list-reception/service');
-                                }
+                                router.visit('/list-reception/service');
                             }}
                         >
                             <ConciergeBell />
                             {countTypeService.serviceRecepcionado > 0 && (
-                            <span className="absolute -top-2 -right-2 inline-flex items-center justify-center rounded-full bg-blue-500 px-1.5 py-0.5 text-xs font-bold text-white">
+                            <span className="absolute -top-2 -right-2 inline-flex items-center justify-center rounded-full bg-blue-600 px-1.5 py-0.5 text-xs font-bold text-white">
                                 {countTypeService.serviceRecepcionado}
                             </span>
+                            )}
+                        </button>
+                    </div>
+                    <div className="relative ml-7" >
+                        <button
+                            type="button"
+                            className="flex"
+                            onClick={() => {
+                                router.visit('/list-diagnosis/service')
+                            }}
+                        >
+                            <BriefcaseMedical />
+                            { countTypeService.serviceDiagnosticado > 0 && (
+                                <span className="absolute -top-2 -right-2 inline-flex items-center justify-center rounded-full bg-violet-500 px-1.5 py-0.5 text-xs font-bold text-white" >
+                                    { countTypeService.serviceDiagnosticado }
+                                </span>
                             )}
                         </button>
                     </div>
@@ -84,11 +90,7 @@ export default function Service({ notOrganization, countTypeService }: ServiData
                             type="button"
                             className="flex"
                             onClick={() => {
-                                if(notOrganization){
-                                    toast.error('No tienes organización No puedes crear servicios')
-                                } else {
-                                    router.visit('/list-in-repair/service');
-                                }
+                                router.visit('/list-in-repair/service');
                             }}
                         >
                             <Wrench />
@@ -104,14 +106,11 @@ export default function Service({ notOrganization, countTypeService }: ServiData
                             type="button"
                             className="flex"
                             onClick={() => {
-                                if(notOrganization){
-                                    toast.error('No tienes organización No puedes crear servicios')
-                                } else {
-                                    router.visit('/create/service');
-                                }
+                                router.visit('/create/service');
                             }}
                         >
-                            <Truck />
+                            <Boxes />
+
                             {countTypeService.serviceEntregado > 0 && (
                                 <span className="absolute -top-2 -right-2 inline-flex items-center justify-center rounded-full bg-red-600 px-1.5 py-0.5 text-xs font-bold text-white">
                               {countTypeService.serviceEntregado}
@@ -126,14 +125,10 @@ export default function Service({ notOrganization, countTypeService }: ServiData
                             type="button"
                             className="flex"
                             onClick={() => {
-                                if(notOrganization){
-                                    toast.error('No tienes organización No puedes listar servicios')
-                                } else {
-                                    router.visit('/list-repair/service');
-                                }
+                                router.visit('/list-repair/service');
                             }}
                         >
-                            <List />
+                            <ClipboardCheck />
                             {countTypeService.serviceReparado > 0 && (
                                 <span className="absolute -top-2 -right-2 inline-flex items-center justify-center rounded-full bg-red-600 px-1.5 py-0.5 text-xs font-bold text-white">
                               {countTypeService.serviceReparado}
@@ -146,19 +141,32 @@ export default function Service({ notOrganization, countTypeService }: ServiData
                             type="button"
                             className="flex"
                             onClick={() => {
-                                if(notOrganization){
-                                    toast.error('No tienes organización No puedes listar servicios')
-                                } else {
-                                    router.visit('/list-repair/service');
-                                }
+                                router.visit('/list-repair/service');
                             }}
                         >
-                            <FileBox />
+                            <Handshake />
+
                             {countTypeService.serviceEntregado > 0 && (
-                                <span className="absolute -top-2 -right-2 inline-flex items-center justify-center rounded-full bg-green-600 px-1.5 py-0.5 text-xs font-bold text-white">
-                              {countTypeService.serviceEntregado}
-                            </span>
+                                <span className="absolute -top-2 -right-2 inline-flex items-center justify-center rounded-full bg-green-500 px-1.5 py-0.5 text-xs font-bold text-white">
+                                    {countTypeService.serviceEntregado}
+                                </span>
                             )}
+                        </button>
+                    </div>
+                    <div className="relative ml-7" >
+                        <button
+                            type="button"
+                            className="flex"
+                            onClick={ () => {
+                                router.visit('')
+                            }}
+                        >
+                            <CircleX />
+                            { countTypeService.serviceIncidencia > 0 && (
+                                <span className="absolute -top-2 -right-2 inline-flex items-center justify-center rounded-full bg-green-500 px-1.5 py-0.5 text-xs font-bold text-white" >
+                                    {countTypeService.serviceIncidencia}
+                                </span>
+                            ) }
                         </button>
                     </div>
                 </div>
