@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useModal } from '@/context/ModalContextForm';
 import { useToast } from '@/context/ToastContext';
 import { useLoading } from '@/context/LoadingContext';
@@ -20,7 +20,7 @@ interface SparePartsData{
     price: number;
     note: string;
 }
-export function CreateDiagnosisForm() {
+export function CreateDiagnosisForm({ serviceId }: { serviceId: number }) {
     const { success, error } = useToast();
     const { closeModal } = useModal();
     const { showLoading, hideLoading } = useLoading();
@@ -31,7 +31,7 @@ export function CreateDiagnosisForm() {
     })
 
     const addDiagnosis = async () => {
-
+        console.log(serviceId);
         // TODO
         // Create logic
         // Agregarle
@@ -41,7 +41,6 @@ export function CreateDiagnosisForm() {
         success('MESSAGE');
         error("ERROR_MESSAGE");
         setError('diagnosis', 'ERROR');
-
     }
 
     return(
@@ -49,7 +48,7 @@ export function CreateDiagnosisForm() {
             <form
                 className="flex w-full flex-col justify-center gap-6 rounded-lg bg-white p-6 shadow-md md:p-10 dark:bg-gray-800"
             >
-                <SidebarGroupLabel> Diagnostico </SidebarGroupLabel>
+                <SidebarGroupLabel> Diagnostico y repuestos </SidebarGroupLabel>
                 <div className="group relative z-0 mb-5 w-full" >
                     <input
                         className="peer block w-full appearance-none border-0 border-b-2 border-gray-300 bg-transparent px-0 py-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-0 focus:outline-none dark:border-gray-600 dark:text-white dark:focus:border-blue-500"

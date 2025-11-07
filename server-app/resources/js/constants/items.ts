@@ -1,5 +1,5 @@
 import { NavItemDrop } from '@/types';
-import { BriefcaseMedical, Pencil, Trash2 } from 'lucide-react';
+import { BellRing, BriefcaseMedical, Cog, Pencil, Trash2, Undo2 } from 'lucide-react';
 
 export const mainNavItems: NavItemDrop[] = [
     {
@@ -11,12 +11,20 @@ export const mainNavItems: NavItemDrop[] = [
         icon: Trash2,
     },
     {
-        title: 'A Reparar',
+        title: 'Reparar',
+        icon: Cog,
+    },
+    {
+        title: 'A Taller',
+        icon: BellRing,
+    },
+    {
+        title: 'Diagnosticar',
         icon: BriefcaseMedical,
     },
     {
-        title: 'A Diagnosticar',
-        icon: BriefcaseMedical,
+        title: 'Regresar',
+        icon: Undo2,
     },
 ];
 

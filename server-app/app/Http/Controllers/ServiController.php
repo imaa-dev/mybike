@@ -180,8 +180,27 @@ class ServiController extends Controller
         session()->flash('message', $data['message'] );
         return redirect()->route('service.list.in.repair.view');
     }
+
     public function toDiagnosis(Request $request){
 
+        // ToDo
+        // Si viene a true la variable se pasa a generar un mensaje de notificacion al cliente
+        // Usar Jobs con dispatch
+        try {
+            $serviceToDiagnosis = Servi::where('id', $request->service_id)->first();
+            $serviceToDiagnosis->status_id = 2;
+            $serviceToDiagnosis->save();
+            $data = [
+                'message' => 'El servicio cambio a Diagnosis',
+            ];
+        } catch (\Throwable $th){
+            $data = [
+                'message' => 'ERROR',
+            ];
+            Log::error($th);
+        }
+        session()->flash('message', $data['message'] );
+        return redirect()->route('service.list.in.diagnosis.view');
     }
     public function toDelivered(Request $request){
 

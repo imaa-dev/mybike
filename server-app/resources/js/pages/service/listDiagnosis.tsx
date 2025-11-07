@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BreadcrumbItem, ServiData } from '@/types';
 import AppLayout from '@/layouts/app-layout';
 import { Head } from '@inertiajs/react';
 import { ServiceCard } from '@/components/cards/service/ServiceCard';
 import { useConfirmDialog } from '@/context/ModalContext';
-import { useServiceActions } from '@/utils/removeService';
+import { useServiceActions } from '@/utils/useServiceActions';
+import { initFlowbite } from 'flowbite';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -28,6 +29,9 @@ export default function ListDiagnosis ({servis}: { servis:ServiData[] }) {
         })
     }
 
+    useEffect(() => {
+        initFlowbite()
+    }, []);
     return (
         <AppLayout breadcrumbs={breadcrumbs} >
             <Head title="Servicios" />

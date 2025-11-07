@@ -41,7 +41,7 @@ export function ToRepairForm ({ serviceId } : { serviceId: number}){
                 className="flex w-full flex-col justify-center gap-6 rounded-lg bg-white p-6 shadow-md md:p-10 dark:bg-gray-800"
                 onSubmit={submit}
              >
-                <SidebarGroupLabel> Reparación </SidebarGroupLabel>
+                <SidebarGroupLabel> Diagnosticar </SidebarGroupLabel>
                 <div className="group relative z-0 mb-5 w-full" >
                     <input
                         type="checkbox"
@@ -50,12 +50,11 @@ export function ToRepairForm ({ serviceId } : { serviceId: number}){
                         tabIndex={1}
                         autoComplete="check-notification"
                         onChange={(e) => setData('toRepair', e.target.checked)}
-
                     />
                     <label
                         className="absolute text-sm text-gray-500 ml-4 mt-1"
                     >
-                        Notificar Cliente
+                        Notificar al cliente que el producto entra a inspección
                     </label>
                 </div>
                 <Button
@@ -64,7 +63,7 @@ export function ToRepairForm ({ serviceId } : { serviceId: number}){
                     tabIndex={2}
                     disabled={processing}
                 >
-                    Servicio a reparación
+                    Servicio a Diagnosticar
                 </Button>
             </form>
         </React.Fragment>

@@ -5,7 +5,7 @@ import { useConfirmDialog } from '@/context/ModalContext';
 import React, { useEffect, useState } from 'react';
 import { ServiceCard } from '@/components/cards/service/ServiceCard';
 import { initFlowbite } from 'flowbite';
-import { useServiceActions } from '@/utils/removeService';
+import { useServiceActions } from '@/utils/useServiceActions';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {

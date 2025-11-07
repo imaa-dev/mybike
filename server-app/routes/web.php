@@ -26,11 +26,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('list-reception/service', [ServiController::class, 'listReception'])->name('services.list.reception.view');
     Route::get('list-repair/service', [ServiController::class, 'listRepair'])->name('services.list.repair.view');
     Route::get('list-in-repair/service', [ServiController::class, 'listInRepair'])->name('service.list.in.repair.view');
-    Route::get('list-diagnosis/service', [ServiController::class, 'listDiagnosis'])->name('service.list.diagnosis.view');
+    Route::get('list-diagnosis/service', [ServiController::class, 'listDiagnosis'])->name('service.list.in.diagnosis.view');
     Route::post('create/service', [ServiController::class, 'store'])->name('services.store');
     Route::post('manage/service', [ServiController::class, 'update'])->name('services.update');
     Route::delete('delete/service/{id}', [ServiController::class, 'delete'])->name('services.destroy');
     Route::post('to-repair/service', [ServiController::class, 'toRepaired'])->name('service.list.to.repaired');
+    Route::post('to-diagnosis/service', [ServiController::class, 'toDiagnosis'])->name('service.list.to.diagnosis');
 
     // Product routes
     Route::get('product', [ProductController::class, 'list'])->name('products.list.view');
