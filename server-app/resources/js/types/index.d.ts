@@ -35,6 +35,7 @@ export interface SharedData {
 }
 export interface User {
     id: number;
+    created_by_user_id?: number;
     name: string;
     email: string;
     phone: string;
@@ -87,6 +88,13 @@ export interface Page {
             id: number,
         }
     };
+}
+
+export interface DiagnosisPage {
+    props: {
+        products: ProductData;
+        clients: User;
+    }
 }
 export interface ClientDataProp {
     clients: Client[];

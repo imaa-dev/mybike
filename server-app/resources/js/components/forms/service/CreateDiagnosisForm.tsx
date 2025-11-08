@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useModal } from '@/context/ModalContextForm';
 import { useToast } from '@/context/ToastContext';
 import { useLoading } from '@/context/LoadingContext';
-import { useForm } from '@inertiajs/react';
+import { useForm, usePage } from '@inertiajs/react';
 import { Button } from '@/components/ui/button';
 import { SidebarGroupLabel } from '@/components/ui/sidebar';
 import InputError from '@/components/input-error';
 import { Plus } from 'lucide-react';
+import { ServiData, type SharedData } from '@/types';
 
 interface DiagnosisData {
     diagnosis: string;
@@ -20,9 +21,11 @@ interface SparePartsData{
     price: number;
     note: string;
 }
-export function CreateDiagnosisForm({ serviceId }: { serviceId: number }) {
+
+export function CreateDiagnosisForm({ service }: { service: ServiData }) {
     const { success, error } = useToast();
     const { closeModal } = useModal();
+    console.log(service)
     const { showLoading, hideLoading } = useLoading();
     const { data, setData, errors, processing, setError } = useForm<Required<DiagnosisData>>({
         diagnosis: '',
@@ -31,10 +34,7 @@ export function CreateDiagnosisForm({ serviceId }: { serviceId: number }) {
     })
 
     const addDiagnosis = async () => {
-        console.log(serviceId);
         // TODO
-        // Create logic
-        // Agregarle
         showLoading();
         hideLoading();
         closeModal();
@@ -79,7 +79,7 @@ export function CreateDiagnosisForm({ serviceId }: { serviceId: number }) {
                         onChange={(e) => setData('repairTime', e.target.value)}
                     />
                     <label>
-                        Tiempo reparación <span className="text-red-500" >*</span>
+                        Tiempo que tardo el diagnostico <span className="text-red-500" >*</span>
                     </label>
                     <InputError message={errors.repairTime} />
                 </div>

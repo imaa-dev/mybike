@@ -1,21 +1,21 @@
-import { type NavItemDrop, ServiData } from '@/types';
-import { router } from '@inertiajs/react';
+import { type NavItemDrop, ServiData, SharedData } from '@/types';
+import { router, usePage } from '@inertiajs/react';
 import { useModal } from '@/context/ModalContextForm';
 import { CreateDiagnosisForm } from '@/components/forms/service/CreateDiagnosisForm';
+import { ToDiagnosisForm } from '@/components/forms/service/ToDiagnosisForm';
+import ToGoBack from '@/components/to-go-back';
 
 export function NavDropDown({ items = [], service, handleDelete }: { items: NavItemDrop[] } & { service: ServiData } & {handleDelete: (id: number) => void}  ) {
     const { openModal } = useModal();
-    console.log(service.status_id)
+    const page = usePage();
+    console.log(page.props)
     return (
         <>
             {items.map((item) => {
                 if (service.status_id !== 2 && item.title === 'Diagnosticar') return null;
                 if (service.status_id === 2 && item.title === 'Reparar') return null;
-
                 if (service.status_id === 1 && item.title === 'Regresar') return null;
-
                 if (service.status_id !== 4 && item.title === 'Reparar') return null;
-
                 if (service.status_id !== 1 && item.title === 'A Taller') return null;
 
                 return(
@@ -33,13 +33,13 @@ export function NavDropDown({ items = [], service, handleDelete }: { items: NavI
                                     console.log("create a form")
                                 }
                                 if(item.title === 'Diagnosticar'){
-                                    openModal( <CreateDiagnosisForm serviceId={service.id} /> )
+                                    openModal( <CreateDiagnosisForm service={service} /> )
                                 }
                                 if(item.title === 'Regresar'){
-                                    console.log('AGREGAR MODAL PARA CONSULTAR SI REALMENTE EL CLIENTE VOLVER ATRAS EL SERVICIO DE ESTADO')
+                                    openModal( <ToGoBack service={service} /> )
                                 }
                                 if(item.title === 'A Taller'){
-                                    console.log('GENERATE FORM AND SHIT')
+                                    openModal( <ToDiagnosisForm serviceId={service.id} />  )
                                 }
                             }}
                             className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-600"

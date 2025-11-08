@@ -3,6 +3,8 @@
 namespace App\Http\Middleware;
 
 use App\Models\Organization;
+use App\Models\Product;
+use App\Models\User;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
@@ -39,7 +41,6 @@ class HandleInertiaRequests extends Middleware
     public function share(Request $request): array
     {
         [$message, $author] = str(Inspiring::quotes()->random())->explode('-');
-
         return [
             ...parent::share($request),
             'name' => config('app.name'),
@@ -53,6 +54,12 @@ class HandleInertiaRequests extends Middleware
             ],
             'organization' => fn () => $request->user()
                 ? Organization::where('user_id', $request->user()->id)->where('active', true)->with('file')->first()
+                : null,
+            'products' => fn () => $request->user()
+                ? Product::where('organization_id', $request->organization()->id)->get()
+                : null,
+            'clients' => fn () => $request->user()
+                ? User::where('rol', 'CLIENT')->where('created_by_user_id', $request->user()->id)->get()
                 : null,
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
             'flash' => [

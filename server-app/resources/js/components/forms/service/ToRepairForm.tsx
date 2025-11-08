@@ -41,7 +41,7 @@ export function ToRepairForm ({ serviceId } : { serviceId: number}){
                 className="flex w-full flex-col justify-center gap-6 rounded-lg bg-white p-6 shadow-md md:p-10 dark:bg-gray-800"
                 onSubmit={submit}
              >
-                <SidebarGroupLabel> Diagnosticar </SidebarGroupLabel>
+                <SidebarGroupLabel> Producto a taller </SidebarGroupLabel>
                 <div className="group relative z-0 mb-5 w-full" >
                     <input
                         type="checkbox"
@@ -63,7 +63,7 @@ export function ToRepairForm ({ serviceId } : { serviceId: number}){
                     tabIndex={2}
                     disabled={processing}
                 >
-                    Servicio a Diagnosticar
+                    Ingresar producto a taller diagnostico
                 </Button>
             </form>
         </React.Fragment>

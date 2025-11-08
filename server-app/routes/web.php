@@ -32,7 +32,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('delete/service/{id}', [ServiController::class, 'delete'])->name('services.destroy');
     Route::post('to-repair/service', [ServiController::class, 'toRepaired'])->name('service.list.to.repaired');
     Route::post('to-diagnosis/service', [ServiController::class, 'toDiagnosis'])->name('service.list.to.diagnosis');
-
+    Route::post('to-go-back/service', [ServiController::class, 'toGoBack'])->name('service.list.to.go.back');
     // Product routes
     Route::get('product', [ProductController::class, 'list'])->name('products.list.view');
     Route::get('create/product', [ProductController::class, 'create'])->name('product.create.view');
@@ -40,6 +40,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('update/{product}/product', [ProductController::class, 'getUpdate'])->name('product.update.view');
     Route::post('update/product', [ProductController::class, 'update'])->name('products.update');
     Route::delete('delete/product/{id}', [ProductController::class, 'delete'])->name('products.destroy');
+    Route::post('products', [ProductController::class, 'get'])->name('products.get.all');
 
     // Organization routes
     Route::get('list/organization', [OrganizationController::class, 'list'])->name('organization.list.view');

@@ -44,7 +44,6 @@ class ServiController extends Controller
         $result = $this->serviService->getTypeService($request->user(), 2);
         return Inertia::render('service/listDiagnosis', [
             'servis' => $result['servis'],
-            'notOrganization' => $result['notOrganization'],
         ]);
     }
     public function listRepair(Request $request)
@@ -117,7 +116,7 @@ class ServiController extends Controller
         $organization = Organization::where('user_id', $request->user()->id)->first();
 
         $product = Product::where('organization_id', $organization->id)->get();
-        $client = User::where('rol', "CLIENT")->get();
+        $client = User::where('rol', "CLIENT")->where('created_by_user_id', $request->user()->id)->get();
 
         return Inertia::render('service/createServis', [
             'products' => $product,
@@ -169,7 +168,7 @@ class ServiController extends Controller
             $serviceToRepaired->status_id = 4;
             $serviceToRepaired->save();
             $data = [
-                'message' => 'El servicio cambio a Reparación',
+                'message' => 'El servicio cambio a en reparación',
             ];
         } catch (\Throwable $th){
             $data = [
@@ -201,6 +200,28 @@ class ServiController extends Controller
         }
         session()->flash('message', $data['message'] );
         return redirect()->route('service.list.in.diagnosis.view');
+    }
+
+    public function toGoBack(Request $request){
+        try {
+            $serviceToGoBack = Servi::where('id', $request->service_id)->first();
+            $serviceToGoBack->status_id = $request->status_service_id - 1;
+            $serviceToGoBack->save();
+            $data = [
+                'code' => 200,
+                'success' => true,
+                'message' => 'El servicio regreso de estado',
+            ];
+        } catch (\Throwable $th){
+            Log::error($th);
+            $data = [
+                'code' => 500,
+                'sucess' => false,
+                'message' => 'ERROR',
+            ];
+        }
+
+        return response()->json(['data' => $data]);
     }
     public function toDelivered(Request $request){
 

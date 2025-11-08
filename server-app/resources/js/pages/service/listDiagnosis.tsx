@@ -20,6 +20,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 export default function ListDiagnosis ({servis}: { servis:ServiData[] }) {
     const [ serviceShow, setServiceShow ] = useState(servis);
+
     const { showConfirm } = useConfirmDialog();
     const { removeService } = useServiceActions(setServiceShow)
     const handleDelete = (serviceId: number) => {
@@ -32,6 +33,7 @@ export default function ListDiagnosis ({servis}: { servis:ServiData[] }) {
     useEffect(() => {
         initFlowbite()
     }, []);
+
     return (
         <AppLayout breadcrumbs={breadcrumbs} >
             <Head title="Servicios" />

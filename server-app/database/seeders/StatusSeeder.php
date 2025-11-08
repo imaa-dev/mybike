@@ -17,7 +17,7 @@ class StatusSeeder extends Seeder
                                 'name' => 'RECEPCIONADO',
                             ],
                             [
-                                'name' => 'DIAGNOSTICADO',
+                                'name' => 'DIAGNOSTICO',
                             ],
                             [
                                 'name' => 'APROVACION_REPUESTO',

@@ -27,9 +27,8 @@ class ProductController extends Controller
         $notOrganization = true;
         if($organization !== null){
             $notOrganization = false;
-            $products = Product::where('organization_id', $request->user()->id)->get();
+            $products = Product::where('organization_id',$organization->id)->get();
         }
-
         return Inertia::render('product/product', [
             'notOrganization' => $notOrganization,
             'products' => $products,
@@ -59,6 +58,10 @@ class ProductController extends Controller
     }
     public function delete($id){
         $res = $this->productService->delete($id);
+        return response()->json($res);
+    }
+    public function get(Request $request){
+        $res = $this->productService->getProducts();
         return response()->json($res);
     }
 }

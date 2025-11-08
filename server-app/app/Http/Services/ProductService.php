@@ -88,4 +88,18 @@ class ProductService{
         }
         return $data;
     }
+
+    public function getProducts(){
+        try {
+            $data = Product::all();
+        } catch (\Throwable $th) {
+            Log::error($th);
+            $data = [
+                'code' => 500,
+                'status' =>  'error',
+                'message' => 'ERROR'
+            ];
+        }
+        return $data;
+    }
 }
