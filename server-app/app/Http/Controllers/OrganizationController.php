@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreOrganizationRequest;
-use App\Http\Services\OrganizationService;
 use App\Models\Organization;
+use App\Services\OrganizationService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 

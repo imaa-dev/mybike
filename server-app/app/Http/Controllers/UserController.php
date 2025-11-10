@@ -3,9 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreClientRequest;
-use App\Http\Requests\StoreUpdateUserRequest;
-use App\Http\Services\UserService;
 use App\Models\User;
+use App\Services\UserService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 

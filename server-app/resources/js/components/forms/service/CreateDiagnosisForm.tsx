@@ -115,7 +115,7 @@ export function CreateDiagnosisForm({ service, spare_parts, setSpareParts }: { s
                         <Button
                             type="button"
                             className="ml-3"
-                            onClick={() => openModal( <CreateSparePartsForm setSpareParts={setSpareParts} /> ) }
+                            onClick={() => openModal( <CreateSparePartsForm setSpareParts={setSpareParts} serviceId={service.id} /> ) }
                         >
                             <Plus />
                         </Button>

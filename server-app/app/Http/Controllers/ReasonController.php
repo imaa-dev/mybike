@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Services\ReasonService;
+use App\Services\ReasonService;
 use Illuminate\Http\Request;
 
 class ReasonController extends Controller
@@ -23,6 +23,6 @@ class ReasonController extends Controller
     public function delete($id)
     {
         $res = $this->reasonService->removeReason($id);
-        return response()->json($res); 
+        return response()->json($res);
     }
 }

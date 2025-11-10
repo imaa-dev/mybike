@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Services\FileService;
+use App\Services\FileService;
 use Illuminate\Http\Request;
 
 class FileController extends Controller

@@ -2,10 +2,9 @@
 
 namespace App\Jobs;
 
-use App\Http\Services\ReceiptServiService;
+use App\Services\ReceiptServiService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
-use Illuminate\Support\Facades\Log;
 
 class ProcessReceipt implements ShouldQueue
 {

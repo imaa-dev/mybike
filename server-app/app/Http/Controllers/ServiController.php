@@ -7,8 +7,8 @@ use App\Models\Organization;
 use App\Models\Product;
 use App\Models\Servi;
 use App\Models\User;
+use App\Services\ServiService;
 use Illuminate\Http\Request;
-use App\Http\Services\ServiService;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
