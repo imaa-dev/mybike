@@ -42,7 +42,6 @@ export default function EditOrganization({organizationUpdate}: OrganizationEditF
         description: organizationUpdate.description,
         active: organizationUpdate.active === 1 ? true : false,
     })
-    console.log(data)
     const active = organizationUpdate.active;
     const [uploadImage, setUploadImage] = useState<string | null>(null)
     const handleUploadImage = (file: File) => {

@@ -117,20 +117,15 @@ class ServiService
             ->where('active', true)
             ->with('file')
             ->first();
-        $notOrganization = true;
-        if($organization !== null){
-            $services = Servi::where('organization_id', $organization->id)
-                ->where('status_id', $status_id)
-                ->with('file')
-                ->with('product')
-                ->with('client')
-                ->with('reasons')
-                ->get();
-            $notOrganization = false;
-        }
+        $services = Servi::where('organization_id', $organization->id)
+            ->where('status_id', $status_id)
+            ->with('file')
+            ->with('product')
+            ->with('client')
+            ->with('reasons')
+            ->get();
         return  [
-            'servis' => $services,
-            'notOrganization' => $notOrganization
+            'servis' => $services
         ];
     }
     public function getById($id)

@@ -2,7 +2,6 @@ import React, { createContext, useContext, useState, ReactNode } from 'react';
 import { ModalWrapper } from '@/components/ModalWrapper';
 
 type ModalContextType = {
-    modalContent: ReactNode | null;
     openModal: (content: ReactNode) => void;
     closeModal: () => void;
 };
@@ -10,19 +9,25 @@ type ModalContextType = {
 const ModalContextForm = createContext<ModalContextType | undefined>(undefined);
 
 export function ModalFormProvider({ children }: { children: ReactNode }) {
-    const [modalContent, setModalContent] = useState<ReactNode | null>(null);
+    const [modalStack, setModalStack] = useState<ReactNode[]>([]);
 
-    const openModal = (content: ReactNode) => setModalContent(content);
-    const closeModal = () => setModalContent(null);
+    const openModal = (content: ReactNode) => {
+        setModalStack((prev) => [...prev, content]);
+    };
+
+    const closeModal = () => {
+        setModalStack((prev) => prev.slice(0, -1));
+    };
 
     return (
-        <ModalContextForm.Provider value={{ modalContent, openModal, closeModal }}>
+        <ModalContextForm.Provider value={{ openModal, closeModal }}>
             {children}
-            {modalContent && (
-                <ModalWrapper onClose={closeModal}>
-                    {modalContent}
+
+            {modalStack.map((content, index) => (
+                <ModalWrapper key={index} onClose={closeModal}>
+                    {content}
                 </ModalWrapper>
-            )}
+            ))}
         </ModalContextForm.Provider>
     );
 }

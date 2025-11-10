@@ -45,22 +45,20 @@ class OrganizationService
 
     public function update($request)
     {
-        // TODO Mejorar logica y clean code de como se alberga el update
         try{
-            if($request->hasFile('file')){
-                $path = $request->file('file')->store('organization/'.$request->user()->id, 'public');
-            }
             $organizationUpdate = Organization::where('id', $request->id)->with('file')->first();
             if($request->hasFile('file')){
-                Storage::disk('public')->delete($organizationUpdate->file->path);
+                $path = $request->file('file')->store('organization/'.$request->user()->id, 'public');
             }
             $organizationUpdate->user_id = $request->user()->id;
             $organizationUpdate->name = $request->name;
             $organizationUpdate->description =  $request->description;
             $organizationUpdate->active  = $request->active;
             $organizationUpdate->save();
+            if($organizationUpdate->file){
+                Storage::disk('public')->delete($organizationUpdate->file->path);
+            }
             if($request->hasFile('file')){
-                $organizationUpdate->file()->delete();
                 $organizationUpdate->file()->create([
                     'path' => $path
                 ]);

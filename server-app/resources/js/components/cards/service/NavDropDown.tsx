@@ -1,14 +1,17 @@
-import { type NavItemDrop, ServiData, SharedData } from '@/types';
+import { type NavItemDrop, ServiData, SparePartsData } from '@/types';
 import { router, usePage } from '@inertiajs/react';
 import { useModal } from '@/context/ModalContextForm';
 import { CreateDiagnosisForm } from '@/components/forms/service/CreateDiagnosisForm';
 import { ToDiagnosisForm } from '@/components/forms/service/ToDiagnosisForm';
 import ToGoBack from '@/components/to-go-back';
+import { useState } from 'react';
 
 export function NavDropDown({ items = [], service, handleDelete }: { items: NavItemDrop[] } & { service: ServiData } & {handleDelete: (id: number) => void}  ) {
     const { openModal } = useModal();
     const page = usePage();
-    console.log(page.props)
+    const [ spareParts, setSpareParts ] = useState<SparePartsData[]>(page.props.spare_parts)
+    console.log(spareParts);
+
     return (
         <>
             {items.map((item) => {
@@ -33,7 +36,7 @@ export function NavDropDown({ items = [], service, handleDelete }: { items: NavI
                                     console.log("create a form")
                                 }
                                 if(item.title === 'Diagnosticar'){
-                                    openModal( <CreateDiagnosisForm service={service} /> )
+                                    openModal( <CreateDiagnosisForm spare_parts={spareParts} setSpareParts={setSpareParts} service={service} /> )
                                 }
                                 if(item.title === 'Regresar'){
                                     openModal( <ToGoBack service={service} /> )

@@ -71,7 +71,6 @@ class ServiController extends Controller
         $result = $this->serviService->getTypeService($request->user(), 1);
         return Inertia::render('service/listReceptionService', [
             'servis' => $result['servis'],
-            'notOrganization' => $result['notOrganization'],
         ]);
     }
 

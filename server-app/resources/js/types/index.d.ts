@@ -137,6 +137,18 @@ export interface ServiData {
     created_at: Date;
     updated_at: Date;
 }
+
+export interface SparePartsData {
+    id: number;
+    servi_id: number;
+    user_id: number;
+    model: string;
+    brand: string;
+    price: number;
+    note: string;
+    created_at: Date;
+    updated_at: Date;
+}
 export interface ServiForm {
     id: number;
     organization_id: number;

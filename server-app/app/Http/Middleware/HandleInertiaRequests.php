@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use App\Models\Organization;
 use App\Models\Product;
+use App\Models\SpareParts;
 use App\Models\User;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Http\Request;
@@ -60,6 +61,9 @@ class HandleInertiaRequests extends Middleware
                 : null,
             'clients' => fn () => $request->user()
                 ? User::where('rol', 'CLIENT')->where('created_by_user_id', $request->user()->id)->get()
+                : null,
+            'spare_parts' => fn () => $request->user()
+                ? SpareParts::where('user_id', $request->user()->id)->get()
                 : null,
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
             'flash' => [

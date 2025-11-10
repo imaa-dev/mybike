@@ -1,13 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useModal } from '@/context/ModalContextForm';
 import { useToast } from '@/context/ToastContext';
 import { useLoading } from '@/context/LoadingContext';
-import { useForm, usePage } from '@inertiajs/react';
+import { useForm } from '@inertiajs/react';
 import { Button } from '@/components/ui/button';
 import { SidebarGroupLabel } from '@/components/ui/sidebar';
 import InputError from '@/components/input-error';
 import { Plus } from 'lucide-react';
-import { ServiData, type SharedData } from '@/types';
+import { ServiData, SparePartsData } from '@/types';
+import { CreateSparePartsForm } from '@/components/forms/service/CreateSparePartsForm';
 
 interface DiagnosisData {
     diagnosis: string;
@@ -15,17 +16,12 @@ interface DiagnosisData {
     cost: number;
 }
 
-interface SparePartsData{
-    model: string;
-    brand: string;
-    price: number;
-    note: string;
-}
 
-export function CreateDiagnosisForm({ service }: { service: ServiData }) {
+export function CreateDiagnosisForm({ service, spare_parts, setSpareParts }: { service: ServiData } & { spare_parts: SparePartsData[] } & { setSpareParts: React.Dispatch<React.SetStateAction<SparePartsData[]>>} ) {
     const { success, error } = useToast();
-    const { closeModal } = useModal();
-    console.log(service)
+    console.log(spare_parts, "SPARE_PARTS");
+    console.log(service, "service")
+    const { closeModal, openModal } = useModal();
     const { showLoading, hideLoading } = useLoading();
     const { data, setData, errors, processing, setError } = useForm<Required<DiagnosisData>>({
         diagnosis: '',
@@ -119,7 +115,7 @@ export function CreateDiagnosisForm({ service }: { service: ServiData }) {
                         <Button
                             type="button"
                             className="ml-3"
-                            onClick={() => console.log("HERE")}
+                            onClick={() => openModal( <CreateSparePartsForm setSpareParts={setSpareParts} /> ) }
                         >
                             <Plus />
                         </Button>
