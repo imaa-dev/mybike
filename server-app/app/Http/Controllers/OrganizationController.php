@@ -19,9 +19,10 @@ class OrganizationController extends Controller
     }
     public function list(Request $request)
     {
-        $organizations = Organization::where('user_id', $request->user()->id)->with('file')->get();
+        $userId = $request->user()->id;
+        $organizations = $this->organizationService->getByUserId($userId);
         return Inertia::render('organization/listOrganization',[
-            'organizations' => $organizations,
+            'organizations' => $organizations['organizations'],
         ]);
     }
     public function create()
@@ -30,14 +31,22 @@ class OrganizationController extends Controller
     }
     public function show(Request $request)
     {
-        $organization = Organization::where('user_id', $request->user()->id)->where('active', true)->with('file')->first();
+        $userId = $request->user()->id;
+        $organization = $this->organizationService->getActive($userId);
         return Inertia::render('organization/organization', [
             'organization' => $organization
         ]);
     }
     public function store(StoreOrganizationRequest $request)
     {
-        $res =  $this->organizationService->create($request);
+        $data = [
+            'user_id' => $request->user()->id,
+            'file' => $request->file('file'),
+            'name' => $request->input('name'),
+            'description' => $request->input('description'),
+            'active' => $request->boolean('active'),
+        ];
+        $res =  $this->organizationService->create($data);
         session()->flash('message', $res['message']);
         return redirect()->route('organization.list.view');
     }
@@ -51,14 +60,22 @@ class OrganizationController extends Controller
     }
     public function update(StoreOrganizationRequest $request)
     {
-        $res = $this->organizationService->update($request);
+        $data = [
+            'id' => $request->input('id'),
+            'user_id' => $request->user()->id,
+            'name' => $request->input('name'),
+            'description' => $request->input('description'),
+            'active' => $request->boolean('active'),
+        ];
+        $file = $request->file('file');
+        $res = $this->organizationService->update($data, $file);
         session()->flash('message', $res['message']);
         return redirect()->route('organization.list.view');
     }
 
     public function delete(Request $request)
     {
-        $res = $this->organizationService->delete($request);
+        $res = $this->organizationService->delete($request->id);
         return response()->json($res);
     }
 }

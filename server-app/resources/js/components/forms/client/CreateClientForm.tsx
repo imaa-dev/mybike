@@ -28,15 +28,14 @@ export const CreateClientForm: React.FC<Props> = ({setClientsData}) => {
         showLoading()
         const response = await createClient(data)
         hideLoading()
-        console.log(response);
-        if(response.message === 'Cliente Creado Exitosamente' && typeof setClientsData !== 'undefined' && response.code === 200){
+        if(response.message === 'Cliente Creado Exitosamente' && typeof setClientsData !== 'undefined' && response.code === 201){
             closeModal();
             setClientsData?.(prevState =>
                 response.client !== undefined ? [...prevState, response.client] : prevState
             );
             success(response.message)
         }
-        if(response.code === 200 && setClientsData === undefined && typeof response.message === 'string'){
+        if(response.code === 201 && setClientsData === undefined){
             success(response.message);
             router.visit('/user-client');
         }
@@ -47,10 +46,10 @@ export const CreateClientForm: React.FC<Props> = ({setClientsData}) => {
         if(response.code === 'ERR_NETWORK'){
             error('Error de conexión')
         }
-        if(response.code === 'ERR_BAD_RESPONSE' && typeof response.message === 'string'){
+        if(response.code === 'ERR_BAD_RESPONSE'){
             error('Error en el servidor')
         }
-        if(response.code === 500 && typeof response.message === 'string'){
+        if(response.code === 500){
             error(response.message)
         }
     }

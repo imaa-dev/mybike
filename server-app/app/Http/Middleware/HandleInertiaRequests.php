@@ -56,7 +56,7 @@ class HandleInertiaRequests extends Middleware
             'organization' => fn () => $request->user()
                 ? Organization::where('user_id', $request->user()->id)->where('active', true)->with('file')->first()
                 : null,
-            'products' => fn () => $request->user()
+            'products' => fn () => $request->organization()
                 ? Product::where('organization_id', $request->organization()->id)->get()
                 : null,
             'clients' => fn () => $request->user()

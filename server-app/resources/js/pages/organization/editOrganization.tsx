@@ -145,7 +145,7 @@ export default function EditOrganization({organizationUpdate}: OrganizationEditF
                                     required
                                     autoFocus
                                     autoComplete="name"
-                                    tabIndex={1}
+                                    tabIndex={2}
                                     value={data.name}
                                     onChange={(e) => setData('name', e.target.value)}
                                 />
@@ -162,12 +162,11 @@ export default function EditOrganization({organizationUpdate}: OrganizationEditF
                                     type="description"
                                     name="organizacion_description"
                                     id="organizacion_description"
-                                    className="peer block w-full appearance-none border-0 border-b-2 border-gray-300 bg-transparent px-0 py-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-0 focus:outline-none dark:border-gray-600 dark:text-white dark:focus:border-blue-500"
-                                    placeholder=" "
+                                    className="peer block w-full appearance-none border-0 border-b-2 border-gray-300 bg-transparent px-0 py-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-0 focus:outline-none dark:border-gray-600 dark:text-white dark:focus:border-blue-500"  
                                     required
                                     autoFocus
                                     autoComplete="description"
-                                    tabIndex={1}
+                                    tabIndex={3}
                                     value={data.description}
                                     onChange={(e) => setData('description', e.target.value)}
                                 />
@@ -182,7 +181,7 @@ export default function EditOrganization({organizationUpdate}: OrganizationEditF
                                     <label className="inline-flex cursor-pointer items-center">
                                         <input
                                             type="checkbox"
-                                            tabIndex={5}
+                                            tabIndex={4}
                                             autoComplete="active"
                                             className="peer sr-only"
                                             checked={data.active}
@@ -200,6 +199,7 @@ export default function EditOrganization({organizationUpdate}: OrganizationEditF
                             </div>
                             <Button
                                 type="submit"
+                                tabIndex={5}
                                 className="mt-4 w-full"
                                 disabled={processing}
                             >

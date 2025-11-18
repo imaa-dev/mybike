@@ -6,6 +6,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ServiController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ReasonController;
+use App\Http\Controllers\SparePartsController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -33,6 +34,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('to-repair/service', [ServiController::class, 'toRepaired'])->name('service.list.to.repaired');
     Route::post('to-diagnosis/service', [ServiController::class, 'toDiagnosis'])->name('service.list.to.diagnosis');
     Route::post('to-go-back/service', [ServiController::class, 'toGoBack'])->name('service.list.to.go.back');
+
     // Product routes
     Route::get('product', [ProductController::class, 'list'])->name('products.list.view');
     Route::get('create/product', [ProductController::class, 'create'])->name('product.create.view');
@@ -66,6 +68,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Reason routes
     Route::post('store-reason-service', [ReasonController::class, 'store'])->name('reason.store');
     Route::delete('delete-reason-service/{id}', [ReasonController::class, 'delete'])->name('reason.delete');
+
+    // Spare Parts
+    Route::post('create/spare-parts', [SparePartsController::class, 'create'])->name('spare.parts.create');
+    
 });
 
 require __DIR__.'/settings.php';

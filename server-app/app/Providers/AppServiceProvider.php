@@ -23,6 +23,9 @@ class AppServiceProvider extends ServiceProvider
     {
         Request::macro('organization', function () {
             /** @var \Illuminate\Http\Request $this */
+            if(!$this->user()){
+                return null;
+            }
             return Organization::where('user_id', $this->user()->id)
                 ->where('active', true)
                 ->first();

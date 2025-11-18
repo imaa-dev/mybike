@@ -32,7 +32,7 @@ export default function Client({clients}: ClientDataProp){
     }
     const removeClient = async (id: number) => {
         const response = await deleteClient(id);
-        if (response.code === 200) {
+        if (response.code === 204) {
             success(response.message);
             setClientsShow(prev => prev.filter(cli => cli.id !== id))
         } else {

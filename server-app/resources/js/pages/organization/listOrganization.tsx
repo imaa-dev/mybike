@@ -31,6 +31,7 @@ export default function ListOrganization({ organizations }: OrganizationDataProp
     useEffect(() => {
         setOrgList(organizations)
     },[organizations])
+    console.log(orgList)
     const handleDelete = (organizationId: number) => {
         showConfirm({
             title: "Deseas eliminar la organizacion",

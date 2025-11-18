@@ -1,7 +1,7 @@
 import React from 'react';
 import { SparePartsData } from '@/types';
 import { SidebarGroupLabel } from '@/components/ui/sidebar';
-import { router, useForm } from '@inertiajs/react';
+import { useForm } from '@inertiajs/react';
 import { Button } from '@/components/ui/button';
 import { createSparePart } from '@/api/product/sparePartsService';
 import { useLoading } from '@/context/LoadingContext';
@@ -18,7 +18,7 @@ export const CreateSparePartsForm: React.FC<Props> = ({ setSpareParts, serviceId
     const { success, error } = useToast();
     const { closeModal } = useModal();
     const { showLoading, hideLoading } = useLoading();
-    const { data, setData, errors, processing, setError } = useForm<Required<SparePartsData>>({
+    const { data, setData, errors, processing } = useForm<Required<SparePartsData>>({
         service_id: serviceId,
         model: "",
         brand: "",
@@ -27,11 +27,11 @@ export const CreateSparePartsForm: React.FC<Props> = ({ setSpareParts, serviceId
     })
 
     const addSpareParts = async () => {
-        showLoading();
+        showLoading()
         const response = await createSparePart(data);
-        hideLoading();
-        console.log(response);
-        if(response.message === 'Pieza de repuesto creada satisfactoriamente' && typeof setSpareParts !== 'undefined' && response.code === 200){
+        console.log(response)
+        hideLoading()
+        if(response.message === 'Pieza de repuesto creada satisfactoriamente' && typeof setSpareParts !== 'undefined' && response.code === 201){
             closeModal();
             setSpareParts()?.(prevState =>
                 response.spare_parts !== undefined ? [...prevState, response.spare_parts] : prevState
@@ -68,16 +68,15 @@ export const CreateSparePartsForm: React.FC<Props> = ({ setSpareParts, serviceId
                         id="model"
                         required
                         tabIndex={1}
-                        autoComplete="model"
+                        autoComplete="Modelo"
                         value={data.model}
                         onChange={(e) => setData('model', e.target.value)}
                     />
-
                     <label
                         htmlFor="floating_model"
                         className="absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:start-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:font-medium peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:text-gray-400 peer-focus:dark:text-blue-500"
                     >
-                        Model <span className="text-red-500" ></span>
+                        Modelo <span className="text-red-500" ></span>
                     </label>
                     <InputError message={errors.model} />
                 </div>

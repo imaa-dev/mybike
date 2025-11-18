@@ -10,7 +10,6 @@ export function NavDropDown({ items = [], service, handleDelete }: { items: NavI
     const { openModal } = useModal();
     const page = usePage();
     const [ spareParts, setSpareParts ] = useState<SparePartsData[]>(page.props.spare_parts)
-    console.log(spareParts);
 
     return (
         <>

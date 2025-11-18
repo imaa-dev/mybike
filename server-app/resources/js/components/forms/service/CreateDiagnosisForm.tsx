@@ -19,8 +19,6 @@ interface DiagnosisData {
 
 export function CreateDiagnosisForm({ service, spare_parts, setSpareParts }: { service: ServiData } & { spare_parts: SparePartsData[] } & { setSpareParts: React.Dispatch<React.SetStateAction<SparePartsData[]>>} ) {
     const { success, error } = useToast();
-    console.log(spare_parts, "SPARE_PARTS");
-    console.log(service, "service")
     const { closeModal, openModal } = useModal();
     const { showLoading, hideLoading } = useLoading();
     const { data, setData, errors, processing, setError } = useForm<Required<DiagnosisData>>({
@@ -30,7 +28,9 @@ export function CreateDiagnosisForm({ service, spare_parts, setSpareParts }: { s
     })
 
     const addDiagnosis = async () => {
-        // TODO
+        // ToDo
+        // create spare parts
+
         showLoading();
         hideLoading();
         closeModal();

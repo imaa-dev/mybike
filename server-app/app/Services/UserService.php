@@ -3,25 +3,27 @@
 namespace App\Services;
 
 
+use App\DAO\UserDAO;
 use App\Models\User;
 use Illuminate\Support\Facades\Log;
 
 class UserService
 {
+    private UserDAO $userDAO;
 
-    public function createClient($request)
+    public function __construct(UserDAO $userDAO)
+    {
+        $this->userDAO = $userDAO;
+    }
+
+    public function createClient($data)
     {
         try {
-            $client = new User;
-            $client->rol = "CLIENT";
-            $client->created_by_user_id = $request->user()->id;
-            $client->name = $request->name;
-            $client->email = $request->email;
-            $client->phone = $request->phone;
-            $client->save();
+            $client = $this->userDAO->create($data);
+
             $data = [
-                'status' => 'success',
-                'code' => 200,
+                'success' => true,
+                'code' => 201,
                 'message' => 'Cliente Creado Exitosamente',
                 'client' => $client
             ];
@@ -29,21 +31,18 @@ class UserService
             Log::error("Service User Catch Error : ". $th);
             $data = [
                 'success' => false,
-                'error' => 'Error',
-                'message' => 'ERROR'
+                'code' => 400,
+                'message' => 'ERROR',
+                'clients' => null
             ];
         }
         return $data;
     }
 
-    public function update($request)
+    public function update($data)
     {
         try {
-            $client = User::where('id', $request->id)->first();
-            $client->name = $request->name;
-            $client->email = $request->email;
-            $client->phone = $request->phone;
-            $client->save();
+            $this->userDAO->updateClient($data);
             $data = [
                 'success' => true,
                 'code' => 200,
@@ -60,14 +59,13 @@ class UserService
         return $data;
     }
 
-    public function deleteClient($request)
+    public function deleteClient($id)
     {
         try {
-            $client = User::where('id', $request->id)->first();
-            $client->delete();
+            $this->userDAO->delete($id);
             $data = [
                 'success' => true,
-                'code' => 200,
+                'code' => 204,
                 'message' => 'Cliente eliminado Correctamente'
             ];
         } catch (\Throwable $th) {
@@ -79,5 +77,15 @@ class UserService
             ];
         }
         return $data;
+    }
+
+    public function listClients($id)
+    {
+        return $this->userDAO->getByUserId($id);
+    }
+
+    public function getClientById($id)
+    {
+        return $this->userDAO->getClientById($id);
     }
 }
