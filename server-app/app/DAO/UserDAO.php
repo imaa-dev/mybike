@@ -24,10 +24,12 @@ class UserDAO
 
     public function updateClient($data) : User
     {
-        $userClient = User::find($data['id']);
-        $fillable = $userClient->getFillable();
-        $updateData = array_intersect($data, array_flip($fillable));
-        $userClient->update($updateData);
+        $userClient = User::findOrFail($data['id']);
+        $userClient->update([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'phone' => $data['phone']
+        ]);
         return $userClient;
     }
 

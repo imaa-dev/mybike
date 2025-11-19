@@ -27,7 +27,7 @@ class UserController extends Controller
             'clients' => $clients,
         ]);
     }
-    public function updateClient(StoreClientRequest $request)
+    public function updateClient(Request $request)
     {
         $data = [
             'id' => $request->id,
@@ -35,6 +35,7 @@ class UserController extends Controller
             'email' => $request->email,
             'phone' => $request->phone
         ];
+        
         $res = $this->userService->update($data);
         session()->flash('message', $res['message']);
         return redirect()->route('users.client.list.view');

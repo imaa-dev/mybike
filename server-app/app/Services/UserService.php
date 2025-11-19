@@ -42,7 +42,7 @@ class UserService
     public function update($data)
     {
         try {
-            $this->userDAO->updateClient($data);
+            $client = $this->userDAO->updateClient($data);
             $data = [
                 'success' => true,
                 'code' => 200,
