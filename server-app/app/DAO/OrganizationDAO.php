@@ -27,7 +27,7 @@ class OrganizationDAO
         return Organization::where('user_id', $userId)->with('file')->get();
     }
 
-    public function getActive(int $userId): ?Organization
+    public function getActive(int $userId): Organization
     {
         return Organization::where('user_id', $userId)->where('active', true)->with('file')->first();
     }
@@ -41,10 +41,11 @@ class OrganizationDAO
      */
     public function updateOrganization(array $data): ?Organization
     {
-        $organization = Organization::findOrFail($data['id']);
-        $organization->update([
-            array_intersect_key($data, array_flip($organization->getFillable()))
-        ]);
+        // Agregar forma para que se valide que venga id, validar con form request 
+        $organization = Organization::find($data['id']);
+        $fillable = $organization->getFillable();
+        $updateData = array_intersect_key($data, array_flip($fillable));
+        $organization->update($updateData);
         return $organization;
     }
 }
