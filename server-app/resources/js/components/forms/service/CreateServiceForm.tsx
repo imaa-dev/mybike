@@ -57,16 +57,21 @@ const CreateServiceForm = ({clients, products}: ClientDataProp & ProductDataProp
     const removeReasonNotes = (index: number) => {
         dispatch({ type: 'REMOVE_REASON_NOTE', index });
     }
+
     const submit:FormEventHandler = (e) => {
         e.preventDefault();
         post('/create/service', {
             onSuccess: (page) => {
+                dispatch({ type: 'CLEAN_REASON_NOTE' });
+                dispatch({ type: 'CLEAN_FORM' })
                 const message = (page.props as { flash?: { message?: string } }).flash?.message;
                 if (message) {
                     success(message);
                 }
             },
             onError: (e) => {
+                dispatch({ type: 'CLEAN_REASON_NOTE' });
+                dispatch({ type: 'CLEAN_FORM' })
                 error(e.message)
                 console.log(e,'ERROR POST')
             }
