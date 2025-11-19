@@ -7,6 +7,7 @@ use App\Models\Organization;
 use App\Models\Product;
 use App\Models\Servi;
 use App\Models\User;
+use App\Services\OrganizationService;
 use App\Services\ServiService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -15,18 +16,18 @@ use Inertia\Inertia;
 class ServiController extends Controller
 {
     protected ServiService $serviService;
+    protected OrganizationService $organizationService;
 
-    public function __construct(ServiService $serviService)
+    public function __construct(ServiService $serviService, OrganizationService $organizationService)
     {
         $this->serviService = $serviService;
+        $this->organizationService = $organizationService;
+
     }
     public function show(Request $request)
     {
         $countTypeService = [];
-        $organization = Organization::where('user_id', $request->user()->id)
-            ->where('active', true)
-            ->with('file')
-            ->first();
+        $organization = $this->organizationService->getActive($request->user()->id);
         $notOrganization = true;
         if($organization !== null){
             $notOrganization = false;

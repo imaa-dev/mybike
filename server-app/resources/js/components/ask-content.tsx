@@ -9,7 +9,7 @@ export const AskContent = () =>  {
             <div className="fixed top-0 right-0 left-0 z-50 flex h-screen w-screen items-center justify-center bg-black/50">
                 <div className="rounded-lg bg-white p-6 shadow-lg dark:bg-gray-700">
                     <h3 className="mb-4 text-lg text-gray-800 dark:text-gray-200">
-                        Notamos que no tienes una organización, ¿deseas crear una?
+                        Notamos que no tienes una organización o no esta activa, ¿deseas crear una o activarla?
                     </h3>
                     <div className="flex justify-end gap-2">
                         <button

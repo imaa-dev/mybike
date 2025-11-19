@@ -128,7 +128,7 @@ class OrganizationService
         return $data;
     }
 
-    public function getByUserId(int $userId)
+    public function getByUserId(int $userId) 
     {
         try {
             $organizationByUserId = $this->organizationDAO->getByUserId($userId);

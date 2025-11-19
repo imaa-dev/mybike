@@ -27,7 +27,7 @@ class OrganizationDAO
         return Organization::where('user_id', $userId)->with('file')->get();
     }
 
-    public function getActive(int $userId): Organization
+    public function getActive(int $userId): ?Organization
     {
         return Organization::where('user_id', $userId)->where('active', true)->with('file')->first();
     }

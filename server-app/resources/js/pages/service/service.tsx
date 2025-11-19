@@ -34,7 +34,7 @@ export default function Service({ notOrganization, countTypeService }: ServiData
         if(modal){
             openModal( <AskContent></AskContent> )
         }
-    }, [modal, openModal])
+    }, [modal])
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
